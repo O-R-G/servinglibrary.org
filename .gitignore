@@ -1,0 +1,14 @@
+# annoying sys files
+.DS_Store
+
+# emacs backups
+*~
+
+# media files
+MEDIA/*
+
+# config files
+config.php
+systemDatabase.php
+.htpasswd
+.htaccess

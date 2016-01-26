@@ -1,0 +1,56 @@
+<?php 
+require_once("_Library/displayMedia.php"); 
+require_once("GLOBAL/head.php"); 
+?>
+
+
+	<!-- MAIN -->
+
+<?php
+
+
+	// Get object plus media
+	
+	// mySQL query returns one row with full object details and related media
+
+	$sql = "SELECT objects.id AS objectsId, objects.name1, objects.deck, objects.body, objects.active, objects.rank as objectsRank, wires.fromid, wires.toid, 
+wires.active, media.id AS mediaId, media.object AS mediaObject, media.type, media.caption, media.active, media.rank FROM objects INNER JOIN wires ON (wires.toid = 
+objects.id AND wires.active = '1') LEFT JOIN media ON (media.object = objects.id AND media.active = '1') WHERE objects.id = $id LIMIT 1;";
+	$result =  MYSQL_QUERY($sql);
+		
+			
+	// Cover
+	
+	$myrow  =  MYSQL_FETCH_ARRAY($result);
+	$title = $myrow["name1"];
+	if ($myrow["deck"]) $deck = $myrow["deck"];
+	$body = $myrow["body"];
+	$id = $myrow[objectsId];
+	if ($myrow["mediaId"]) {
+
+		$mediaId = $myrow["mediaId"];
+		$type = $myrow["type"];
+		$style 	= "width:100%";	
+		$mediaFile = "MEDIA/". STR_PAD($mediaId, 5, "0", STR_PAD_LEFT) .".". $type;	
+	}
+		
+	
+	// Display
+	
+	$html   = "\n	<div class = 'mainContainer'>";	
+	$html  .= "\n		<div class='wordsContainer body'>";
+	if ($deck) $html  .= "\n		" . nl2br($deck) . "<br /><br />";
+	if ($mediaFile) $html  .= "\n                                   ". displayMedia($mediaFile, null, $style) . "<br /><br />";
+	$html  .= "\n		" . nl2br($body);
+	if (!$back) $html  .= "<br/><br/><a href='javascript:self.history.back();'>Go back</a><br/>";
+	$html  .= "\n		</div>";		
+	$html  .= "\n	</div>";						
+
+	echo $html;
+?>
+
+
+
+<?php
+require_once("GLOBAL/foot.php"); 
+?>

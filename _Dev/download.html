@@ -1,0 +1,67 @@
+<?php
+require_once("_Library/systemDatabase.php");
+require_once("Zend/Pdf.php");
+require_once("_Library/downloadPDF.php"); 
+
+
+// 1. Init
+
+$now = time();
+if (!$timeStamp) $timeStamp = strtoupper(date('Y M d g:i A', $now));
+// $quiet = TRUE; // supress database writing for debugging
+
+$name1 = $downloadFile;
+$deck = $author;
+$body = $_SERVER['REMOTE_ADDR'];
+$url = $sourceFile;
+$created = $modified = $end = date('Y-m-d H:i:s', $now);
+
+
+// 2. Write database record
+
+$sql = "INSERT INTO objects (created, modified, name1, url, deck, body, end, rank) VALUES('$created', '$modified', '$name1', '$url', '$deck', '$body', '$end', null)";
+if (!$quiet) $result = MYSQL_QUERY($sql);
+$insertId = MYSQL_INSERT_ID();
+
+$sql = "INSERT INTO wires (created, modified, fromid, toid) VALUES('". date("Y-m-d H:i:s") ."', '". date("Y-m-d H:i:s") ."', (SELECT objects.id FROM objects WHERE objects.name1 LIKE '_Downloads' AND objects.active='1'), '$insertId')";
+if (!$quiet) $result = MYSQL_QUERY($sql);
+	
+	
+// 3. Load PDF (Zend_PDF)
+
+$sourceFileStub = 'MEDIA/' . $sourceFile . '.pdf';
+$pdf = Zend_Pdf::load($sourceFileStub);
+
+
+// 4. Set metadata (Zend_PDF)
+
+$pdf->properties['Title'] = $downloadFile; 
+$pdf->properties['Author'] = $author;
+$parsedGMToffset = explode(":", date("P", $now));
+$pdf->properties["ModDate"] = "D:" . date("YmdHis", $now) . $parsedGMToffset[0] . "'" . $parsedGMToffset[1] ."'";
+
+
+// 5. Time stamp pages (Zend_PDF)
+
+$fontPath = '/usr/www/users/reinfurt/SERVINGLIBRARY/_Fonts/mtdbt2f-gg-webfont.ttf';
+$mtdbt2Font = Zend_Pdf_Font::fontWithPath($fontPath);
+$red = new Zend_Pdf_Color_Html('#FF0000');
+
+foreach ($pdf->pages as $pageNumber => $pageObject) {
+
+	$pageObject->setFont($mtdbt2Font, 7)->setFillColor($red); // font and color
+	$pageObject->drawText($timeStamp, 124, 24); // stamp
+	$pdf->pages[$pageNumber] = $pageObject; // save
+}
+
+
+// 6. Render PDF (Zend_PDF)
+
+$pdfData = $pdf->render(); 
+
+
+// 7. Download PDF stream
+
+downloadPDFfromStream($pdfData, $downloadFile, $timeStamp);
+
+?>

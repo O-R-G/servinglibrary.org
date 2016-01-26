@@ -1,0 +1,42 @@
+<?php 
+require_once("_Library/systemMedia.php"); 
+require_once("GLOBAL/head.php"); 
+if (!$id) $id=4; // Temp hack
+?>
+
+
+<!--  TEXT DISPLAY  -->
+
+<?php
+
+
+	// Get Object 
+	
+	$sql    = "SELECT * FROM objects ";
+	$sql   .= "WHERE objects.id = '$id' AND objects.active = 1 ";
+	$sql   .= "LIMIT 1";
+	$result =  MYSQL_QUERY($sql);
+	$myrow  =  MYSQL_FETCH_ARRAY($result);
+	$object = $myrow['id'];
+	if ($myrow["body"]) $body = $myrow["body"];
+
+	// Parse $bodyTemp to replace <br/> with </p><p> 
+	// $bodyTempStripped 	= ereg_replace( "\n", "</p><p>", nl2br($bodyTemp));
+	// $bodyTempParsed 	= "<p>" . $bodyTempStripped;
+		
+		
+	// Display
+				
+	$html   = "\n	<div class = 'bodyContainer'>";
+	$html  .= "\n 		" . nl2br($body) . "<br /><br />";	
+	$html  .= "\n	</div>";
+			
+	echo $html;		
+		
+		
+				
+	// Close main div	
+
+
+	require_once("GLOBAL/foot.php"); 
+?>

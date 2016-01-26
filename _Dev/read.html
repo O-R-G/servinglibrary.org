@@ -1,0 +1,106 @@
+<?php 
+require_once("_Library/displayMedia.php"); 
+require_once("GLOBAL/head.php"); 
+?>
+
+
+	<!-- MAIN -->
+
+<?php
+
+
+	// Get object plus media
+	
+	// mySQL query returns two rows with full object details and related media
+	// (row 1 PDF, row 2 jpg)
+
+	$sql    = "SELECT objects.id AS objectsId, objects.name1, objects.deck, objects.body, objects.active, objects.rank as objectsRank, wires.fromid, wires.toid, wires.active, media.id AS mediaId, media.object AS mediaObject, media.type, media.caption, media.active, media.rank FROM objects, wires, media WHERE objects.id = $id AND wires.toid = objects.id AND media.object = objects.id AND objects.active = '1' AND wires.active = '1' AND media.active = '1' ORDER BY media.type DESC LIMIT 2;";
+	$result =  MYSQL_QUERY($sql);
+	
+
+	// PDF
+
+	$myrow  =  MYSQL_FETCH_ARRAY($result);
+	
+	if ( $myrow["mediaId"] && $myrow["type"] == "pdf" ) {
+	
+		$sourceFile = STR_PAD($myrow["mediaId"], 5, "0", STR_PAD_LEFT);
+
+		if ( $myrow["caption"] ) {
+	
+			$downloadFile = $myrow["caption"];
+
+		} else {
+	
+			$downloadFile = $sourceFile;		
+		}
+				
+	} else {
+	
+		$error = "Sorry, we are probably uploading this PDF right now. <br />Check back in a few minutes.";
+	}
+	
+			
+	// Cover
+	
+ 	
+	$myrow  =  MYSQL_FETCH_ARRAY($result);
+	$title = strtoupper($myrow["name1"]);
+	$author = $myrow["deck"];
+	$body = $myrow["body"];
+	$id = $myrow[objectsId];
+	$mediaId = $myrow["mediaId"];
+	$type = $myrow["type"];
+	$mediaFile = "MEDIA/". STR_PAD($mediaId, 5, "0", STR_PAD_LEFT) .".". $type;	
+	$style 	= "width:100%";			
+	$issue = (int) ($myrow["objectsRank"]);
+	
+	
+	// Display
+	
+	$html   = "\n	<div class = 'mainContainer'>";	
+	$html  .= "\n		<div class='detailContainer issue" . $issue . "'>";
+
+	if ( $error ) {
+		
+		$html .= "** " . $error . "**";
+	
+	} else {
+	
+		$html  .= "\n		<a href = 'download.html?sourceFile=" . $sourceFile . "&downloadFile=" . $downloadFile . "&author=" . $author . "&issue=" . $issue . "' border='0'>";
+	}
+
+	$html  .= "\n				<div class='coverContainer'>";
+
+	if ( $id == "77066" ) {		
+
+		// G-e-s-t-a-l-t exception
+
+                $html .= "\n 		                <script>var thisW = 400; var thisH = 570;</script>";
+		$html .= "\n				<canvas data-processing-sources='../_Processing/G-e-s-t-a-l-t.pde' width='400' height='570'></canvas>";
+
+	} else {
+
+		$html  .= "\n					". displayMedia($mediaFile, null, $style);
+	}
+
+	$html  .= "\n				</div>";
+	$html  .= "\n			</a>";
+	$html  .= "\n			<div class='captionContainer detail'>". $author . ": " . $title . "	</div>";	
+	//$html .= "<a href='index.html'>* Go back *</a>";
+	$html  .= "\n		</div>";			
+	$html  .= "\n	<div class='wordsContainer body pad'>";
+	$html  .= "\n		" . nl2br($body);
+	$html  .= "\n		<br /><br /><a href = 'download.html?sourceFile=" . $sourceFile . "&downloadFile=" . $downloadFile . "&author=" . $author . "' border='0'>Download PDF</a>";
+	$html  .= "\n	</div>";	
+	$html  .= "\n	</div>";						
+
+
+	echo $html;
+?>
+
+
+
+<?php
+require_once("GLOBAL/foot.php"); 
+?>

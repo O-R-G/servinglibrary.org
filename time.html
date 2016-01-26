@@ -1,0 +1,79 @@
+<?php 
+require_once("_Library/displayMedia.php"); 
+require_once("GLOBAL/head.php"); 
+ini_set('memory_limit','512M');
+?>
+
+
+	<!-- MAIN -->
+
+<?php
+
+	// Get objects plus media
+	
+	// mySQL query returns all objects attached to 'Library' w/ .jpg
+
+	// get all records attached to '_Downloads'
+	// list them in reverse chronological order
+	// include links to the files so it becomes a kind of Way Back machine
+	
+	if ( !$sort ) $sort = "when";
+		
+	if ( $sort == "which" ) {
+	
+		$sql    = "SELECT objects.id AS objectsId, objects.name1, objects.deck, objects.body, objects.end, objects.url, objects.active, wires.fromid, wires.toid, wires.active FROM objects, wires WHERE wires.fromid=(SELECT objects.id FROM objects WHERE objects.name1 LIKE '_Downloads' AND objects.active='1') AND wires.toid = objects.id AND objects.active='1' AND wires.active='1' ORDER BY objects.deck ASC;";
+
+		$recentlyserved = "\n			* Recently served * by which / <a href='" . $pageName . ".html?sort=who'>who</a> / <a href='" . $pageName . ".html?sort=when'>when</a>";
+	}
+
+	if ( $sort == "who" )  {
+	
+		$sql    = "SELECT objects.id AS objectsId, objects.name1, objects.deck, objects.body, objects.end, objects.url, objects.active, wires.fromid, wires.toid, wires.active FROM objects, wires WHERE wires.fromid=(SELECT objects.id FROM objects WHERE objects.name1 LIKE '_Downloads' AND objects.active='1') AND wires.toid = objects.id AND objects.active='1' AND wires.active='1' ORDER BY objects.body ASC;";
+		
+		$recentlyserved = "\n			* Recently served * by <a href='" . $pageName . ".html?sort=which'>which</a> / who / <a href='" . $pageName . ".html?sort=when'>when</a>";	
+	}
+							
+	if ( $sort == "when" ) {
+	
+		$sql    = "SELECT objects.id AS objectsId, objects.name1, objects.deck, objects.body, objects.end, objects.url, objects.active, wires.fromid, wires.toid, wires.active FROM objects, wires WHERE wires.fromid=(SELECT objects.id FROM objects WHERE objects.name1 LIKE '_Downloads' AND objects.active='1') AND wires.toid = objects.id AND objects.active='1' AND wires.active='1' ORDER BY objects.end DESC;";
+		
+		// $recentlyserved = "\n			* Recently served * by <a href='" . $pageName . ".html?sort=which'>which</a> / <a href='" . $pageName . ".html?sort=who'>who</a> / when";
+
+		$recentlyserved = "\n			* Recently served *";
+	}
+			
+	$result =  MYSQL_QUERY($sql);
+	
+			
+	// Display 
+	
+	$html   = "\n	<div class = 'mainContainer'>";	
+	$html  .= "\n		<div class='servedContainer body'>";
+	$html  .= $recentlyserved;
+	$html  .= "\n			<br/><br/>";
+	$html  .= "\n			<div class='detail'>";
+	
+	while ( $myrow  =  MYSQL_FETCH_ARRAY($result) ) {
+	
+		$downloadFile = $title = strtoupper($myrow["name1"]);
+		$sourceFile = $myrow["url"];
+		$author = $myrow["deck"];
+		$timeStamp = strtoupper(date('Y M d g:i A', strtotime($myrow["end"])));
+		$ip = $myrow["body"];
+		$id = $myrow[objectsId];
+		
+		// $html  .= "\n		<a href = 'download.html?sourceFile=" . $sourceFile . "&downloadFile=" . $downloadFile . "&author=" . $author . "&timeStamp=" . $timeStamp . "&quiet=TRUE' border='0'>";
+		$html  .= "\n	" . $author . ": " . $title . " by " . $ip . " at " . $timeStamp;
+		$html  .= "\n		<br/>";
+		// $html  .= "\n		</a>";
+	}
+
+	$html  .= "\n			</div>";	
+	$html  .= "\n		</div>";
+	$html  .= "\n	</div>";
+	echo $html;
+?>
+
+<?php
+require_once("GLOBAL/foot.php"); 
+?>

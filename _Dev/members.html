@@ -1,0 +1,61 @@
+<?php 
+require_once("_Library/systemMedia.php"); 
+require_once("GLOBAL/head.php"); 
+?>
+
+
+
+<!--  MAIN DISPLAY  -->
+
+<?php
+
+if ($id) {
+
+	$sql    = "SELECT * FROM objects ";
+	$sql   .= "WHERE objects.id = '$id' AND objects.active = 1 ";
+	$sql   .= "LIMIT 1";
+	$result =  MYSQL_QUERY($sql);
+	$myrow  =  MYSQL_FETCH_ARRAY($result);
+	$thisButtonId = $myrow['notes'];
+	$thisBody = $myrow["body"];
+	$thisDeck = $myrow["deck"];
+	$thisUrl =  $myrow["url"];
+	
+	echo "<div id='text' class='textContainer'>";	
+	echo "\n" .  $thisUrl . ". <br/>";
+	echo "\n". nl2br($thisBody) ."<br /><br />";
+	echo "</div>";
+	echo "\n</div>";
+		
+	// CONTINUE ...
+	
+	$idStub = $id + 1;
+	if ( $idStub != 27 ) {
+	// $idStub = 3;  // hack for end of set of objects
+	
+		$sql    = "SELECT * FROM objects ";
+		$sql   .= "WHERE objects.id = '$idStub' AND objects.active = 1 ";
+		$sql   .= "LIMIT 1";
+		$result =  MYSQL_QUERY($sql);
+		$myrow  =  MYSQL_FETCH_ARRAY($result);
+		$thisName = $myrow["name1"];
+		$thisUrl =  $myrow["url"];
+	
+		echo "<div>";
+		echo "\n<a href = 'index.html?id=" . $idStub . "'>" . $thisName . " . . .</a><br/><br/>";
+	
+	} else {
+	
+		echo "END.<br/><br/>";
+	}
+	
+	echo "\n--<br/><br/>";
+	echo "\n<a href='index.html'>Contents</a>";
+	echo "\n<br/><br/>--<br/>";
+	//echo "</div>";
+}
+
+echo "\n</div>";
+
+require_once("GLOBAL/foot.php"); 
+?>

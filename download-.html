@@ -1,0 +1,132 @@
+<?php
+require_once("_Library/systemDatabase.php");
+require_once("Zend/Pdf.php");
+require_once("_Library/downloadPDF.php"); 
+        
+$sourceFile = $_REQUEST['sourceFile'];          // no register globals
+$downloadFile = $_REQUEST['downloadFile'];      // no register globals
+$author = $_REQUEST['author'];                  // no register globals
+$issue = $_REQUEST['issue'];                    // no register globals
+
+
+// 1. Init
+
+$now = time();
+if (!$timeStamp) $timeStamp = strtoupper(date('Y M d g:i A', $now));
+//$quiet = TRUE; // supress database writing for debugging
+
+$name1 = $downloadFile;
+$deck = $author;
+$body = $_SERVER['REMOTE_ADDR'];
+$url = $sourceFile;
+$created = $modified = $end = date('Y-m-d H:i:s', $now);
+
+
+// 2. Write database record
+
+$sql = "INSERT INTO objects (created, modified, name1, url, deck, body, end, rank) VALUES('$created', '$modified', '$name1', '$url', '$deck', '$body', '$end', null)";
+if (!$quiet) $result = MYSQL_QUERY($sql);
+$insertId = MYSQL_INSERT_ID();
+
+$sql = "INSERT INTO wires (created, modified, fromid, toid) VALUES('". date("Y-m-d H:i:s") ."', '". date("Y-m-d H:i:s") ."', (SELECT objects.id FROM objects WHERE objects.name1 LIKE '_Downloads' AND objects.active='1'), '$insertId')";
+if (!$quiet) $result = MYSQL_QUERY($sql);
+	
+
+// 3. Load PDF (Zend_PDF)
+
+$sourceFileStub = 'MEDIA/' . $sourceFile . '.pdf';
+$pdf = Zend_Pdf::load($sourceFileStub);
+
+
+// 4. Set metadata (Zend_PDF)
+
+$pdf->properties['Title'] = $downloadFile; 
+$pdf->properties['Author'] = $author;
+$parsedGMToffset = explode(":", date("P", $now));
+$pdf->properties["ModDate"] = "D:" . date("YmdHis", $now) . $parsedGMToffset[0] . "'" . $parsedGMToffset[1] ."'";
+
+
+// 5. Time stamp pages (Zend_PDF)
+
+$blue = new Zend_Pdf_Color_Html('#000000');
+$white = new Zend_Pdf_Color_Html('#FFFFFF');
+// $issue passed from read.html
+$timeStampPlus = "BoTSL#" . $issue . " " . $timeStamp;
+
+
+$bulletinStyle = new Zend_Pdf_Style(); 
+$bulletinStyle->setFillColor($white); 
+$bulletinStyle->setLineColor($white); 
+$bulletinStyle->setFont(Zend_Pdf_Font::fontWithPath('/usr/www/users/reinfurt/SERVINGLIBRARY/_Fonts/mtdbt2f-gg-webfont.ttf'), 7);
+
+// this is where the error is (font with path perhaps...)
+// introduced by pair.com upgrade to php 5.6
+// echo $sourceFile;
+
+
+foreach ($pdf->pages as $pageNumber => $pageObject) {
+
+	$pageObject->setStyle($bulletinStyle); 
+	$pageObject->drawRectangle(30, 32, 150, 20); 
+	$pageObject->setFillColor($blue); 
+	$pageObject->drawText($timeStampPlus, 32, 24); // stamp
+	$pdf->pages[$pageNumber] = $pageObject; // save
+}
+
+
+// 5a. Note on the Time stamp exception (Zend_PDF)
+
+// perhaps excerpt all of this out to extra include?
+// or at least clean it up so not so redundant
+// and fix the caps / lc in time stamp
+
+
+if ( $downloadFile == "A-Note-on-the-Time" ) {
+
+	$noteonthetimeStyle = new Zend_Pdf_Style(); $noteonthetimeStyle->setFont(Zend_Pdf_Font::fontWithPath('/usr/www/users/reinfurt/SERVINGLIBRARY/_Fonts/mtdbt2f-f-webfont.ttf'), 13);
+	$noteonthetimeStyle->setFillColor($white);
+	
+	$boxes = array();
+	$stampText = date('Y M d g:i A', $now);
+	
+	$date1 = "2011-02-18 3:34"; // the time of writing
+	$date2 = date('Y-M-d g:i', $now);
+	$daylightSaving = date('I');
+	$diff = abs(strtotime($date2) - strtotime($date1));
+	$days = floor($diff / (60*60*24));
+	$hours = floor((($diff - $days*60*60*24) / (60*60)));
+	$minutes = floor(($diff - $days*60*60*24 - $hours*60*60)/ (60));
+	$hours = $hours + $daylightSaving;
+	$stampTextD = $days . " days, " . $hours . " hours, " . $minutes . " minutes.";
+	
+	
+	// 2d array -- page, x, y, w, h, text
+	
+	$boxes = array(	array( p=>2, x=>89, y=>602, w=>114, h=>15, t=>$stampText),
+					array( p=>4, x=>174, y=>482, w=>114, h=>15, t=>$stampText),
+					array( p=>5, x=>169, y=>617, w=>114, h=>15, t=>$stampText),
+					array( p=>6, x=>51, y=>362, w=>114, h=>15, t=>$stampText),
+					array( p=>6, x=>120, y=>77, w=>152, h=>15, t=>$stampTextD) ); 
+
+	foreach ( $boxes as $thisBox ) {
+
+		$pageObject = $pdf->pages[$thisBox[p]];
+		$pageObject->setStyle($noteonthetimeStyle); 
+		$pageObject->drawRectangle($thisBox[x], $thisBox[y], $thisBox[x] + $thisBox[w], $thisBox[y] - $thisBox[h]);
+		$pageObject->setFillColor($blue); 
+		$pageObject->drawText($thisBox[t], $thisBox[x] + 1, $thisBox[y] - 11);
+		$pdf->pages[$thisBox[p]] = $pageObject;
+	}	
+}
+
+
+// 6. Render PDF (Zend_PDF)
+
+$pdfData = $pdf->render(); 
+
+
+// 7. Download PDF stream
+
+downloadPDFfromStream($pdfData, $downloadFile, $timeStamp);
+
+?>

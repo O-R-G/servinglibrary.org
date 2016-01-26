@@ -1,0 +1,47 @@
+<?php 
+require_once("_Library/systemMedia.php"); 
+require_once("GLOBAL/head.php"); 
+?>
+
+
+
+
+<!--  MAIN DISPLAY  -->
+
+<?php
+
+	// Manual hack for printing all 
+	
+	$sql    = "SELECT * FROM objects, wires ";
+	$sql   .= "WHERE wires.fromid = 1 AND wires.toid = objects.id ";
+	$sql   .= "AND objects.active = 1 ";
+	$sql   .= "ORDER BY rank ASC";
+	$result =  MYSQL_QUERY($sql);
+	
+	echo "<div class='textPrintContainer'>";	
+	
+	while (	$myrow  =  MYSQL_FETCH_ARRAY($result) ) {
+	
+		$thisBody = $myrow["body"];
+		$thisDeck = $myrow["deck"];
+		$thisUrl =  $myrow["url"];
+	
+		echo "\n" .  $thisUrl . ". <br/>";
+		echo "\n". nl2br($thisBody) ."<br /><br />";
+	
+	}
+	
+	echo "END.<br/><br/>";
+	echo "</div>";
+	echo "\n</div>";
+	echo "\n--<br/><br/>";
+	echo "</div>";
+
+
+	// TIME DATE STAMP
+	// echo "\n\n<div class='helvetica'>Posted ". date("j F Y H:i:s", strtotime($objectCreated)) ."</div>";
+	
+	echo "\n</div>";
+
+require_once("GLOBAL/foot.php"); 
+?>
