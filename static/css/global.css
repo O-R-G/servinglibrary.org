@@ -378,8 +378,8 @@ iframe {
 #ellipsis > span:nth-child(1),
 #ellipsis > span:nth-child(2),
 #ellipsis > span:nth-child(3){
-	animation: blink 2s steps(2, start) infinite;
-	-webkit-animation: blink 2s steps(2, start) infinite;
+	animation: blink 3s steps(2, start) infinite;
+	-webkit-animation: blink 3s steps(2, start) infinite;
 }
 
 #ellipsis > span:nth-child(2){
@@ -442,6 +442,9 @@ iframe {
 	}
 	.pad {
 		/*padding: 0px;*/
+	}
+	.hidden {
+		display: none;
 	}
 }	
 	
