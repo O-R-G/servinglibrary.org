@@ -42,7 +42,7 @@ a#badge:hover {
 	background: transparent;
 }
 
-#badge:focus {
+canvas:focus {
 	outline: none;
 }
 	
