@@ -5,10 +5,9 @@
 *~
 
 # media files
-MEDIA/*
+media/*
 
 # config files
 config.php
-systemDatabase.php
 .htpasswd
 .htaccess
