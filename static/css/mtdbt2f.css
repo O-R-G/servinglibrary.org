@@ -1,0 +1,32 @@
+@font-face {
+	font-family: 'mtdbt2fF';
+	src: url('../fonts/mtdbt2f-f.eot');
+	src: url('../fonts/mtdbt2f-f.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/mtdbt2f-f.woff') format('woff'),
+		 url('../fonts/mtdbt2f-f.ttf') format('truetype'),
+		 url('../fonts/mtdbt2f-f.svg#mtdbt2fF') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+    font-family: 'mtdbt2fGG';
+    src: url('../fonts/mtdbt2f-gg.eot');
+    src: url('../fonts/mtdbt2f-gg.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/mtdbt2f-gg.woff') format('woff'),
+         url('../fonts/mtdbt2f-gg.ttf') format('truetype'),
+         url('../fonts/mtdbt2f-gg.svg#mtdbt2fGG') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'mtdbt2fOO';
+    src: url('../fonts/mtdbt2f-oo.eot');
+    src: url('../fonts/mtdbt2f-oo.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/mtdbt2f-oo.woff') format('woff'),
+         url('../fonts/mtdbt2f-oo.ttf') format('truetype'),
+         url('../fonts/mtdbt2f-oo.svg#mtdbt2fOO') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
