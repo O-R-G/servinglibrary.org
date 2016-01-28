@@ -350,7 +350,11 @@ iframe {
 }
 
 .hidden {
-	display: none;
+	visibility: hidden;
+}
+
+.videoContainer {
+	position: absolute;
 }
 
 /* mobile styles */
