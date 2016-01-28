@@ -31,6 +31,8 @@ if($pdf['caption'])
 else
 	$display_name = $source_name;
 
+$display_name = htmlspecialchars($display_name, ENT_QUOTES);
+
 // video exception for issue 8
 $video = false;
 if(count($media_all) > 2)
