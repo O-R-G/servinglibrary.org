@@ -4,4 +4,7 @@
 	<div class="detail" id="served"><?
 	require_once("time-ajax.php");
 	?></div>
+	<div id="ellipsis">
+		<span>.</span> <span>.</span> <span>.</span>
+	</div>
 </div>
