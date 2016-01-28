@@ -443,7 +443,7 @@ iframe {
 	.pad {
 		/*padding: 0px;*/
 	}
-	.hidden {
+	#video.hidden {
 		display: none;
 	}
 }	
