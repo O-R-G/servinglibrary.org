@@ -57,7 +57,7 @@ $source_filename = $media_root.$source_name.".pdf";
 $pdf = Zend_Pdf::load($source_filename);
 
 // 4. Set metadata (Zend_PDF)
-$pdf->properties['Title'] = $download_file;
+$pdf->properties['Title'] = $display_name;
 $pdf->properties['Author'] = $author;
 $gmt_offset = explode(":", date("P", $now));
 $pdf->properties["ModDate"] = "D:".date("YmdHis", $now).$gmt_offset[0]."'".$gmt_offset[1]."'";
@@ -82,7 +82,7 @@ foreach ($pdf->pages as $num => $obj)
 }
 
 // 5a. note on the time exception 
-if(false) 
+if($display_name == "A-Note-on-the-Time") 
 {
 	$style = new Zend_Pdf_Style(); 
 	$style->setFont(Zend_Pdf_Font::fontWithPath($note_font_path), $note_font_size);
