@@ -4,9 +4,6 @@
 # emacs backups
 *~
 
-# media files
-media/*
-
 # config files
 config.php
 .htpasswd
