@@ -1,7 +1,8 @@
 /* Document */
 
 body {
-	font-family: 'mtdbt2fF', Helvetica, Arial, Verdana, sans-serif; 
+	font-family: 'mtdbt2fF', Helvetica, Arial, Verdana, sans-serif;
+	-webkit-font-smoothing: subpixel-antialiased;
 	text-align: left;
 	color: #000;
 	margin: 20px;

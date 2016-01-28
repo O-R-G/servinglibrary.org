@@ -81,7 +81,7 @@ if(count($media_all) > 2)
 		// video exception
 		if($video)
 		{
-		?><div id="video-button">Watch * Video</div>
+		?><div id="video-button">* Watch VIDEO</div>
 		<script>
 			var video_hidden = true;
 			video = document.getElementById("video");
@@ -92,13 +92,13 @@ if(count($media_all) > 2)
 				{
 					video.className = "videoContainer";
 					cover.className+= " hidden";
-					video_button.innerHTML = "Hide Video";
+					video_button.innerHTML = "* Hide VIDEO";
 				}
 				else
 				{
 					video.className+= " hidden";
 					cover.className = "";
-					video_button.innerHTML = "Watch * Video";
+					video_button.innerHTML = "* Watch VIDEO";
 				}
 				video_hidden = !video_hidden;
 			}
