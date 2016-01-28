@@ -1,4 +1,11 @@
-<?
+<!-- <script type="text/javascript" src="/static/js/home-ajax.js"></script> -->
+<!-- 
+<script>
+	var thisW = 220; 
+	var thisH = 313;
+</script>
+ --><?
+
 // id of the 'journal' object
 // all issues are attached to this object, 
 // and all bulletins are attached to one of those issues
@@ -12,6 +19,11 @@ $issues = $oo->children($journal_id);
 
 $i = count($issues)-1;
 $issues = array_reverse($issues);
+
+// $n = 10;
+// require($root."views/home-ajax.php");
+// $n--;
+// require($root."views/home-ajax.php");
 
 foreach($issues as $issue)
 {
@@ -56,7 +68,7 @@ foreach($issues as $issue)
 						var thisW = 220; 
 						var thisH = 313;
 					</script>
-					 <canvas data-processing-sources='static/pde/G-e-s-t-a-l-t.pde' width='220' height='313'></canvas><?
+					 <canvas datasrc='static/pde/G-e-s-t-a-l-t.pde' width='220' height='313'></canvas><?
 					}
 					else
 					{
@@ -75,9 +87,10 @@ foreach($issues as $issue)
 	
 	$i--;
 }
+
 ?><div id="Menu" class="TSLContainer body">
 	<a href="about/the-serving-library">About</a> /
 	<a href="subscribe">Subscribe</a> /
 	<a href="journal">Journal</a> /
-	<a href="archive">Archive</a>
+	<a href="archive"><span class="blink green-hi">&nbsp;Buy the archive&nbsp;</span></a>
 </div>

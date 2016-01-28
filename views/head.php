@@ -49,5 +49,5 @@ $is_mobile = false;
 				<a href='/time' id='serverTime'></a>
 			</div>
 		</div>
-		<div class="mainContainer">
+		<div id="main-container" class="mainContainer">
 			
