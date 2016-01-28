@@ -6,7 +6,8 @@ require_once($config);
 require_once("Zend/Pdf.php");
 require_once("downloadPDF.php");
 
-$db = db_connect("guest");
+// user must have write access to database
+$db = db_connect("dfw");
 
 $font_path = $root.'static/fonts/mtdbt2f-gg.ttf';
 $font_size = 7;
