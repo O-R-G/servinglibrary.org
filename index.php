@@ -7,6 +7,8 @@ if($uri[1])
 {
 	if($uri[1] == "time")
 		$view.="time.php";
+	else if($uri[1] == "table")
+		$view.= "table.php";
 	else if(strcmp($uri[1], "journal") === 0 && count($uri) == 4)
 		$view.= "read.php";
 	else

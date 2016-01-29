@@ -251,7 +251,29 @@ iframe {
 	margin:30px;
 }
 	
-	
+/* div table things */
+.table {
+	display: table;
+	width: auto;
+}
+
+.table-tr {
+	display: table-row; 
+	width: auto;
+	clear: both;
+}
+
+.table-th,
+.table-td {
+	display: table-cell;
+	width: 200px;
+}
+
+.table-th {
+	background-color: #CCCCCC;
+	text-align: left;
+}
+
 /* Type */
 
 .caption {
