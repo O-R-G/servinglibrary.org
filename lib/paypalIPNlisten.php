@@ -12,7 +12,7 @@ if($sandbox)
 {
 	// staging
 	$IPNserver = "www.sandbox.paypal.com";	
-	$IPNemail = "info@servinglibrary.org";	
+	$IPNemail = "lily@lilyhealey.co.uk";	
 	$thisreceiver_email = "info-facilitator@servinglibrary.org"; 
 } 
 else 

@@ -30,6 +30,7 @@ $is_mobile = false;
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/mtdbt2f.css">
 		<link rel="shortcut icon" href="/media/png/icon.png">
 		<script type="text/javascript" src="/static/js/global.js"></script>
+		<script src="/static/js/analytics.js"></script>
 		<script src="/static/pde/processing-1.4.1.min.js"></script>
 	</head>
 	<body>
