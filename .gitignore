@@ -8,6 +8,3 @@
 config.php
 .htpasswd
 .htaccess
-
-# mp3 files
-media/mp3/*
