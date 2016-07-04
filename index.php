@@ -11,6 +11,8 @@ if($uri[1])
 		$view.= "table.php";
 	else if(strcmp($uri[1], "journal") === 0 && count($uri) == 4)
 		$view.= "read.php";
+	else if($uri[1] == "collect")
+		$view.= "collect.php";
 	else
 		$view.="words.php";
 }

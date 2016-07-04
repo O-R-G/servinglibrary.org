@@ -9,8 +9,12 @@ require_once("downloadPDF.php");
 // user must have write access to database
 $db = db_connect("rw");
 
+// check format
+$smallformat = ($issue > 10) ? true : false; 
+
+// set font
 $font_path = $root.'static/fonts/mtdbt2f-gg.ttf';
-$font_size = 7;
+$font_size = ($smallformat == true) ? 5 : 7; 
 
 $note_font_path = $root.'static/fonts/mtdbt2f-f.ttf';
 $note_font_size = 13;
@@ -19,7 +23,6 @@ $source_name = $_POST['source_name'];
 $display_name = $_POST['display_name'];
 $author = $_POST['author'];
 $issue = $_POST['issue'];
-
 
 // 1. Init
 $now = time();
@@ -63,7 +66,8 @@ $gmt_offset = explode(":", date("P", $now));
 $pdf->properties["ModDate"] = "D:".date("YmdHis", $now).$gmt_offset[0]."'".$gmt_offset[1]."'";
 
 // 5. Time stamp pages (Zend_PDF)
-$blue = new Zend_Pdf_Color_Html('#000000');
+$black = new Zend_Pdf_Color_Html('#000000');
+$blue = new Zend_Pdf_Color_Html('#0000FF');
 $white = new Zend_Pdf_Color_Html('#FFFFFF');
 $stamp = "BoTSL#".$issue." ".$timestamp;
 
@@ -72,13 +76,22 @@ $bulletin_style->setFillColor($white);
 $bulletin_style->setLineColor($white); 
 $bulletin_style->setFont(Zend_Pdf_Font::fontWithPath($font_path), $font_size);
 
-foreach ($pdf->pages as $num => $obj) 
-{
-	$obj->setStyle($bulletin_style); 
-	$obj->drawRectangle(30, 32, 150, 20); 
-	$obj->setFillColor($blue); 
-	$obj->drawText($stamp, 32, 24); // stamp
-	$pdf->pages[$num] = $obj; // save
+if ($smallformat == true) {
+    foreach ($pdf->pages as $num => $obj) {
+        $obj->setStyle($bulletin_style); 
+        $obj->drawRectangle(22, 24, 120, 13);
+        $obj->setFillColor($black); 
+        $obj->drawText($stamp, 25, 17); // stamp
+        $pdf->pages[$num] = $obj; // save
+    }
+} else { 
+    foreach ($pdf->pages as $num => $obj) {
+        $obj->setStyle($bulletin_style); 
+        $obj->drawRectangle(30, 32, 150, 20);
+        $obj->setFillColor($black); 
+        $obj->drawText($stamp, 32, 24); // stamp
+        $pdf->pages[$num] = $obj; // save
+    }
 }
 
 // 5a. note on the time exception 
@@ -115,7 +128,7 @@ if($display_name == "A-Note-on-the-Time")
 		$page = $pdf->pages[$b[p]];
 		$page->setStyle($style); 
 		$page->drawRectangle($b[x], $b[y], $b[x] + $b[w], $b[y] - $b[h]);
-		$page->setFillColor($blue); 
+		$page->setFillColor($white); 
 		$page->drawText($b[t], $b[x] + 1, $b[y] - 11);
 		$pdf->pages[$b[p]] = $page;
 	}	

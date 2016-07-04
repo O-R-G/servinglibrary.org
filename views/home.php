@@ -92,5 +92,6 @@ foreach($issues as $issue)
 	<a href="about/the-serving-library">About</a> /
 	<a href="subscribe">Subscribe</a> /
 	<a href="journal">Journal</a> /
-	<a href="archive"><span class="blink green-hi">&nbsp;Buy the archive&nbsp;</span></a>
+	<a href="">* Space *</a>
+	<!-- <a href="archive"><span class="blink green-hi">&nbsp;Buy the archive&nbsp;</span></a> -->
 </div>
