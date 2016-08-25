@@ -21,7 +21,9 @@ $back_url = "javascript:self.history.back();";
 		?><img src="<? echo $cover_img; ?>"><?
 		}
 		echo $body;
-		if($internal)
+                if ($showsubscribe)
+                       require_once("views/subscribe.php");
+		if($internal && !$showsubscribe)
 		{
 		?><a href="<? echo $back_url; ?>">Go back</a><?
 		}

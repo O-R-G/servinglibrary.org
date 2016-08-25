@@ -13,6 +13,10 @@ if($uri[1])
 		$view.= "read.php";
 	else if($uri[1] == "collect")
 		$view.= "collect.php";
+	else if($uri[1] == "subscribe") {
+        	$showsubscribe = true;
+		$view.="words.php";
+	}
 	else
 		$view.="words.php";
 }
