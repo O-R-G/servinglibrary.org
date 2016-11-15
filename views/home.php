@@ -90,6 +90,7 @@ foreach($issues as $issue)
 
 ?><div id="Menu" class="TSLContainer body">
 	<a href="about/the-serving-library">About</a> /
+	<a href="contact">Contact</a> /
 	<a href="subscribe">Subscribe</a> /
 	<a href="buy">Buy</a> /
 	<a href="journal">Journal</a> /
