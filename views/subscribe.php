@@ -19,3 +19,9 @@
         ?><p>Please <a href="">enter a valid email address.</a></p><?
     }
 ?></section>
+
+<p>*and/or* FOLLOW us, in the usual places . . . 
+<a href="https://www.instagram.com/servinglibrary/" target="new"><img src='media/png/instagram.png' style='width:5%; 
+padding:2px;'></a>
+<a href="https://twitter.com/serving_library" target="new"><img src='media/png/twitter.png' style='width:5%; 
+padding:2px;'></a>
