@@ -91,10 +91,10 @@ foreach($issues as $issue)
 ?><div id="Menu" class="TSLContainer body">
 	<a href="about/the-serving-library">About</a> /
 	<a href="contact">Contact</a> /
-	<a href="join">Join</a> /
-	<a href="follow">Follow</a> /
-	<a href="buy">Buy</a> /
 	<a href="journal">Journal</a> /
-	<a href="space">Space</a>
-	<!-- <a href="archive"><span class="blink green-hi">&nbsp;Buy the archive&nbsp;</span></a> -->
+	<a href="space">Space</a> / 
+	<!-- <a href="events">Events</a> / -->
+	<!-- <a href="collection">Collection</a> / -->
+	<!-- <a href="teaching">Teaching</a> / -->
+	<a href="shop">Shop</a>
 </div>
