@@ -17,7 +17,7 @@ if($uri[1])
 		$view.= "collection.php";
 	else if($uri[1] == "collection" && $uri[2])
 		$view.= "words.php";
-	else if($uri[1] == "contact") {
+	else if($uri[1] == "contact" || $uri[1] == "subscribe") {
         	$showsubscribe = true;
 		$view.="words.php";
 	}

@@ -3,7 +3,8 @@
     $unsubscribe = $_POST['unsubscribe'];
     $address = $_POST['address'];
     if (!$subscribe && !$unsubscribe) {	
-	?><form enctype='multipart/form-data' action='join' method='post'>
+	?><form enctype='multipart/form-data' action='subscribe' 
+method='post'>
             <textarea name='address' cols='30' rows='2'></textarea><br />    
             <input name='subscribe' type='submit' value='Subscribe'>
             <input name='unsubscribe' type='submit' value='Unsubscribe'>

@@ -95,6 +95,6 @@ foreach($issues as $issue)
 	<a href="space">Space</a> / 
 	<a href="events">Events</a> / 
 	<!-- <a href="collection">Collection</a> / -->
-	<!-- <a href="teaching">Teaching</a> / -->
+	<a href="teaching">Teaching</a> / 
 	<a href="shop">Shop</a>
 </div>
