@@ -33,7 +33,7 @@ $is_mobile = false;
 		<script src="/static/js/analytics.js"></script>
 		<script src="/static/pde/processing-1.4.1.min.js"></script>
 	</head>
-	<body>
+	<body class = "<? echo ($uri[1] == "collection") ? "pegboard" : ""; ?>">
 		<div id='timeWrapper' class='timeContainerWrapper'>
 			<div id='time' class='timeContainer time'>
 				<script type="text/javascript">
@@ -50,5 +50,4 @@ $is_mobile = false;
 				<a href='/time' id='serverTime'></a>
 			</div>
 		</div>
-		<div id="main-container" class="mainContainer">
-			
+		<div id="main-container" class="mainContainer">			

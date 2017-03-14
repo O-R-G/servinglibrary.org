@@ -375,6 +375,10 @@ iframe {
 	padding: 0 0 0 16px;
 }
 
+.pegboard {
+    	background-image: url("/media/gif/peg.gif");
+}
+
 .hidden {
 	visibility: hidden;
 }
