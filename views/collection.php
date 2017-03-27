@@ -46,13 +46,4 @@ foreach($objects as $o)
 	}
 }
 	
-?><div id="Menu" class="TSLContainer body">
-        <a href="about/the-serving-library">About</a> /
-        <a href="contact">Contact</a> /
-        <a href="journal">Journal</a> /
-        <a href="space">Space</a> /
-        <a href="events">Events</a> / 
-        <!-- <a href="collection">Collection</a> / -->
-        <!-- <a href="teaching">Teaching</a> / -->
-        <a href="shop">Shop</a>  
-</div>
+?>
