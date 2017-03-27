@@ -111,6 +111,14 @@ iframe {
 	z-index: 10;
 }
 
+.sidebarContainer {
+	position: absolute;
+	top: 40px;
+	left: 75%;
+	width: 200px;
+	z-index: 10;
+}
+
 .TSLContainer {
 	z-index: 10;
 	/* position: relative;*/
@@ -471,6 +479,14 @@ iframe {
 	}
 	.videoContainer {
 		margin-top: 30px;
+	}
+	.sidebarContainer {
+	position: relative;
+		width: inherit;
+                float: inherit;
+		left: 0px;
+                margin-left: auto;
+                margin-right: auto;
 	}
 	.pad {
 		/*padding: 0px;*/
