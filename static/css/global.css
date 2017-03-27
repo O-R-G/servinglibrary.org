@@ -476,18 +476,20 @@ iframe {
 		width: inherit;
 	}
 	.wordsContainer {
-		padding: 15px;
+		padding: 15px; 
+        padding-top: 40px;
 	}
 	.videoContainer {
 		margin-top: 30px;
 	}
 	.sidebarContainer {
-	position: relative;
+	    position: relative;
 		width: inherit;
-                float: inherit;
+        float: inherit;
+        top: 0px;
 		left: 0px;
-                margin-left: auto;
-                margin-right: auto;
+        margin-left: auto;
+        margin-right: auto;
 	}
 	.pad {
 		/*padding: 0px;*/
