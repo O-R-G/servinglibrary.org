@@ -88,9 +88,4 @@ foreach($issues as $issue)
 	$i--;
 }
 
-?><div id="Menu" class="TSLContainer body">
-	<a href="introduction">Introduction</a> — 
-	<a href="publication">Publication</a> /
-	<a href="program">Program</a> /
-	<a href="collection-new">Collection</a>
-</div>
+?>
