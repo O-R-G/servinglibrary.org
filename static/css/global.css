@@ -450,6 +450,7 @@ iframe {
 	}
 	.mainContainer {
 		width: 100%;
+		padding-top: 30px;
 	}
 	.TSLContainer {
 		top: 25px;
@@ -498,4 +499,3 @@ iframe {
 		display: none;
 	}
 }	
-	
