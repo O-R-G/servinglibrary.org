@@ -13,37 +13,43 @@ $n = count($children);
 // randomise the array
 shuffle($objects);
 
-foreach($objects as $o)
-{
+foreach($objects as $o) {
+
 	// style caption
 	$title = strtoupper($o['name1']);
 	$caption = $title;
+
+	// multiple images per object	
+	$media = $oo->media($o['id']);
+
+	foreach ($media as $m) {
+
+		// get cover image
+		$j = 0;
+		
+		// ignore if .pdf
+		while($m['type'] == "pdf")
+			continue;
+
+		// build object url
+		$o_url = $uu->url."/".$o['url'];
+
+		// media url
+		$m_url = m_url($m);
 	
-	// get cover image
-	$all_media = $oo->media($o['id']);
-	$j = 0;
-	while($all_media[$j]['type'] == "pdf")
-		$j++;
-	
-	// get cover image url
-	$m_url = m_url($all_media[$j]);
-	
-	// build object url
-	$o_url = $uu->url."/".$o['url'];
-	
-	// display object and caption
-	if (substr($o['name1'], 0, 1) != ".") {
-		?><div class="thumbsContainer object">
-			<a href="<? echo $o_url; ?>">
-				<div class="coverContainer"><?
-					?><img src="<? echo $m_url; ?>"><?
+		// display object and caption
+		if (substr($o['name1'], 0, 1) != ".") {
+			?><div class="thumbsContainer object">
+				<a href="<? echo $o_url; ?>">
+					<div class="coverContainer"><?
+						?><img src="<? echo $m_url; ?>"><?
+					?></div>
+				</a>
+				<div class="captionContainer caption"><? 
+					echo $caption; 
 				?></div>
-			</a>
-			<div class="captionContainer caption"><? 
-				echo $caption; 
-			?></div>
-		</div><?
+			</div><?
+		}
 	}
 }
-	
 ?>

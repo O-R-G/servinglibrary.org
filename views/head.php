@@ -28,7 +28,7 @@ $is_mobile = false;
 		<meta name="viewport" content="width=device-width">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/global.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/mtdbt2f.css">
-		<link rel="shortcut icon" href="/media/png/icon.png">
+		<link rel="apple-touch-icon" href="/media/png/icon.png" />
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>
 		<script src="/static/pde/processing-1.4.1.min.js"></script>
