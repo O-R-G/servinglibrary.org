@@ -18,7 +18,7 @@ $back_url = "javascript:self.history.back();";
 		echo nl2br($deck);
 		if($cover)
 		{
-		?><img src="<? echo $cover_img; ?>"><?
+		?><img class="cover" src="<? echo $cover_img; ?>"><?
 		}
 		echo $body;
                 if ($showsubscribe)
