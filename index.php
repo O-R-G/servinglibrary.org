@@ -29,6 +29,7 @@ else
 
 // show the things
 require_once("views/head.php");
+require_once("views/closed.php");
 if($view == "views/time.php")
 	require_once("views/clock.php");
 else
