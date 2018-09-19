@@ -110,6 +110,7 @@ if(count($media_all) > 2)
 		}
 	?>
 	<br />
+	<!--
 	<span class='green-hi'>&nbsp;Please consider donating $1 per download. *Thank you.*&nbsp;</span>
 	<br /><br />
 	<form name="Donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -118,11 +119,12 @@ if(count($media_all) > 2)
 		<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 		<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 	</form>
+	-->
 	</div>
 	<form id="download-form" action="/lib/download.php" method="post">
 		<input type="hidden" name="source_name" value="<? echo $source_name; ?>">
 		<input type="hidden" name="display_name" value="<? echo $display_name; ?>">
 		<input type="hidden" name="author" value="<? echo $author; ?>">
 		<input type="hidden" name="issue" value="<? echo $issue; ?>">
-	</form>
+	</form>	
 </div>
