@@ -1,5 +1,4 @@
-<?php
-
+<?php	
 require_once("config.php");
 $pageName = basename($_SERVER['PHP_SELF'], ".php");
 $object = $_REQUEST['object'];

@@ -1,5 +1,6 @@
-<?php require_once("GLOBAL/head.php"); ?>
-
+<?
+require_once("GLOBAL/head.php"); 
+?>
 
 
 <br />

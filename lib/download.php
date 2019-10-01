@@ -7,7 +7,7 @@ require_once("Zend/Pdf.php");
 require_once("downloadPDF.php");
 
 // user must have write access to database
-$db = db_connect("rw");
+$db = db_connect('main');
 
 // check format
 $smallformat = ($issue > 10) ? true : false; 
@@ -23,6 +23,7 @@ $source_name = $_POST['source_name'];
 $display_name = $_POST['display_name'];
 $author = $_POST['author'];
 $issue = $_POST['issue'];
+
 
 // 1. Init
 $now = time();

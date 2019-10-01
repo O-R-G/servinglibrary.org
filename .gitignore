@@ -8,3 +8,9 @@
 config.php
 .htpasswd
 .htaccess
+
+# media
+
+# media/*.jpg
+# media/*.png
+# media/*.pdf
