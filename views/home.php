@@ -20,6 +20,7 @@ $issues = $oo->children($journal_id);
 $i = count($issues)-1;
 $issues = array_reverse($issues);
 
+
 // $n = 10;
 // require($root."views/home-ajax.php");
 // $n--;
@@ -56,30 +57,34 @@ foreach($issues as $issue)
 		
 		// build bulletin url
 		$b_url = $issue_url."/".$b['url'];
+
+		// staged?
+	    	$staged = !(substr($title, 0, 1) != "_" && substr($title, 0, 1) != ".");
 		
-		// display bulletin and caption
-		?><div class="thumbsContainer issue<? echo $i; ?>">
-			<a href="<? echo $b_url; ?>">
-				<div class="coverContainer"><?
-					// G-e-s-t-a-l-t exception
-					if($b['id'] == $gestalt_id and !$is_mobile)
-					{
-					?><script>
-						var thisW = 220; 
-						var thisH = 313;
-					</script>
-					 <canvas datasrc='static/pde/G-e-s-t-a-l-t.pde' width='220' height='313'></canvas><?
-					}
-					else
-					{
-					?><img src="<? echo $m_url; ?>"><?
-					}
+		if (!$staged) {
+			?><div class="thumbsContainer issue<? echo $i; ?>">
+				<a href="<? echo $b_url; ?>">
+					<div class="coverContainer"><?
+						// G-e-s-t-a-l-t exception
+						if($b['id'] == $gestalt_id and !$is_mobile)
+						{
+						?><scripÃt>
+							var thisW = 220; 
+							var thisH = 313;
+						</script>
+						<canvas datasrc='static/pde/G-e-s-t-a-l-t.pde' width='220' height='313'></canvas><?
+						}
+						else
+						{
+						?><img src="<? echo $m_url; ?>"><?
+						}
+					?></div>
+				</a>
+				<div class="captionContainer caption"><? 
+					echo $caption; 
 				?></div>
-			</a>
-			<div class="captionContainer caption"><? 
-				echo $caption; 
-			?></div>
-		</div><?
+			</div><?
+		}
 	}
 	
 	// divide bulletins
