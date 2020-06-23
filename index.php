@@ -30,10 +30,10 @@ else
 // show the things
 require_once("views/head.php");
 require_once("views/closed.php");
+require_once($view);
 if($view == "views/time.php")
 	require_once("views/clock.php");
 else
 	require_once("views/badge.php");
-require_once($view);
 require_once("views/foot.php");
 ?>

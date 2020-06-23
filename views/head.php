@@ -34,6 +34,15 @@ $is_mobile = false;
 		<script src="/static/pde/processing-1.4.1.min.js"></script>
 	</head>
 	<body> 
+
+	<!-- sanctuary.computer embed -->
+	<?
+		if (!$uri[1]) { 
+			?><iframe src="https://sanctuarycomputer.github.io/blm-resource-embed/iframe.html" style="height:800px;width:100%;position:relative;border:0;margin:0;padding:0;top:0;left:0;right:0;bottom:0;z-index:51;padding-top:20px;"></iframe><?
+		}
+	?>
+	<!-- end sanctuary.computer embed -->
+
 		<div id='timeWrapper' class='timeContainerWrapper'>
 			<div id='time' class='timeContainer time'>
 				<script type="text/javascript">
