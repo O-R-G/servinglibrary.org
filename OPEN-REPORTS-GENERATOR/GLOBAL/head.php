@@ -18,7 +18,7 @@ $notes = $_REQUEST['notes'];
 $action = $_REQUEST['action'];
 $cancel = $_REQUEST['cancel'];
 $submit = $_REQUEST['submit'];
-
+/*
 
     ////////////////
    //            //
@@ -49,6 +49,15 @@ else if( isset( $_SERVER['PHP_AUTH_USER'] ) )
 		if ($_SERVER['PHP_AUTH_USER'] == $dbUser3) $dbUserSelected = 3;
 	}
 };
+*/
+
+// for some reason the auth above stopped working, so this is a workaround
+// force ignore auth
+
+// $dbUserSelected = 1;
+$dbUserSelected = 2;
+// $dbUserSelected = 3;
+
 
 
 

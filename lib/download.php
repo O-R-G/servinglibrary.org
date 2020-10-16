@@ -6,6 +6,10 @@ require_once($config);
 require_once("Zend/Pdf.php");
 require_once("downloadPDF.php");
 
+// debug
+// ini_set('display_errors', 1);
+// var_dump($_POST['source_name']);
+
 // user must have write access to database
 $db = db_connect('main');
 

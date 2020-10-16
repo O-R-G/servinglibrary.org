@@ -1,7 +1,7 @@
-#AuthUserFile /usr/www/users/reinfurt/o-r-g.com/.htpasswd
-#AuthName "OPEN-RECORDS-GENERATOR"
-#AuthType Basic
-#Require valid-user
+# AuthUserFile /usr/www/users/reinfurt/o-r-g.com/.htpasswd
+# AuthName "OPEN-RECORDS-GENERATOR"
+# AuthType Basic
+# Require valid-user
 # 
 Options +FollowSymLinks -Indexes
 IndexIgnore */*

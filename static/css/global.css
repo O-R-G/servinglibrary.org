@@ -138,7 +138,7 @@ iframe {
 }
 
 .dividerContainer {
-	clear: left;
+	/* clear: left; */
 	width: 100%;
 }
 

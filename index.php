@@ -2,6 +2,8 @@
 
 $uri = explode('/', $_SERVER['REQUEST_URI']);
 $view = "views/";
+// debug
+// ini_set('display_errors', 1);
 
 if($uri[1])
 {
