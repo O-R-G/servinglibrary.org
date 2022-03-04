@@ -17,8 +17,6 @@ $protocol = isset($_SERVER['HTTPS']) &&
          "https://" : "http://";
 $host = $protocol . $_SERVER['HTTP_HOST'];
 $paypal_client_id = getenv('PAYPAL_CLIENT_ID');
-// $paypal_client_id = 'ffmwgssqcwgsh43p';
-var_dump($paypal_client_id);
 ?>
 <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&disable-funding=credit,card"></script>
 <div class="mainContainer">
