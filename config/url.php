@@ -22,7 +22,7 @@ class URL extends URL_Base
 			if($urls)
 				header("Location: ".$host."/".implode("/", $urls));
 		}
-		$id = $ids[count($ids)-1];
+		$id = end($ids);
 		if(!$id)
 			$id = 0;
 		if(sizeof($ids) == 1 && empty($ids[0]))

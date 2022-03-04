@@ -18,6 +18,8 @@ $uu = new URL();
 
 $title = "The Serving Library";
 $is_mobile = false;
+
+require 'static/php/vendor/autoload.php';
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +33,7 @@ $is_mobile = false;
 		<link rel="apple-touch-icon" href="/media/png/icon.png" />
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>
-		<script src="/static/pde/processing-1.4.1.min.js"></script>
+		<!-- <script src="/static/pde/processing-1.4.1.min.js"></script> -->
 	</head>
 	<body> 
 		<div id='timeWrapper' class='timeContainerWrapper'>

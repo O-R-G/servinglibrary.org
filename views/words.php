@@ -5,7 +5,12 @@ use \Michelf\Markdown;
 $r = $oo->get($uu->id);
 $body = Markdown::defaultTransform($r['body']);
 $deck = $r['deck'];
-$cover = $oo->media($r['id'])[0];
+$media = $oo->media($r['id']);
+if(count($media) > 0)
+	$cover = $media[0];
+else
+	$cover = false;
+
 if($cover)
 	$cover_img = m_url($cover);
 
@@ -21,9 +26,9 @@ $back_url = "javascript:self.history.back();";
 		?><img class="cover" src="<? echo $cover_img; ?>"><?
 		}
 		echo $body;
-                if ($showsubscribe)
+                if (isset($showsubscribe))
                        require_once("views/subscribe.php");
-		if($internal && !$showsubscribe)
+		if($internal && !isset($showsubscribe))
 		{
 		?><a href="<? echo $back_url; ?>">Go back</a><?
 		}

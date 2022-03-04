@@ -23,6 +23,8 @@ if($uri[1])
         	$showsubscribe = true;
 		$view.="words.php";
 	}
+	else if($uri[1] == "shop" && isset($uri[2]) && $uri[2] == 'issues') 
+		$view.="shop.php";
 	else
 		$view.="words.php";
 }

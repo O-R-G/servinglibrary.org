@@ -152,6 +152,11 @@ iframe {
 	margin: 0 10px 10px 0;
 }
 
+.thumbsContainer.journalContainer {
+	width: 300px;
+	margin-bottom: 100px;
+}
+
 .detailContainer {
 	width: 400px;
 }
@@ -441,6 +446,69 @@ iframe {
 #ellipsis > span:nth-child(3){
 	animation-delay: 1s;
 	-webkit-animation-delay: 1s;
+}
+
+.floatContainer:after
+{
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
+.button {
+    width: 200px;
+    height: 35px;
+    color: #FFF;
+    background-color: #0C0;
+    border: 1px solid #0C0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+}
+.button:hover
+{
+    background-color: #0E0;
+    border: 1px solid #0E0;
+}
+
+.buy-button-container {
+    /*position: fixed;*/
+    /*left: 18px;*/
+    /*bottom: 17px;*/
+    width: 100px;
+}
+
+.paypal-button-container {
+    /*position: fixed;*/
+    /*left: 18px;*/
+    /*bottom: 90px;*/
+    /*width: 100px;*/
+    display: block;
+    opacity: 0.0;
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+}
+
+.paypal-button-container:hover {
+    /* opacity: 1.0; */
+}
+
+.viewing-paypal .download-code-container,
+.viewing-paypal .paypal-button-container
+{
+    opacity: 1;
+    pointer-events: initial;
+    height: initial;
+}
+.viewing-paypal .buy-button-container .button
+{
+    background-color: #ccc;
+    border-color: #ccc;
 }
 
 /* mobile styles */
