@@ -457,14 +457,14 @@ iframe {
 }
 
 .button {
-    width: 200px;
+    width: 100%;
     height: 35px;
     color: #FFF;
     background-color: #0C0;
     border: 1px solid #0C0;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 18px;
+    /*font-size: 18px;*/
     text-align: center;
     vertical-align: top;
     cursor: pointer;
@@ -479,7 +479,22 @@ iframe {
     /*position: fixed;*/
     /*left: 18px;*/
     /*bottom: 17px;*/
-    width: 100px;
+    /*width: 200px;*/
+}
+
+.button-area
+{
+    /*padding: 5px;*/
+    /*width: 200px;*/
+    box-sizing: content-box;
+}
+.button-area + .button-area
+{
+	margin-top: 11px;
+}
+.viewing-paypal .button-area
+{
+    background-color: #fff;
 }
 
 .paypal-button-container {
@@ -504,13 +519,19 @@ iframe {
     opacity: 1;
     pointer-events: initial;
     height: initial;
+    margin-top: 11px;
 }
 .viewing-paypal .buy-button-container .button
 {
-    background-color: #ccc;
-    border-color: #ccc;
+    /*background-color: #ccc;*/
+    /*border-color: #ccc;*/
+    background-color: #0E0;
+    border-color: #0E0;
 }
-
+.shopItemLink
+{
+	display: block;
+}
 /* mobile styles */
 @media screen and (max-width: 568px)
 {

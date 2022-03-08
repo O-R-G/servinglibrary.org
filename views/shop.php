@@ -7,7 +7,7 @@ $body = Markdown::defaultTransform($r['body']);
 $deck = $r['deck'];
 
 // only show back button on internal references
-$internal = (substr($_SERVER['HTTP_REFERER'], 0, strlen($host)) === $host);
+$internal = isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, strlen($host)) === $host);
 $back_url = "javascript:self.history.back();";
 
 $journal_children = $oo->children($r['id']);
@@ -16,19 +16,154 @@ $protocol = isset($_SERVER['HTTPS']) &&
          $_SERVER['HTTPS'] === 'on' ? 
          "https://" : "http://";
 $host = $protocol . $_SERVER['HTTP_HOST'];
-$paypal_client_id = getenv('PAYPAL_CLIENT_ID');
+if($uri[1] == 'shop' && $uri[2] == 'issues')
+	$base_url = '/journal/';
+else
+	$base_url = '/' . $uri[1] . '/' . $uri[2] . '/';
+
+// $paypal_client_id = getenv('PAYPAL_CLIENT_ID');
+// sandbox
+$paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSERT_IuhPuIVueizce3yXCzX';
+// live
+// $paypal_client_id = 'ATB90kcor24zrbGtQCBUnIKeqtxMMaz5M1rgUbO4mcEt_ACUHXk52TPiBbyoQJaOiubhDz8jzA3iQepP';
+
 ?>
-<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&disable-funding=credit,card"></script>
+<script id="paypal-library-usd" src="https://www.paypal.com/sdk/js?client-id=<?= $paypal_client_id; ?>&disable-funding=credit,card"></script>
+<script>
+	const loadDynamicScript = (callback, buttonContainerId, price, currency) => {
+		let scriptId = 'paypal-library-'+currency.toLowerCase();
+		let scriptUrl = "https://www.paypal.com/sdk/js?client-id=<?= $paypal_client_id; ?>&disable-funding=credit,card&currency="+currency;
+		const existingScript = document.getElementById(scriptId);
+
+		if (!existingScript) {
+			const script = document.createElement('script');
+			script.src = scriptUrl; // URL for the third-party library being loaded.
+			script.id = scriptId ; // e.g., googleMaps or stripe
+			document.body.appendChild(script);
+			script.onload = () => {
+				if (callback) callback(buttonContainerId, price, currency);
+			};
+		}
+
+		if (existingScript && callback) callback();
+	};
+
+	var shippingOptions = 
+	{
+        USD: {
+        	US: 3.00,
+        	EU: 8.00,
+        	OTHER: 10.00
+        },
+        GBP: {
+        	US: 2.00,
+        	EU: 6.00,
+        	OTHER: 8.00
+        },
+        EUR: {
+        	US: 2.50,
+        	EU: 6.50,
+        	OTHER: 8.50
+        }
+    };
+
+	function expandPaypal(buttonAreaId, price, currency="USD"){
+		let sButtonArea = document.getElementById(buttonAreaId);
+		if( sButtonArea.classList.contains('viewing-paypal') ){
+			sButtonArea.classList.remove('viewing-paypal');
+		}
+		else
+		{
+			let sViewing_paypal = document.querySelector('.button-area.viewing-paypal');
+			if(sViewing_paypal)
+				sViewing_paypal.classList.remove('viewing-paypal');
+			sButtonArea.classList.add('viewing-paypal');
+			let thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
+			if(thisPaypalButtonContainer)
+				loadDynamicScript(createButton, thisPaypalButtonContainer.id, price, currency);
+		}
+
+		
+		
+	}
+	function createButton(buttonContainerId, price, currency){
+		paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    application_context: {
+                        brand_name: 'O-R-G',
+                        shipping_method: "United Postal Service"
+                        // shipping_preference: 'NO_SHIPPING'
+                    },
+                    purchase_units: [{
+                    	amount: {
+                            currency_code: currency,
+                            value: price
+                    	},
+		              	shipping: {
+			              	options: [
+			              	{
+		                        id: "SHIP_US",
+		                        label: "US",
+		                        type: "SHIPPING",
+		                        selected: true,
+		                        amount: {
+		                            value: shippingOptions[currency]['US'],
+		                            currency_code: currency
+		                        }
+			                },{
+		                        id: "SHIP_EU",
+		                        label: "Europe",
+		                        type: "SHIPPING",
+		                        selected: false,
+		                        amount: {
+		                            value: shippingOptions[currency]['EU'],
+		                            currency_code: currency
+		                        }
+		                    },{
+		                        id: "SHIP_OTHER",
+		                        label: "Rest of the world",
+		                        type: "SHIPPING",
+		                        selected: false,
+		                        amount: {
+		                            value: shippingOptions[currency]['OTHER'],
+		                            currency_code: currency
+		                        }
+		                    }]
+			            }
+                    }]
+                });
+            },
+            style: {
+                color: 'black'
+            },
+            onError: function (err) {
+				// For example, redirect to a specific error page
+				// window.location.href = "/your-error-page-here";
+				// window.location.href = "/shop/issues/error";
+				console.log(err);
+			},
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(orderData) {
+                    /* 
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    var transaction = orderData.purchase_units[0].payments.captures[0];
+                    alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+                    const element = document.getElementById('paypal-button-container');
+                    element.innerHTML = 'Thx.';
+                    */
+                    // let email = orderData.payer.email_address;
+                    window.location.href = "/shop/issues/thank-you";
+                    console.log('on approve');   
+                });
+            }
+      }).render('#' + buttonContainerId);
+	}
+</script>
 <div class="mainContainer">
 	<div class="wordsContainer body"><?
 		echo nl2br($deck);
 		echo $body;
-                if (isset($showsubscribe))
-                       require_once("views/subscribe.php");
-		if($internal && !isset($showsubscribe))
-		{
-		?><a href="<? echo $back_url; ?>">Go back</a><?
-		}
 	?></div>
 	<div id="shopContainer" class="floatContainer">
 		<? foreach($journal_children as $key => $child){
@@ -37,91 +172,45 @@ $paypal_client_id = getenv('PAYPAL_CLIENT_ID');
 				$media = $oo->media($child['id']);
 				if(count($media) > 0)
 					$cover = m_url($media[0]);
-				// $price_pattern = '/\[price\]\((.*?\))\)/';
-				// var_dump($child['notes']);
-				// preg_match($price_pattern, $child['notes'], $temp);
-				$prices_pattern = '/\[(USD|EU|GBP)\]\((.*?)\)/';
+				$prices_pattern = '/\[(USD|EUR|GBP)\]\((.*?)\)/';
 				preg_match_all($prices_pattern, $child['notes'], $temp);
 				$prices = array();
-				foreach($temp[2] as $c => $t)
-					$prices[$temp[1][$c]] = $t;
-				// var_dump($prices);
-				// die();
+				if(!empty($temp)){
+					foreach($temp[2] as $c => $t)
+						$prices[$temp[1][$c]] = $t;
+				}
+				else
+					$isSoldOut = true;
 				
 				?><div class="thumbsContainer journalContainer">
 					<? if(isset($cover)){
 						?><div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div><?
 					} ?>
 					<div class="issue-title"><?= $child['name1']; ?></div>
+					<a class="shopItemLink" href="<?= $base_url . $child['url']; ?>">Read more</a>
 					<br>
-					<div class="issue-body"><?= $child['body']; ?></div>
-					<section id="buy-<?= $key; ?>">
-				            <div id="button-area-<?= $key; ?>">
-				                
-				                <?
-				                	foreach($prices as $c => $p)
-				                	{
-				                		?>
-				                		<div id="paypal-button-container-<?= $key . '-' . $c; ?>" class="payment-option paypal-button-container"></div>
-				                		<div id="buy-button-container-<?= $key . '-' . $c; ?>" class="buy-button-container">
-						                    <button id="cost-<?= $key . '-' . $c; ?>" class="button">$<?= $c . ' $' . $p; ?></button>
-						              </div>
-				                		<?
-				                	}
-				                ?>
-				                
-				            </div>
-				        
-				            <script>
-				           
-				                var host = <?= json_encode($host); ?>;
-				                // var download_url = host + '/thx?name=' + filename;
-				                <?
-				                foreach($prices as $c => $p)
-			                	{
-			                	?>
-			                	var buy_button_container = document.getElementById('buy-button-container-<?= $key . '-' . $c; ?>');
-				                // var download_code_container = document.getElementById('download-code-container');
-				                // var download_code = document.getElementById('download-code');
-				                buy_button_container.addEventListener('click', function(){
-				                    document.body.classList.toggle('viewing-payment-options');
-				                });
-		                			paypal.Buttons({
-					                    createOrder: function(data, actions) {
-					                        return actions.order.create({
-					                            application_context: {
-					                                brand_name: 'O-R-G',
-					                                // shipping_preference: 'NO_SHIPPING'
-					                            },
-					                            purchase_units: [{
-					                                amount: {
-					                                	currency_code: '<?= $c; ?>',
-					                                   value: '<?= $p; ?>'
-					                                },
-					                                // description: filename
-					                            }]
-					                        });
-					                    },
-					                    style: {
-					                        color: 'black'
-					                    },
-					                    onApprove: function(data, actions) {
-					                        return actions.order.capture().then(function(orderData) {
-					                            /* 
-					                            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-					                            var transaction = orderData.purchase_units[0].payments.captures[0];
-					                            alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
-					                            const element = document.getElementById('paypal-button-container');
-					                            element.innerHTML = 'Thx.';
-					                            */
-					                            // let email = orderData.payer.email_address;
-					                            console.log('on approve');   
-					                        });
-					                    }
-					              }).render('#paypal-button-container-<?= $key . '-' . $c; ?>');
-			                	<? } ?>
-				            </script>
-				        </section>
+					<section id="buy-<?= $key; ?>" class="buy-section">
+				       	<? 
+				       	if(!empty($prices))
+				       	{
+				       		foreach($prices as $c => $p) { ?>
+		                		<div id="button-area-<?= $key . '-' . $c; ?>" class="button-area">
+			                		<div id="buy-button-container-<?= $key . '-' . $c; ?>" class="buy-button-container">
+					              		<button id="cost-<?= $key . '-' . $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>')">$<?= $p . ' '. $c; ?></button>
+					            	</div>
+					            	<div id="paypal-button-container-<?= $key . '-' . $c; ?>" class="payment-option paypal-button-container"></div>
+					            	<script>
+					            		createButton('paypal-button-container-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>');
+					            	</script>
+				            	</div>
+		                	<? }
+				       	}
+				       	else
+				       	{
+				       		?><div id="button-area-<?= $key . '-' . $c; ?>" class="button-area"><div class="sold-out red">SOLD OUT</div></div><?
+				       	}
+				       	?>
+			        </section>
 				</div><?
 			}   
 		} ?>
