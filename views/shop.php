@@ -1,3 +1,39 @@
+<style>
+	/*
+		tmp for dev only
+		should be cleaned up
+	*/
+
+	/* horribly ugly -- the buy-section should really be in the larger container div */
+
+	.buy-section {
+		margin-top: -70px;
+		text-align: right;
+		right: 0px;
+		padding: 10px;
+	}
+
+	/* obvo all of this is an ugly hack to be fixed */
+
+	.buy-button-container {
+		display: inline-block;
+		width: 50%;
+	}
+
+	.button-area:first-of-type {
+		display: none;
+	}
+
+	.thumbsContainer.journalContainer {
+		margin-bottom: 10px;
+	}
+
+	.button {
+		font-size: 15px;
+	}
+
+</style>
+
 <?
 // namespace stuff
 use \Michelf\Markdown;
@@ -82,9 +118,6 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 			if(thisPaypalButtonContainer)
 				loadDynamicScript(createButton, thisPaypalButtonContainer.id, price, currency);
 		}
-
-		
-		
 	}
 	function createButton(buttonContainerId, price, currency){
 		paypal.Buttons({
@@ -154,7 +187,7 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
                     */
                     // let email = orderData.payer.email_address;
                     window.location.href = "/shop/issues/thank-you";
-                    console.log('on approve');   
+                    console.log('on approve');
                 });
             }
       }).render('#' + buttonContainerId);
@@ -163,7 +196,7 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 <div class="mainContainer">
 	<div class="wordsContainer body"><?
 		echo nl2br($deck);
-		echo $body;
+		// echo $body;
 	?></div>
 	<div id="shopContainer" class="floatContainer">
 		<? foreach($journal_children as $key => $child){
@@ -181,22 +214,24 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 				}
 				else
 					$isSoldOut = true;
-				
-				?><div class="thumbsContainer journalContainer">
-					<? if(isset($cover)){
+
+				?><div class="thumbsContainer journalContainer"><?
+					if(isset($cover)){
 						?><div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div><?
-					} ?>
+					}
+					?><!--
 					<div class="issue-title"><?= $child['name1']; ?></div>
 					<a class="shopItemLink" href="<?= $base_url . $child['url']; ?>">Read more</a>
 					<br>
+					-->
 					<section id="buy-<?= $key; ?>" class="buy-section">
-				       	<? 
+				       	<?
 				       	if(!empty($prices))
 				       	{
 				       		foreach($prices as $c => $p) { ?>
 		                		<div id="button-area-<?= $key . '-' . $c; ?>" class="button-area">
 			                		<div id="buy-button-container-<?= $key . '-' . $c; ?>" class="buy-button-container">
-					              		<button id="cost-<?= $key . '-' . $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>')">$<?= $p . ' '. $c; ?></button>
+					              		<button id="cost-<?= $key . '-' . $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>')">$<?= $p; ?></button>
 					            	</div>
 					            	<div id="paypal-button-container-<?= $key . '-' . $c; ?>" class="payment-option paypal-button-container"></div>
 					            	<script>
@@ -212,7 +247,7 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 				       	?>
 			        </section>
 				</div><?
-			}   
-		} ?>
-	</div>
+			}
+		}
+	?></div>
 </div>
