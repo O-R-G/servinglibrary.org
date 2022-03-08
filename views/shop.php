@@ -217,7 +217,9 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 
 				?><div class="thumbsContainer journalContainer"><?
 					if(isset($cover)){
-						?><div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div><?
+						?><a class="shopItemLink" href="<?= $base_url . $child['url']; ?>">
+							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
+						</a><?
 					}
 					?><!--
 					<div class="issue-title"><?= $child['name1']; ?></div>
