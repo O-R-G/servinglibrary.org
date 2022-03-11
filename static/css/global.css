@@ -152,11 +152,6 @@ iframe {
 	margin: 0 10px 10px 0;
 }
 
-.thumbsContainer.journalContainer {
-	width: 300px;
-	margin-bottom: 100px;
-}
-
 .detailContainer {
 	width: 400px;
 }
@@ -210,7 +205,8 @@ iframe {
 .timeContainerWrapper {
 	position: fixed;
 	top: 10px;
-	left: 98%;
+	/*left: 98%;*/
+	right: 20px;
 	width: 150px;
 	margin: 0 0 0 -140px;
 	z-index: 90;
@@ -464,7 +460,7 @@ iframe {
     border: 1px solid #0C0;
     border-radius: 4px;
     box-sizing: border-box;
-    /*font-size: 18px;*/
+    font-size: 18px;
     text-align: center;
     vertical-align: top;
     cursor: pointer;
@@ -490,48 +486,9 @@ iframe {
 }
 .button-area + .button-area
 {
-	margin-top: 11px;
-}
-.viewing-paypal .button-area
-{
-    background-color: #fff;
+	/*margin-top: 11px;*/
 }
 
-.paypal-button-container {
-    /*position: fixed;*/
-    /*left: 18px;*/
-    /*bottom: 90px;*/
-    /*width: 100px;*/
-    display: block;
-    opacity: 0.0;
-    pointer-events: none;
-    height: 0;
-    overflow: hidden;
-}
-
-.paypal-button-container:hover {
-    /* opacity: 1.0; */
-}
-
-.viewing-paypal .download-code-container,
-.viewing-paypal .paypal-button-container
-{
-    opacity: 1;
-    pointer-events: initial;
-    height: initial;
-    margin-top: 11px;
-}
-.viewing-paypal .buy-button-container .button
-{
-    /*background-color: #ccc;*/
-    /*border-color: #ccc;*/
-    background-color: #0E0;
-    border-color: #0E0;
-}
-.shopItemLink
-{
-	display: block;
-}
 /* mobile styles */
 @media screen and (max-width: 568px)
 {

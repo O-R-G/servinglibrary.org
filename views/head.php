@@ -20,6 +20,10 @@ $title = "The Serving Library";
 $is_mobile = false;
 
 require 'static/php/vendor/autoload.php';
+
+$bodyClass = '';
+if($uri[1] == 'shop')
+	$bodyClass .= ' viewing-usd';
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +39,7 @@ require 'static/php/vendor/autoload.php';
 		<script src="/static/js/analytics.js"></script>
 		<!-- <script src="/static/pde/processing-1.4.1.min.js"></script> -->
 	</head>
-	<body> 
+	<body class="<?= $bodyClass; ?>"> 
 		<div id='timeWrapper' class='timeContainerWrapper'>
 			<div id='time' class='timeContainer time'>
 				<script type="text/javascript">

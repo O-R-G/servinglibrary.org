@@ -4,34 +4,100 @@
 		should be cleaned up
 	*/
 
-	/* horribly ugly -- the buy-section should really be in the larger container div */
-
+	.thumbsContainer.journalContainer {
+		width: 300px;
+		margin-bottom: 10px;
+		position: relative;
+	}
 	.buy-section {
-		margin-top: -70px;
+		position: absolute;
 		text-align: right;
 		right: 0px;
+		bottom: 0;
 		padding: 10px;
+		width: 200px;
 	}
 
 	/* obvo all of this is an ugly hack to be fixed */
 
 	.buy-button-container {
 		display: inline-block;
-		width: 50%;
+		width: 100%;
+	}
+	.issue-img
+	{
+		display: block;
+	}
+	.viewing-paypal .button-area
+	{
+	    background-color: #fff;
 	}
 
-	.button-area:first-of-type {
+	.viewing-usd .button-area-eur,
+	.viewing-usd .button-area-gbp,
+	.viewing-eur .button-area-usd,
+	.viewing-eur .button-area-gbp,
+	.viewing-gbp .button-area-usd,
+	.viewing-gbp .button-area-eur
+	{
 		display: none;
 	}
 
-	.thumbsContainer.journalContainer {
-		margin-bottom: 10px;
+
+	.paypal-button-container {
+	    /*position: fixed;*/
+	    /*left: 18px;*/
+	    /*bottom: 90px;*/
+	    /*width: 100px;*/
+	    display: block;
+	    opacity: 0.0;
+	    pointer-events: none;
+	    height: 0;
+	    overflow: hidden;
 	}
 
-	.button {
-		font-size: 15px;
+	.paypal-button-container:hover {
+	    /* opacity: 1.0; */
 	}
 
+	.viewing-paypal .download-code-container,
+	.viewing-paypal .paypal-button-container
+	{
+	    opacity: 1;
+	    pointer-events: initial;
+	    height: initial;
+	    margin-top: 11px;
+	}
+	.viewing-paypal .buy-button-container .button
+	{
+	    /*background-color: #ccc;*/
+	    /*border-color: #ccc;*/
+	    background-color: #0E0;
+	    border-color: #0E0;
+	}
+	.shopItemLink
+	{
+		display: block;
+	}
+	#currencySwitchWrapper
+	{
+		position: fixed;
+		top: 30px;
+		right: 20px;
+		z-index: 90;
+	}
+	.currencyOption
+	{
+		display: inline-block;
+		padding: 2px 5px;
+		cursor: pointer;
+	}
+	.currencyOption.active,
+	.currencyOption:hover
+	{
+		background-color: #0C0;
+		color: #fff;
+	}
 </style>
 
 <?
@@ -192,13 +258,26 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
             }
       }).render('#' + buttonContainerId);
 	}
+	function switchCurrency(evt){
+		let thisOption = evt.target;
+		if(!thisOption.classList.contains('active'))
+		{
+			let currentActive = document.querySelector('.currencyOption.active');
+			let currentCurrency = currentActive.innerText.toLowerCase();
+			currentActive.classList.remove('active');
+
+			thisOption.classList.add('active');
+			document.body.classList.remove('viewing-'+currentCurrency);
+			document.body.classList.add('viewing-'+thisOption.innerText.toLowerCase());
+		}
+		
+	}
+	document.body.classList.add('viewing-usd');
 </script>
+<div id="currencySwitchWrapper" class="time"><span id="currencyOption-usd" class="currencyOption active" onclick="switchCurrency(event)">USD</span> | <span id="currencyOption-eur" class="currencyOption" onclick="switchCurrency(event)">EUR</span> | <span id="currencyOption-gbp" class="currencyOption" onclick="switchCurrency(event)">GBP</span></div>
 <div class="mainContainer">
-	<div class="wordsContainer body"><?
-		echo nl2br($deck);
-		// echo $body;
-	?></div>
 	<div id="shopContainer" class="floatContainer">
+		<div class="thumbsContainer journalContainer"></div>
 		<? foreach($journal_children as $key => $child){
 			if( substr($child['name1'], 0, 1) != '.')
 			{
@@ -231,11 +310,12 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 				       	if(!empty($prices))
 				       	{
 				       		foreach($prices as $c => $p) { ?>
-		                		<div id="button-area-<?= $key . '-' . $c; ?>" class="button-area">
+		                		<div id="button-area-<?= $key . '-' . $c; ?>" class="button-area button-area-<?= strtolower($c); ?>">
+		                			<div id="paypal-button-container-<?= $key . '-' . $c; ?>" class="payment-option paypal-button-container"></div>
 			                		<div id="buy-button-container-<?= $key . '-' . $c; ?>" class="buy-button-container">
 					              		<button id="cost-<?= $key . '-' . $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>')">$<?= $p; ?></button>
 					            	</div>
-					            	<div id="paypal-button-container-<?= $key . '-' . $c; ?>" class="payment-option paypal-button-container"></div>
+					            	
 					            	<script>
 					            		createButton('paypal-button-container-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>');
 					            	</script>
