@@ -44,7 +44,8 @@
 	}
 
 
-	.paypal-button-container{
+	.paypal-button-container,
+	body.loading .viewing-paypal .paypal-button-container{
 	    /*position: fixed;*/
 	    /*left: 18px;*/
 	    /*bottom: 90px;*/
@@ -66,7 +67,7 @@
 	    opacity: 1;
 	    pointer-events: initial;
 	    height: initial;
-	    margin-top: 11px;
+	    /*margin-top: 11px;*/
 	}
 	.viewing-paypal .buy-button-container .button
 	{
@@ -76,14 +77,15 @@
 	    border-color: #0E0;
 	    position: relative;
 	}
-	body.loading .viewing-paypal .paypal-button-container:after
+	body.loading .viewing-paypal:before
 	{
 		content: "Loading . . .";
+		/*position: absolute;*/
 		display: block;
 		width: 100%;
 		height: 35px;
-		top: 21px;
-		left: 10px;
+		/*top: -21px;*/
+		/*left: 10px;*/
 		border-radius: 4px;
 		border: 1px solid #ccc;
 		background-color: #ccc;
@@ -93,6 +95,7 @@
 	    font-size: 18px;
 	    padding-top: 6px;
 	    box-sizing: border-box;
+	    margin-bottom: 5px;
 	}
 	.shopItemLink
 	{
