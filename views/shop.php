@@ -44,7 +44,7 @@
 	}
 
 
-	.paypal-button-container {
+	.paypal-button-container{
 	    /*position: fixed;*/
 	    /*left: 18px;*/
 	    /*bottom: 90px;*/
@@ -74,6 +74,25 @@
 	    /*border-color: #ccc;*/
 	    background-color: #0E0;
 	    border-color: #0E0;
+	    position: relative;
+	}
+	body.loading .viewing-paypal .paypal-button-container:after
+	{
+		content: "Loading . . .";
+		display: block;
+		width: 100%;
+		height: 35px;
+		top: 21px;
+		left: 10px;
+		border-radius: 4px;
+		border: 1px solid #ccc;
+		background-color: #ccc;
+		color: #000;
+		z-index: 100;
+		text-align: center;
+	    font-size: 18px;
+	    padding-top: 6px;
+	    box-sizing: border-box;
 	}
 	.shopItemLink
 	{
@@ -132,22 +151,32 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 ?>
 <script id="paypal-library-usd" src="https://www.paypal.com/sdk/js?client-id=<?= $paypal_client_id; ?>&disable-funding=credit,card"></script>
 <script>
-	const loadDynamicScript = (callback, buttonContainerId, price, currency) => {
+	var currentCurrency = 'USD';
+	var sThumbsContainer = document.getElementsByClassName('thumbsContainer');
+	const loadDynamicScript = (currency) => {
+		// console.log('loadDynamicScript');
+		currentCurrency = currency;
+		document.body.classList.add('loading');
 		let scriptId = 'paypal-library-'+currency.toLowerCase();
 		let scriptUrl = "https://www.paypal.com/sdk/js?client-id=<?= $paypal_client_id; ?>&disable-funding=credit,card&currency="+currency;
 		const existingScript = document.getElementById(scriptId);
 
-		if (!existingScript) {
-			const script = document.createElement('script');
-			script.src = scriptUrl; // URL for the third-party library being loaded.
-			script.id = scriptId ; // e.g., googleMaps or stripe
-			document.body.appendChild(script);
-			script.onload = () => {
-				if (callback) callback(buttonContainerId, price, currency);
-			};
-		}
-
-		if (existingScript && callback) callback();
+		const script = document.createElement('script');
+		script.src = scriptUrl; // URL for the third-party library being loaded.
+		script.id = scriptId ; // e.g., googleMaps or stripe
+		document.body.appendChild(script);
+		script.onload = () => {
+			// if (callback) callback(buttonContainerId, price, currency);
+			document.body.classList.remove('loading');
+			[].forEach.call(sThumbsContainer, function(el, i){
+				let thisButtonContainer = el.querySelector('.button-area-'+currency.toLowerCase()+' .paypal-button-container');
+				if(thisButtonContainer){
+					let thisPrice = thisButtonContainer.getAttribute('price');
+					console.log('thisPrice = '+thisPrice);
+					createButton(thisButtonContainer.id, thisPrice, currency);
+				}
+			});
+		};
 	};
 
 	var shippingOptions = 
@@ -181,8 +210,9 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 				sViewing_paypal.classList.remove('viewing-paypal');
 			sButtonArea.classList.add('viewing-paypal');
 			let thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
-			if(thisPaypalButtonContainer)
-				loadDynamicScript(createButton, thisPaypalButtonContainer.id, price, currency);
+			// console.log('currentCurrency = '+currentCurrency);
+			if(thisPaypalButtonContainer && currency != currentCurrency)
+				loadDynamicScript(currency);
 		}
 	}
 	function createButton(buttonContainerId, price, currency){
@@ -253,7 +283,7 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
                     */
                     // let email = orderData.payer.email_address;
                     window.location.href = "/shop/issues/thank-you";
-                    console.log('on approve');
+                    // console.log('on approve');
                 });
             }
       }).render('#' + buttonContainerId);
@@ -311,7 +341,7 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 				       	{
 				       		foreach($prices as $c => $p) { ?>
 		                		<div id="button-area-<?= $key . '-' . $c; ?>" class="button-area button-area-<?= strtolower($c); ?>">
-		                			<div id="paypal-button-container-<?= $key . '-' . $c; ?>" class="payment-option paypal-button-container"></div>
+		                			<div id="paypal-button-container-<?= $key . '-' . $c; ?>" price="<?= $p; ?>" class="payment-option paypal-button-container"></div>
 			                		<div id="buy-button-container-<?= $key . '-' . $c; ?>" class="buy-button-container">
 					              		<button id="cost-<?= $key . '-' . $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $key . '-' . $c; ?>', <?= $p; ?>, '<?= $c; ?>')">$<?= $p; ?></button>
 					            	</div>
