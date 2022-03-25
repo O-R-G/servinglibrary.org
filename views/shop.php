@@ -185,19 +185,34 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
 	var shippingOptions = 
 	{
         USD: {
-        	US: 3.00,
-        	EU: 8.00,
-        	OTHER: 10.00
-        },
-        GBP: {
-        	US: 2.00,
-        	EU: 6.00,
-        	OTHER: 8.00
+        	id: "SHIP_USD",
+            label: "Standard Domestic",
+            type: "SHIPPING",
+            selected: true,
+            amount: {
+                value: 5,
+                currency_code: "USD"
+            }
         },
         EUR: {
-        	US: 2.50,
-        	EU: 6.50,
-        	OTHER: 8.50
+        	id: "SHIP_EUR",
+            label: "Default",
+            type: "SHIPPING",
+            selected: true,
+            amount: {
+                value: 6,
+                currency_code: "EUR"
+            }
+        },
+        EUR: {
+        	id: "SHIP_GBP",
+            label: "Default",
+            type: "SHIPPING",
+            selected: true,
+            amount: {
+                value: 2,
+                currency_code: "GBP"
+            }
         }
     };
 
@@ -234,34 +249,8 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
                     	},
 		              	shipping: {
 			              	options: [
-			              	{
-		                        id: "SHIP_US",
-		                        label: "US",
-		                        type: "SHIPPING",
-		                        selected: true,
-		                        amount: {
-		                            value: shippingOptions[currency]['US'],
-		                            currency_code: currency
-		                        }
-			                },{
-		                        id: "SHIP_EU",
-		                        label: "Europe",
-		                        type: "SHIPPING",
-		                        selected: false,
-		                        amount: {
-		                            value: shippingOptions[currency]['EU'],
-		                            currency_code: currency
-		                        }
-		                    },{
-		                        id: "SHIP_OTHER",
-		                        label: "Rest of the world",
-		                        type: "SHIPPING",
-		                        selected: false,
-		                        amount: {
-		                            value: shippingOptions[currency]['OTHER'],
-		                            currency_code: currency
-		                        }
-		                    }]
+			              		shippingOptions[currency]
+			              	]
 			            }
                     }]
                 });

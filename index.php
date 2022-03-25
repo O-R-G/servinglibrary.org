@@ -1,6 +1,9 @@
 <?php
 
-$uri = explode('/', $_SERVER['REQUEST_URI']);
+// $uri = explode('/', $_SERVER['REQUEST_URI']);
+$request = $_SERVER['REQUEST_URI'];
+$requestclean = strtok($request,"?");
+$uri = explode('/', $requestclean);
 $view = "views/";
 // debug
 // ini_set('display_errors', 1);

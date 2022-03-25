@@ -16,6 +16,20 @@ $mm = new Media();
 $ww = new Wires();
 $uu = new URL();
 
+if($uu->id)
+	$item = $oo->get($uu->id);
+else if(!empty($_GET)) {
+	try {
+		$uri_temp = $uri;
+		array_shift($uri_temp);
+		$temp = $oo->urls_to_ids($uri_temp);
+		$id = end($temp);
+		$item = $oo->get($id);
+	} catch(Exception $err) {
+		$item = $oo->get(0);
+	}
+} 
+
 $title = "The Serving Library";
 $is_mobile = false;
 
