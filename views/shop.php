@@ -204,7 +204,7 @@ $paypal_client_id = 'AarUvt7o6QoGOIcQTz9lMSf7UEtUGPJL8iX5mLmTFtIES07o31Pdn_pYSER
                 currency_code: "EUR"
             }
         },
-        EUR: {
+        GBP: {
         	id: "SHIP_GBP",
             label: "Default",
             type: "SHIPPING",
