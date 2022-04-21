@@ -206,7 +206,7 @@ iframe {
 	position: fixed;
 	top: 10px;
 	/*left: 98%;*/
-	right: 20px;
+	right: 10px;
 	width: 150px;
 	margin: 0 0 0 -140px;
 	z-index: 90;
