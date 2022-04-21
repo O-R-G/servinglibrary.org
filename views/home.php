@@ -1,10 +1,4 @@
-<!-- <script type="text/javascript" src="/static/js/home-ajax.js"></script> -->
-<!-- 
-<script>
-	var thisW = 220; 
-	var thisH = 313;
-</script>
- --><?
+<?
 
 // id of the 'journal' object
 // all issues are attached to this object, 
@@ -20,8 +14,7 @@ $issues = $oo->children($journal_id);
 $i = count($issues)-1;
 $issues = array_reverse($issues);
 
-var_dump(count($issues));
-die();
+
 
 // $n = 10;
 // require($root."views/home-ajax.php");
