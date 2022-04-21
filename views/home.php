@@ -20,6 +20,8 @@ $issues = $oo->children($journal_id);
 $i = count($issues)-1;
 $issues = array_reverse($issues);
 
+var_dump(count($issues));
+die();
 
 // $n = 10;
 // require($root."views/home-ajax.php");

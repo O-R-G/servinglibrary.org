@@ -7,38 +7,40 @@ $uri = explode('/', $requestclean);
 $view = "views/";
 // debug
 // ini_set('display_errors', 1);
-
-if($uri[1])
-{
-	if($uri[1] == "time")
-		$view.="time.php";
-	else if($uri[1] == "table")
-		$view.= "table.php";
-	else if(strcmp($uri[1], "journal") === 0 && count($uri) == 4)
-		$view.= "read.php";
-	else if($uri[1] == "collect")
-		$view.= "collect.php";
-	else if($uri[1] == "collection" && !$uri[2])
-		$view.= "collection.php";
-	else if($uri[1] == "collection" && $uri[2])
-		$view.= "words.php";
-	else if($uri[1] == "contact" || $uri[1] == "subscribe") {
-        	$showsubscribe = true;
-		$view.="words.php";
-	}
-	else if($uri[1] == "shop" && isset($uri[2]) && $uri[2] == 'issues') 
-		$view.="shop.php";
-	else
-		$view.="words.php";
-}
-else
-	$view.="home.php";
-
-// show the things
 require_once("views/head.php");
 require_once("views/closed.php");
-require_once($view);
-if($view == "views/time.php")
+if($uri[1])
+{
+	if($uri[1] == "time"){
+		require_once('views/time.php');
+	}
+	else if($uri[1] == "table"){
+		require_once('views/table.php');
+	}
+	else if(strcmp($uri[1], "journal") === 0 && count($uri) == 4)
+		require_once('views/read.php');
+	else if($uri[1] == "collect")
+		require_once('views/collect.php');
+	else if($uri[1] == "collection" && !$uri[2])
+		require_once('views/collection.php');
+	else if($uri[1] == "collection" && $uri[2])
+		require_once('views/words.php');
+	else if($uri[1] == "contact" || $uri[1] == "subscribe") {
+        	$showsubscribe = true;
+		require_once('views/words.php');
+	}
+	else if($uri[1] == "shop" && isset($uri[2]) && $uri[2] == 'issues') 
+		require_once('views/shop.php');
+	else
+		require_once('views/words.php');
+}
+else
+	require_once('views/home.php');
+
+// show the things
+
+// require_once($view);
+if($uri[1] && $uri[1] == "time")
 	require_once("views/clock.php");
 else
 	require_once("views/badge.php");

@@ -1,6 +1,6 @@
 <?
 // namespace stuff
-use \Michelf\Markdown;
+// use \Michelf\Markdown;
 
 $displayHTML = isset($_GET['html']);
 

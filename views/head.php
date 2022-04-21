@@ -1,12 +1,14 @@
 <?
 // path to config file
-$config = $_SERVER["DOCUMENT_ROOT"];
-$config = $config."/open-records-generator/config/config.php";
-require_once($config);
+// $config = $_SERVER["DOCUMENT_ROOT"];
+// $config = $config."/open-records-generator/config/config.php";
+// require_once($config);
+require_once('open-records-generator/config/config.php');
+require_once('open-records-generator/config/url.php');
 
 // specific to this 'app'
-$config_dir = $root."/config/";
-require_once($config_dir."url.php");
+# $config_dir = $root."/config/";
+// require_once($config_dir."url.php");
 // require_once($config_dir."request.php");
 
 $db = db_connect("guest");
@@ -16,8 +18,9 @@ $mm = new Media();
 $ww = new Wires();
 $uu = new URL();
 
-if($uu->id)
+if($uu->id){
 	$item = $oo->get($uu->id);
+}
 else if(!empty($_GET)) {
 	try {
 		$uri_temp = $uri;
@@ -33,13 +36,10 @@ else if(!empty($_GET)) {
 $title = "The Serving Library";
 $is_mobile = false;
 
-require 'static/php/vendor/autoload.php';
+// require 'static/php/vendor/autoload.php';
 
 $bodyClass = '';
-if($uri[1] == 'shop')
-	$bodyClass .= ' viewing-usd';
 ?>
-
 <!DOCTYPE html>
 <html>
 	<head>
