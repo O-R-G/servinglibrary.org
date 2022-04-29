@@ -39,6 +39,8 @@ $is_mobile = false;
 // require 'static/php/vendor/autoload.php';
 
 $bodyClass = '';
+if($uri[1] == 'shop')
+	$bodyClass .= 'shop ';
 ?>
 <!DOCTYPE html>
 <html>

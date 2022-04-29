@@ -9,21 +9,15 @@ $acceptedCurrenciesSymbols = array(
 	'eur' => '€'
 );
 
-// only show back button on internal references
-$protocol = isset($_SERVER['HTTPS']) && 
-         $_SERVER['HTTPS'] === 'on' ? 
-         "https://" : "http://";
-$host = $protocol . $_SERVER['HTTP_HOST'];
-
-$internal = isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, strlen($host)) === $host);
-$back_url = "javascript:self.history.back();";
-
-$body = trim($item['body']);
-$deck = trim($item['deck']);
-
-$temp = $oo->urls_to_ids(array('shop', 'issues'));
-$journal_children = $oo->children(end($temp));
-$base_url = '/journal/';
+$prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
+preg_match_all($prices_pattern, $item['notes'], $temp);
+$prices = array();
+if(!empty($temp)){
+	foreach($temp[2] as $c => $t)
+		$prices[$temp[1][$c]] = $t;
+}
+else
+	$isSoldOut = true;
 
 ?>
 <div id="currencySwitchWrapper" class="time">
@@ -35,65 +29,33 @@ $base_url = '/journal/';
 	<? }
  } ?>
 </div>
-<div class="mainContainer">
-	<div id="shopContainer" class="floatContainer">
-		<div class="thumbsContainer journalContainer"><?= $body; ?></div>
-		<? foreach($journal_children as $key => $child){
-			if( substr($child['name1'], 0, 1) != '.')
-			{
-				$media = $oo->media($child['id']);
-				if(count($media) > 0)
-					$cover = m_url($media[0]);
-				$prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
-				preg_match_all($prices_pattern, $child['notes'], $temp);
-				$prices = array();
-				if(!empty($temp)){
-					foreach($temp[2] as $c => $t)
-						$prices[$temp[1][$c]] = $t;
-				}
-				else
-					$isSoldOut = true;
-				$url = $base_url . $child['url'];
-				if($currency !== 'usd') $url .= '?currency=' . $currency;
-
-				?><div class="thumbsContainer journalContainer"><?
-					if(isset($cover)){
-						?><a class="shopItemLink" href="<?= $url; ?>">
-							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
-						</a><?
-					}
-					?>
-					<section id="buy-<?= $key; ?>" class="buy-section">
-				       	<?
-				       	if(!empty($prices))
-				       	{
-				       		foreach($prices as $c => $p) { 
-				       			?>
-		                		<div id="button-area-<?= $key . '-' . $c; ?>" class="button-area button-area-<?= $c; ?>">
-		                			<div id="paypal-button-container-<?= $key . '-' . $c; ?>" price="<?= $p; ?>" class="payment-option paypal-button-container"></div>
-			                		<div id="buy-button-container-<?= $key . '-' . $c; ?>" class="buy-button-container">
-					              		<button id="cost-<?= $key . '-' . $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $key . '-' . $c; ?>', '<?= $c; ?>')"><?= $acceptedCurrenciesSymbols[$c] . $p; ?></button>
-					            	</div>
-				            	</div>
-		                	<? }
-				       	}
-				       	else
-				       	{
-				       		?><div id="button-area-<?= $key . '-' . $c; ?>" class="button-area"><div class="sold-out red">SOLD OUT</div></div><?
-				       	}
-				       	?>
-			        </section>
-				</div><?
-			}
-		}
-	?></div>
-</div>
+<section id="buy" class="buy-section">
+   	<?
+   	if(!empty($prices))
+   	{
+   		foreach($prices as $c => $p) { 
+   			?>
+    		<div id="button-area-<?= $c; ?>" class="button-area button-area-<?= $c; ?>">
+    			<div id="paypal-button-container-<?= $c; ?>" price="<?= $p; ?>" class="payment-option paypal-button-container"></div>
+        		<div id="buy-button-container-<?= $c; ?>" class="buy-button-container">
+              		<button id="cost-<?= $c; ?>" class="button" onclick="expandPaypal('button-area-<?= $c; ?>', '<?= $c; ?>')"><?= $acceptedCurrenciesSymbols[$c] . $p; ?></button>
+            	</div>
+        	</div>
+    	<? }
+   	}
+   	else
+   	{
+   		?><div id="button-area-<?= $c; ?>" class="button-area"><div class="sold-out red">SOLD OUT</div></div><?
+   	}
+   	?>
+</section>
 <script>
 	var currency = '<?= $currency; ?>';
 	paypal_url += '&currency='+currency.toUpperCase();
 	var paypal_script = loadScript(paypal_url);
 
 	document.body.classList.add('viewing-'+currency);
+	
 </script>
 <style>
 	/*
@@ -107,11 +69,13 @@ $base_url = '/journal/';
 		position: relative;
 	}
 	.buy-section {
-		position: absolute;
-		text-align: right;
-		right: 0px;
-		bottom: 0;
-		padding: 10px;
+		position: fixed;
+		left: 20px;
+		bottom: 20px;
+		/*text-align: right;*/
+		/*right: 0px;*/
+		/*bottom: 0;*/
+		/*padding: 10px;*/
 		width: 200px;
 	}
 
@@ -218,5 +182,9 @@ $base_url = '/journal/';
 	{
 		background-color: #0C0;
 		color: #fff;
+	}
+	#main-container
+	{
+		padding-bottom: 70px;
 	}
 </style>

@@ -348,7 +348,9 @@ iframe {
 	color: #0B0;
 }
 
-.green a {
+.green a,
+.green a:link,
+a.green:link {
 	color: #0B0;
 }
 
@@ -488,6 +490,11 @@ iframe {
 {
 	/*margin-top: 11px;*/
 }
+#shopContainer a:link,
+#shopContainer a:visited
+{
+	color: #0B0;
+} 
 
 /* mobile styles */
 @media screen and (max-width: 568px)
