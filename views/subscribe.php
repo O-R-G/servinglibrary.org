@@ -1,7 +1,7 @@
 <section id="subscribe" class="visible"><?
-    $subscribe = $_POST['subscribe'];
-    $unsubscribe = $_POST['unsubscribe'];
-    $address = $_POST['address'];
+    $subscribe = isset($_POST['subscribe']) ? $_POST['subscribe'] : false;
+    $unsubscribe = isset($_POST['unsubscribe']) ? $_POST['unsubscribe'] : false;
+    $address = isset($_POST['address']) ? $_POST['address'] : false;
     if (!$subscribe && !$unsubscribe) {	
 	?><form enctype='multipart/form-data' action='subscribe' 
 method='post'>

@@ -32,17 +32,8 @@ var shippingOptions =
             value: 10,
             currency_code: "USD"
         }
-	},
-    {
-    	id: "SHIP_WORLD",
-        label: "TEST",
-        type: "SHIPPING",
-        selected: false,
-        amount: {
-            value: 40,
-            currency_code: "USD"
-        }
-    } ], 
+	}
+	], 
     EUR: [
         {
         	id: "SHIP_EUR",

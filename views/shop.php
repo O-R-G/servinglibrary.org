@@ -219,4 +219,19 @@ $base_url = '/journal/';
 		background-color: #0C0;
 		color: #fff;
 	}
+	.sold-out
+	{
+		width: 100%;
+	    height: 35px;
+	    color: #FFF;
+	    background-color: #f00;
+	    border: 1px solid #f00;
+	    border-radius: 4px;
+	    box-sizing: border-box;
+	    font-size: 18px;
+	    text-align: center;
+	    vertical-align: top;
+	    padding-top: 7px;
+	    font-family: 'Arial', sans-serif;
+	}
 </style>
