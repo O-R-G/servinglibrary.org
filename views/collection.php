@@ -2,7 +2,7 @@
 // get all objects
 
 $objects = $oo->children($uu->id);
-$n = count($children);
+$n = count($objects);
 
 // ajax (turned off for now)
 // $n = 10;

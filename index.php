@@ -21,9 +21,9 @@ if($uri[1])
 		require_once('views/read.php');
 	else if($uri[1] == "collect")
 		require_once('views/collect.php');
-	else if($uri[1] == "collection" && !$uri[2])
+	else if($uri[1] == "collection" && !isset($uri[2]))
 		require_once('views/collection.php');
-	else if($uri[1] == "collection" && $uri[2])
+	else if($uri[1] == "collection" && isset($uri[2]))
 		require_once('views/words.php');
 	else if($uri[1] == "contact" || $uri[1] == "subscribe") {
     	$showsubscribe = true;
@@ -40,7 +40,13 @@ else
 if( ($uri[1] == 'journal' && count($uri) == 3) ||
 	($uri[1] == "shop" && count($uri) == 2) ||
 	($uri[1] == "shop" && count($uri) == 3) ||
-	($uri[1] == "programs")
+	( count($uri) == 2 && (
+		$uri[1] == "programs" ||
+		$uri[1] == "introduction" ||
+		$uri[1] == "publication" ||
+		$uri[1] == "collection-new"
+	))
+	
 )
 	require_once('views/paypal.php');
 

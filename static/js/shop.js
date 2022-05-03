@@ -80,7 +80,7 @@ var shippingOptions =
     ]
 };
 
-function expandPaypal(buttonAreaId, currency){
+function expandPaypal(buttonAreaId, currency, itemName){
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
 		sButtonArea.classList.remove('viewing-paypal');
@@ -97,10 +97,10 @@ function expandPaypal(buttonAreaId, currency){
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		createButton(thisPaypalButtonContainer.id, thisPrice, currency);
+		createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName);
 	}
 }
-function createButton(buttonContainerId, price, currency){
+function createButton(buttonContainerId, price, currency, itemName){
 	console.log('createButton . . .');
 	var baseAmount = parseFloat(price, 10);
 	var totalValue = baseAmount + parseFloat(shippingOptions[currency.toUpperCase()][0].amount.value, 10);
@@ -124,6 +124,7 @@ function createButton(buttonContainerId, price, currency){
 		// },
         createOrder: function(data, actions) {
         	console.log('createOrder . . .');
+        	console.log(itemName);
             return actions.order.create({
                 application_context: {
                     brand_name: 'O-R-G',
@@ -139,6 +140,7 @@ function createButton(buttonContainerId, price, currency){
 		              	options: shippingOptions[currencyUppercase]
 		            }
                 }]
+                
             });
         },
         onShippingChange: function (data, actions) {

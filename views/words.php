@@ -17,16 +17,35 @@ if($cover)
 
 if($displayHTML)
 {
-	$body_html = $item['body'];
-	$deck_html = $item['deck'];
-	$italic_pattern = '/\*(.*?)\*/';
-	$deck_html = preg_replace($italic_pattern, '<i>$1</i>', $deck_html);
-	$body_html = preg_replace($italic_pattern, '<i>$1</i>', $body_html);
-	$hyperlink_pattern = '/\[(.*?)\]\((.*?)\)/';
-	$body_html = preg_replace($hyperlink_pattern, '<a href="$2">$1</a>', $body_html);
-
-	$deck_html = htmlspecialchars($deck_html);
-	$body_html = htmlspecialchars($body_html);
+	
+	$hyperlink_pattern = '/\[([^\]]*?)\]\((.*?)\)/';
+	$body_html = file_get_contents('temp.txt');
+	preg_match_all($hyperlink_pattern, $body_html, $temp);
+	$outputfile = fopen("output.txt", "w") or die("Unable to open file!");
+	foreach($temp[0] as $key => $original)
+	{
+		// echo $original . '<br>';
+		$replacement = "<a href=\'" . $temp[2][$key] . "\'>" . $temp[1][$key] . "</a>";
+		if($temp[1][$key] == '...')
+		{
+			echo $temp[2][$key] . '</br>';
+		}
+		if( $temp[1][$key] !== 'price' &&
+			$temp[1][$key] !== 'donation' && 
+			$temp[1][$key] !== 'usd' && 
+			$temp[1][$key] !== 'gbp' && 
+			$temp[1][$key] !== 'eur' && 
+			$temp[1][$key] !== 'paypal' &&
+			$temp[1][$key] !== '...'
+		) $body_html = str_replace($original, $replacement, $body_html);
+		// echo $match[1] . '<br>';
+		// echo htmlspecialchars("<a href=\'" . $temp[2][$key] . "\'>" . $temp[1][$key] . "</a>");
+		// echo preg_replace($hyperlink_pattern, , $temp[1][$key]);
+		// echo '<br><br>';
+	}
+	fwrite($outputfile, $body_html);
+	// $deck_html = htmlspecialchars($deck_html);
+	// $body_html = htmlspecialchars($body_html);
 
 }
 
@@ -34,7 +53,7 @@ if($displayHTML)
 $internal = isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, strlen($host)) === $host);
 $back_url = "javascript:self.history.back();";
 
-if(!$isShop){ ?> 
+if(!$isShop && !$displayHTML){ ?> 
 <div class="mainContainer">
 	<div class="wordsContainer body"><?
 		// echo nl2br($deck);
@@ -54,9 +73,11 @@ if(!$isShop){ ?>
 </div>
 <? } 
 
-if($displayHTML){ ?>
-	<div id="formmattedDeck" style="color:purple"><?= $deck_html; ?></div>
-	<pre id="formmattedBody" style="font-family: sans-serif;"><?= $body_html; ?></pre>
+if($displayHTML){ 
+	echo '<br><br><br><br>';
+	// echo $body_html;
+	?>
+	
 <? }?>
 <style>
 	#formmattedBody,
