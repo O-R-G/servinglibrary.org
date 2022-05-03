@@ -31,7 +31,18 @@ else if(!empty($_GET)) {
 	} catch(Exception $err) {
 		$item = $oo->get(0);
 	}
-} 
+}
+else if( $uri[1] == 'subscribe' && count($uri) == 2 )
+{
+	try{
+		$temp = $oo->urls_to_ids(array('contact', 'subscribe'));
+		$id = end($temp);
+		$item = $oo->get($id);
+	} catch(Exception $err) {
+		$item = $oo->get(0);
+	}
+	
+}
 
 $title = "The Serving Library";
 $is_mobile = false;

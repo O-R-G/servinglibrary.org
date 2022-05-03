@@ -26,7 +26,7 @@ if($uri[1])
 	else if($uri[1] == "collection" && $uri[2])
 		require_once('views/words.php');
 	else if($uri[1] == "contact" || $uri[1] == "subscribe") {
-        	$showsubscribe = true;
+    	$showsubscribe = true;
 		require_once('views/words.php');
 	}
 	else if($uri[1] == "shop" && count($uri) == 2) 
