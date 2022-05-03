@@ -29,8 +29,8 @@ if($uri[1])
     	$showsubscribe = true;
 		require_once('views/words.php');
 	}
-	else if($uri[1] == "shop" && count($uri) == 2) 
-		require_once('views/shop.php');
+	// else if($uri[1] == "shop" && count($uri) == 2) 
+	// 	require_once('views/shop.php');
 	else
 		require_once('views/words.php');
 }
@@ -38,9 +38,11 @@ else
 	require_once('views/home.php');
 
 if( ($uri[1] == 'journal' && count($uri) == 3) ||
-	($uri[1] == "shop" && count($uri) == 3)
+	($uri[1] == "shop" && count($uri) == 2) ||
+	($uri[1] == "shop" && count($uri) == 3) ||
+	($uri[1] == "programs")
 )
-	require_once('views/shop-btns.php');
+	require_once('views/paypal.php');
 
 // show the things
 

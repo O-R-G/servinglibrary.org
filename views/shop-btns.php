@@ -68,15 +68,22 @@ else
 		margin-bottom: 10px;
 		position: relative;
 	}
-	.buy-section {
+	.buy-section
+	{
 		position: fixed;
+		width: 200px;
 		left: 20px;
 		bottom: 20px;
-		/*text-align: right;*/
-		/*right: 0px;*/
-		/*bottom: 0;*/
-		/*padding: 10px;*/
-		width: 200px;
+	}
+	.thumbsContainer .buy-section
+	{
+		position: absolute;
+		text-align: right;
+		left: auto;
+		right: 0px;
+		bottom: 0px;
+		padding: 10px;
+		/*width: 200px;*/
 	}
 
 	/* obvo all of this is an ugly hack to be fixed */

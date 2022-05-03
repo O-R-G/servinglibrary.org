@@ -48,6 +48,7 @@ $title = "The Serving Library";
 $is_mobile = false;
 
 // require 'static/php/vendor/autoload.php';
+$isShop = ($uri[1] == 'shop' && count($uri) == 2);
 
 $bodyClass = '';
 if($uri[1] == 'shop')
