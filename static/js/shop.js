@@ -106,25 +106,9 @@ function createButton(buttonContainerId, price, currency, itemName){
 	var totalValue = baseAmount + parseFloat(shippingOptions[currency.toUpperCase()][0].amount.value, 10);
 	var currencyUppercase = currency.toUpperCase();
 	paypal.Buttons({
-		// onShippingChange: function (data, actions) {
-			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
-			// if(data['amount'] !== undefined && data['amount']['value'] !== undefined)
-			// {
-			// 	data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
-			// 	console.log(data.amount.value);
-			// 	return actions.order.patch([
-			// 	{
-			// 		op: "replace",
-			// 		path: "/purchase_units/@reference_id=='default'/amount",
-			// 		value: { value: data.amount, currency_code: data.amount.currency },
-			// 	},]);
-
-			// }
-			
-		// },
         createOrder: function(data, actions) {
         	console.log('createOrder . . .');
-        	console.log(itemName);
+        	console.log(data);
             return actions.order.create({
                 application_context: {
                     brand_name: 'O-R-G',
@@ -134,11 +118,25 @@ function createButton(buttonContainerId, price, currency, itemName){
                 purchase_units: [{
                 	amount: {
                         currency_code: currencyUppercase,
-                        value: totalValue
+                        value: totalValue,
+                        breakdown: {
+							item_total: {  /* Required when including the `items` array */
+								currency_code: currencyUppercase,
+								value: totalValue
+							}
+						}
                 	},
 	              	shipping: {
 		              	options: shippingOptions[currencyUppercase]
-		            }
+		            },
+		            items: [{
+						name: itemName, /* Shows within upper-right dropdown during payment approval */
+						unit_amount: {
+							currency_code: currencyUppercase,
+							value: price
+						},
+						quantity: "1"
+					}]
                 }]
                 
             });
