@@ -44,7 +44,8 @@ if( ($uri[1] == 'journal' && count($uri) == 3) ||
 		$uri[1] == "programs" ||
 		$uri[1] == "introduction" ||
 		$uri[1] == "publication" ||
-		$uri[1] == "collection-new"
+		$uri[1] == "collection-new" ||
+		$uri[1] == "archive"
 	))
 	
 )

@@ -10,32 +10,32 @@ function getPrices($currency, $priceField){
 	}
 	return $output;
 }
-function printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols = array(), $itemName, $key = ''){
+function printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols = array(), $itemName, $key = '', $isSubscriptions = false){
 	$key = empty($key) ? '' : '-' . $key;
 	$output = '';
 	if(!empty($prices))
    	{
-   		if(is_array($prices))
+   		if($prices[$currency] == floatval($prices[$currency]) . '')
    		{
    			$output = '<section id="buy' . $key . '" class="buy-section">';
    			$p = $prices[$currency];
    			$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area button-area-' . $currency . '">';
    			$output .= 		'<div id="paypal-button-container' . $key . '-' . $currency . '" price="'. $p . '" class="payment-option paypal-button-container"></div>';
    			$output .= 	'<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
-   			$output .= 	'<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\')">' . $acceptedCurrenciesSymbols[$currency] . $p . '</button>';
+   			$output .= 	'<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$isSubscriptions.'\')">' . $acceptedCurrenciesSymbols[$currency] . $p . '</button>';
    			$output .= '</div></div>';
 	  	   	$output .= '</section>';
    		}
    		else if($prices == 'donation')
    		{
    			$output = '<div id="donate-buy-section" class="buy-section"><div id="paypal-donate-button-container"></div><button id="donate-btn" class="button">DONATE</button></div>';
-   		}	
-   	}
-   	else
-   	{
-   		$output = '<section id="buy' . $key . '" class="buy-section">';
-   		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red">SOLD OUT</div></div>';
-   		$output .= '</section>';
+   		}
+   		else if(strtolower($prices[$currency] == 'sold out'))
+   		{
+   			$output = '<section id="buy' . $key . '" class="buy-section">';
+	   		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red">SOLD OUT</div></div>';
+	   		$output .= '</section>';
+   		}
    	}
    	return $output;
 }
@@ -56,17 +56,6 @@ $isDonation = strpos(trim($item['notes']), '[donation]') !== false;
 $prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
 
 ?>
-<div id="currencySwitchWrapper" class="time">
-<? if(!$isDonation){
-	foreach($acceptedCurrencies as $option){ 
-		if($option == $currency) { ?>
-			<span id="currencyOption-<?= $option; ?>" class="currencyOption active"><?= strtoupper($option); ?></span>
-		<? } else { ?>
-			<a id="currencyOption-<?= $option; ?>" class="currencyOption" href="?currency=<?= $option; ?>"><?= strtoupper($option); ?></a>
-		<? }
-	}
- } ?>
-</div>
 <? if($isShop){
 	$temp = $oo->urls_to_ids(array('shop', 'issues'));
 	$journal_children = $oo->children(end($temp));
@@ -112,7 +101,7 @@ else if($isSubscriptions)
 		{
 			$itemName = 'Subscription - ' . $child['name1'];
 			$prices = getPrices($currency, trim($child['notes']));
-			echo printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols, $itemName, $key);
+			echo printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols, $itemName, $key, $isSubscriptions);
 		}
 	}
 }
@@ -123,6 +112,22 @@ else
 		$prices = 'donation';
 	if(!$isDonation)
 		echo printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols, '');
+}
+if(!empty($prices))
+{
+	?>
+	<div id="currencySwitchWrapper" class="time">
+	<? if(!$isDonation){
+		foreach($acceptedCurrencies as $option){ 
+			if($option == $currency) { ?>
+				<span id="currencyOption-<?= $option; ?>" class="currencyOption active"><?= strtoupper($option); ?></span>
+			<? } else { ?>
+				<a id="currencyOption-<?= $option; ?>" class="currencyOption" href="?currency=<?= $option; ?>"><?= strtoupper($option); ?></a>
+			<? }
+		}
+	 } ?>
+	</div>
+	<?
 }
 
 if($isDonation){ ?>
