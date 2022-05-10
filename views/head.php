@@ -49,7 +49,7 @@ $is_mobile = false;
 
 // require 'static/php/vendor/autoload.php';
 $isShop = ($uri[1] == 'shop' && count($uri) == 2);
-$isSubscriptions = ($uri[1] == 'shop' && count($uri) == 3 && $uri[2] == 'subscriptions');
+// $isSubscriptions = ($uri[1] == 'shop' && count($uri) == 3 && $uri[2] == 'subscriptions');
 
 $bodyClass = '';
 if($uri[1] == 'shop')

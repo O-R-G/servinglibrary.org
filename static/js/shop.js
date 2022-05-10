@@ -21,68 +21,10 @@ function loadScript(url){
 }
 
 
-var shippingOptions = 
+var shippingOptions_arr = 
 {
-    USD: [
-    {
-    	id: "SHIP_US",
-        label: "DOMESTIC",
-        type: "SHIPPING",
-        selected: true,
-        amount: {
-            value: "10.00",
-            currency_code: "USD"
-        }
-	}
-	], 
-    EUR: [
-        {
-        	id: "SHIP_EU",
-            label: "WITHIN EU",
-            type: "SHIPPING",
-            selected: true,
-            amount: {
-                value: "10.00",
-                currency_code: "EUR"
-            }
-        },
-        {
-        	id: "SHIP_WORLD",
-            label: "REST OF THE WORLD",
-            type: "SHIPPING",
-            selected: false,
-            amount: {
-                value: "40.00",
-                currency_code: "EUR"
-            }
-        }
-    ],
-    GBP: [
-        {
-        	id: "SHIP_UK",
-            label: "WITHIN UK",
-            type: "SHIPPING",
-            selected: true,
-            amount: {
-                value: "10.00",
-                currency_code: "GBP"
-            }
-        },
-        {
-        	id: "SHIP_WORLD",
-            label: "REST OF THE WORLD",
-            type: "SHIPPING",
-            selected: false,
-            amount: {
-                value: "30.00",
-                currency_code: "GBP"
-            }
-        }
-    ]
-};
-var shippingOptions_subscription = 
-{
-    USD: [
+	'issue' : {
+	    USD: [
 	    {
 	    	id: "SHIP_US",
 	        label: "DOMESTIC",
@@ -92,45 +34,270 @@ var shippingOptions_subscription =
 	            value: "10.00",
 	            currency_code: "USD"
 	        }
-		},
-		{
-	    	id: "SHIP_WORLD",
-	        label: "ELSEWHERE",
+		}
+		], 
+	    EUR: [
+	        {
+	        	id: "SHIP_EU",
+	            label: "WITHIN EU",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "EUR"
+	            }
+	        },
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "40.00",
+	                currency_code: "EUR"
+	            }
+	        }
+	    ],
+	    GBP: [
+	        {
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "GBP"
+	            }
+	        },
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "30.00",
+	                currency_code: "GBP"
+	            }
+	        }
+	    ]
+	},
+	'annual': {
+	    USD: [
+	    {
+	    	id: "SHIP_US",
+	        label: "DOMESTIC",
 	        type: "SHIPPING",
-	        selected: false,
+	        selected: true,
 	        amount: {
-	            value: "35.00",
+	            value: "10.00",
 	            currency_code: "USD"
 	        }
 		}
-	], 
-    EUR: [
-        {
-        	id: "SHIP_EU",
-            label: "WITHIN EU",
-            type: "SHIPPING",
-            selected: true,
-            amount: {
-                value: "10.00",
-                currency_code: "EUR"
-            }
-        }
-    ],
-    GBP: [
-        {
-        	id: "SHIP_UK",
-            label: "WITHIN UK",
-            type: "SHIPPING",
-            selected: true,
-            amount: {
-                value: "10.00",
-                currency_code: "GBP"
-            }
-        }
-    ]
-};
+		], 
+	    EUR: [
+	        {
+	        	id: "SHIP_EU",
+	            label: "WITHIN EU",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "8.00",
+	                currency_code: "EUR"
+	            }
+	        },
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "40.00",
+	                currency_code: "EUR"
+	            }
+	        }
+	    ],
+	    GBP: [
+	        {
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "5.00",
+	                currency_code: "GBP"
+	            }
+	        },
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "30.00",
+	                currency_code: "GBP"
+	            }
+	        }
+	    ]
+	},
+	'archive': {
+	    USD: [
+	    {
+	    	id: "SHIP_US",
+	        label: "DOMESTIC",
+	        type: "SHIPPING",
+	        selected: true,
+	        amount: {
+	            value: "10.00",
+	            currency_code: "USD"
+	        }
+		}
+		], 
+	    EUR: [
+	        {
+	        	id: "SHIP_EU",
+	            label: "WITHIN EU",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "8.00",
+	                currency_code: "EUR"
+	            }
+	        },
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "40.00",
+	                currency_code: "EUR"
+	            }
+	        }
+	    ],
+	    GBP: [
+	        {
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "5.00",
+	                currency_code: "GBP"
+	            }
+	        },
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "30.00",
+	                currency_code: "GBP"
+	            }
+	        }
+	    ]
+	},
+	'subscription-2': {
+	    USD: [
+		    {
+		    	id: "SHIP_US",
+		        label: "DOMESTIC",
+		        type: "SHIPPING",
+		        selected: true,
+		        amount: {
+		            value: "10.00",
+		            currency_code: "USD"
+		        }
+			},
+			{
+		    	id: "SHIP_WORLD",
+		        label: "ELSEWHERE",
+		        type: "SHIPPING",
+		        selected: false,
+		        amount: {
+		            value: "35.00",
+		            currency_code: "USD"
+		        }
+			}
+		], 
+	    EUR: [
+	        {
+	        	id: "SHIP_EU",
+	            label: "WITHIN EU",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "EUR"
+	            }
+	        }
+	    ],
+	    GBP: [
+	        {
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "GBP"
+	            }
+	        }
+	    ]
+	},
+	'subscription-12': {
+	    USD: [
+		    {
+		    	id: "SHIP_US",
+		        label: "DOMESTIC",
+		        type: "SHIPPING",
+		        selected: true,
+		        amount: {
+		            value: "10.00",
+		            currency_code: "USD"
+		        }
+			},
+			{
+		    	id: "SHIP_WORLD",
+		        label: "ELSEWHERE",
+		        type: "SHIPPING",
+		        selected: false,
+		        amount: {
+		            value: "220.00",
+		            currency_code: "USD"
+		        }
+			}
+		], 
+	    EUR: [
+	        {
+	        	id: "SHIP_EU",
+	            label: "WITHIN EU",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "EUR"
+	            }
+	        }
+	    ],
+	    GBP: [
+	        {
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
+	            type: "SHIPPING",
+	            selected: true,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "GBP"
+	            }
+	        }
+	    ]
+	}
+}
 
-function expandPaypal(buttonAreaId, currency, itemName, isSubscriptions = false){
+// var shippingOptions = shippingOptions_arr[type];
+
+function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
 		sButtonArea.classList.remove('viewing-paypal');
@@ -147,19 +314,26 @@ function expandPaypal(buttonAreaId, currency, itemName, isSubscriptions = false)
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, isSubscriptions);
+		createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
 	}
 }
-function createButton(buttonContainerId, price, currency, itemName, isSubscriptions){
+function createButton(buttonContainerId, price, currency, itemName, type){
 	console.log('createButton . . .');
-	if(isSubscriptions)
-		var options = shippingOptions_subscription;
+
+	if(type == 'subscription')
+	{
+		if(itemName.indexOf('two years') !== -1){
+			console.log(itemName.indexOf('two years'));
+			var options = shippingOptions_arr[type + '-2'];
+		}
+		else if(itemName.indexOf('twelve years') !== -1)
+			var options = shippingOptions_arr[type + '-12'];
+	}
 	else
-		var options = shippingOptions;
+		var options = shippingOptions_arr[type];	
 	console.log(options);
 	var baseAmount = parseFloat(price, 10);
 	var totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
-	console.log(baseAmount, totalValue);
 	var currencyUppercase = currency.toUpperCase();
 	
 	paypal.Buttons({

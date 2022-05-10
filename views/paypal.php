@@ -1,44 +1,117 @@
 <script src="/static/js/shop.js"></script>
 <?
-function getPrices($currency, $priceField){
-	$prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
-	preg_match_all($prices_pattern, trim($priceField), $temp);
+function getProductInfo($currency, $priceField){
+	$price_pattern = '/\['.$currency.'\]\((.*?)\)/';
+	$type_pattern = '/\[type\]\((.*?)\)/';
+	preg_match($price_pattern, trim($priceField), $temp);
 	$output = array();
 	if(!empty($temp)){
-		foreach($temp[2] as $c => $t)
-			$output[$temp[1][$c]] = $t;
+		if(!empty($temp[1]) && strtolower($temp[1]) !== 'sold out'){
+			preg_match($type_pattern, trim($priceField), $temp_type);
+			if(!empty($temp_type))
+				$output['type'] = $temp_type[1];
+			else
+				$output['type'] = '';
+			$output['price'] = $temp[1];
+		}
+		else{
+			$output['type'] = 'sold out';
+			$output['price'] = 'sold out';
+		}
 	}
+	else
+	{
+		if(strpos(trim($priceField), '[donation]') !== false)
+		{
+			$output['type'] = 'donation';
+			$output['price'] = 'donation';
+		}
+		else{
+			$output['type'] = 'sold out';
+			$output['price'] = 'sold out';
+		}
+	}
+	
 	return $output;
 }
-function printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols = array(), $itemName, $key = '', $isSubscriptions = false){
+// function getProductInfo($currency, $priceField){
+// 	$product_pattern = '/^\[(.*)\]\((?:\[.*\]\(.*\))*\['.$currency.'\]\((.*)\)(?:\[.*\]\(.*\))*\)/';
+// 	preg_match($product_pattern, trim($priceField), $temp);
+// 	var_dump($temp);
+// 	if( empty($temp) )
+// 	{
+// 		if(strpos(trim($item['notes']), '[donation]') !== false){
+// 			$product_type = 'donation';
+// 			$product_price = false;
+// 		}
+// 		else{
+// 			$product_type = false;
+// 			$product_price = false;
+// 		}
+// 	}
+// 	else if( empty($product_price) || strtolower($product_price) == 'sold out')
+// 	{
+// 		$product_type = false;
+// 		$product_price = false;
+// 	}
+// 	else
+// 	{
+// 		$product_type = $temp[1];
+// 		$product_price = $temp[2];
+// 	}
+
+// 	$output = array(
+// 		'type'  => $product_type,
+// 		'price' => $product_price
+// 	);
+
+// 	return $output;
+// }
+function printPayPalButtons($currency, $productInfo, $itemName){
+	global $acceptedCurrenciesSymbols;
 	$key = empty($key) ? '' : '-' . $key;
+	$key = slug($itemName);
 	$output = '';
-	if(!empty($prices))
+	$price = $productInfo['price'];
+	$type = $productInfo['type'];
+
+	// $isSubscription = $type === 'subscription';
+	// var_dump($price);
+	// var_dump(floatval($price));
+	// var_dump(!is_nan('ss'));
+	// var_dump(!is_nan($price));
+	// echo '<br><br><br>';
+	if( is_numeric($price) )
    	{
-   		if($prices[$currency] == floatval($prices[$currency]) . '')
-   		{
-   			$output = '<section id="buy' . $key . '" class="buy-section">';
-   			$p = $prices[$currency];
-   			$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area button-area-' . $currency . '">';
-   			$output .= 		'<div id="paypal-button-container' . $key . '-' . $currency . '" price="'. $p . '" class="payment-option paypal-button-container"></div>';
-   			$output .= 	'<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
-   			$output .= 	'<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$isSubscriptions.'\')">' . $acceptedCurrenciesSymbols[$currency] . $p . '</button>';
-   			$output .= '</div></div>';
-	  	   	$output .= '</section>';
-   		}
-   		else if($prices == 'donation')
-   		{
-   			$output = '<div id="donate-buy-section" class="buy-section"><div id="paypal-donate-button-container"></div><button id="donate-btn" class="button">DONATE</button></div>';
-   		}
-   		else if(strtolower($prices[$currency] == 'sold out'))
-   		{
-   			$output = '<section id="buy' . $key . '" class="buy-section">';
-	   		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red">SOLD OUT</div></div>';
-	   		$output .= '</section>';
-   		}
+   		$output = '<section id="buy' . $key . '" class="buy-section">';
+		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area button-area-' . $currency . '">';
+		$output .= 		'<div id="paypal-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container"></div>';
+		$output .= 	'<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
+		$output .= 	'<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$type.'\')">' . $acceptedCurrenciesSymbols[$currency] . $price . '</button>';
+		$output .= '</div></div>';
+	   	$output .= '</section>';
    	}
+   	else if($type == 'doantion')
+   	{
+   		$output = '<div id="donate-buy-section" class="buy-section"><div id="paypal-donate-button-container"></div><button id="donate-btn" class="button">DONATE</button></div>';
+   	}
+   	else if($price == 'sold out')
+   	{
+   		$output = '<section id="buy' . $key . '" class="buy-section">';
+		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red">SOLD OUT</div></div>';
+		$output .= '</section>';
+   	}
+
    	return $output;
 }
+
+if( ($uri[1] == 'shop' && count($uri) == 2) || 
+	($uri[1] == 'journal' && count($uri) == 3) )
+	$this_page = 'issue';
+else if($uri[1] == 'shop' && count($uri) == 3 && $uri[2] == 'subscriptions')
+	$this_page = 'subscription';
+else if( strpos(trim($item['notes']), '[donation]') !== false )
+	$this_page = 'donation';
 
 $acceptedCurrencies = array('usd','gbp','eur');
 $currency = isset($_GET['currency']) ? $_GET['currency'] : 'usd';
@@ -52,8 +125,35 @@ $acceptedCurrenciesSymbols = array(
 $isDonation = strpos(trim($item['notes']), '[donation]') !== false;
 
 // only show back button on internal references
+// $product_pattern = '/^\[(.*)\]\((?:\[.*\]\(.*\))*\['.$currency.'\]\((.*)\)(?:\[.*\]\(.*\))*\)/';
+// $product_pattern = '/^\[(.*)\]\(.*\)/';
+// preg_match($product_pattern, trim($item['notes']), $temp);
+// var_dump($temp);
 
-$prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
+// $product_type = $temp[1];
+// $product_price = $temp[2];
+// echo 'type: ' . $product_type . '<br>';
+// echo 'price: ' . $product_price . ' ' . $currency . '<br>';
+// if( empty($temp) )
+// {
+// 	if(strpos(trim($item['notes']), '[donation]') !== false){
+// 		$product_type = 'donation';
+// 		$product_price = false;
+// 	}
+// 	else
+// 		$product_type = 'sold out';
+// 		$product_price = false;
+// }
+// else if( empty($product_price) || strtolower($product_price) == 'sold out')
+// {
+// 	$product_type = 'sold out';
+// 	$product_price = false;
+// }
+// else
+// {
+// 	$product_type = $temp[1];
+// 	$product_price = $temp[2];
+// }
 
 ?>
 <? if($isShop){
@@ -71,9 +171,9 @@ $prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
 				if(count($media) > 0)
 					$cover = m_url($media[0]);
 				$isDonation = strpos(trim($child['notes']), '[donation]') !== false;
-				$prices = getPrices($currency, trim($child['notes']));
-				if(empty($prices) && $isDonation)
-					$prices = 'donation';
+				$productInfo = getProductInfo($currency, trim($child['notes']));
+				// $this_product = getProductInfo($currency, trim($child['notes']));
+				
 				$url = $base_url . $child['url'];
 				if($currency !== 'usd') $url .= '?currency=' . $currency;
 				$itemName = $child['name1'];
@@ -84,7 +184,7 @@ $prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
 							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
 						</a><?
 					}
-					echo printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols, $itemName, $key);
+					echo printPayPalButtons($currency, $productInfo, $itemName);
 					?>
 				</div><?
 			}
@@ -92,7 +192,7 @@ $prices_pattern = '/\[('.$currency.')\]\((.*?)\)/';
 	?></div>
 </div><?
 } 
-else if($isSubscriptions)
+else if($this_page == 'subscription')
 {
 	$children = $oo->children($item['id']);
 	foreach($children as $key => $child)
@@ -100,20 +200,18 @@ else if($isSubscriptions)
 		if( substr($child['name1'], 0, 1) != '.')
 		{
 			$itemName = 'Subscription - ' . $child['name1'];
-			$prices = getPrices($currency, trim($child['notes']));
-			echo printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols, $itemName, $key, $isSubscriptions);
+			$productInfo = getProductInfo($currency, trim($child['notes']));
+			// $this_product = getProductInfo($currency, trim($child['notes']));
+			echo printPayPalButtons($currency, $productInfo, $itemName);
 		}
 	}
 }
 else
 {
-	$prices = getPrices($currency, trim($item['notes']));
-	if(empty($prices) && $isDonation)
-		$prices = 'donation';
-	if(!$isDonation)
-		echo printPayPalButtons($currency, $prices, $acceptedCurrenciesSymbols, '');
+	$productInfo = getProductInfo($currency, trim($item['notes']));
+	echo printPayPalButtons($currency, $productInfo, '');
 }
-if(!empty($prices))
+if($this_page !== 'donation')
 {
 	?>
 	<div id="currencySwitchWrapper" class="time">
@@ -128,44 +226,28 @@ if(!empty($prices))
 	 } ?>
 	</div>
 	<?
-}
-
-if($isDonation){ ?>
-	<script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+}else{ ?>
+	<!-- <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script> -->
 	<div id="donate-buy-section" class="buy-section">
-		<!-- <form name="Donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+		<form name="Donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 			<input type="hidden" name="cmd" value="_s-xclick">
 			<input type="hidden" name="hosted_button_id" value="H4B76UC2KFXCE">
 			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" name="submit" alt="PayPal - The safer, easier way to pay online!" border="0">
 			<img alt="" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" border="0">
 		</form> 
-		<button id="donate-btn" class="button">DONATE</button> -->
-		<form action="https://www.sandbox.paypal.com/donate" method="post" target="_top">
+		<button id="donate-btn" class="button">DONATE</button>
+		<!-- <form action="https://www.sandbox.paypal.com/donate" method="post" target="_blank">
 		<input type="hidden" name="hosted_button_id" value="TKKY8UTYFQ754" />
 		<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
 		<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-		</form>
+		</form> -->
 
-		<div id="paypal-donate-button-container"></div>
+		<!-- <div id="paypal-donate-button-container"></div> -->
+		<!-- <button id="donate-btn" class="button">DONATE</button> -->
 	</div>
-	<script>
-		// PayPal.Donation.Button({
-		// 	env: 'sandbox',
-		// 	hosted_button_id: 'TKKY8UTYFQ754',
-		// 	// business: 'YOUR_EMAIL_OR_PAYERID',
-		// 	image: {
-		// 		src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
-		// 		title: 'PayPal - The safer, easier way to pay online!',
-		// 		alt: 'Donate with PayPal button'
-		// 	},
-		// 	onComplete: function (params) {
-		// 	   // Your onComplete handler
-		// 	},
-		// }).render('#paypal-donate-button-container');
-	</script>
 <? } ?>
 <script>
-	var isDonation = <?= json_encode($isDonation); ?>;
+	var isDonation = '<?= $this_page === 'donation'; ?>';
 	var currency = '<?= $currency; ?>';
 	paypal_url += '&currency='+currency.toUpperCase();
 	if(!isDonation) {
@@ -329,7 +411,7 @@ if($isDonation){ ?>
 	{
 		pointer-events: none;
 	}
-	#donate-buy-section form[name="Donate"]
+	#donate-buy-section form
 	{
 		position: absolute;
 		top: 0;
@@ -338,7 +420,7 @@ if($isDonation){ ?>
 		height: 100%;
 		opacity: 0;
 	}
-	form[name="Donate"] input[type="image"]
+	#donate-buy-section form input[type="image"]
 	{
 		width: 100%;
 		height: 100%;
