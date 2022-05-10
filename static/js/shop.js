@@ -319,7 +319,7 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 }
 function createButton(buttonContainerId, price, currency, itemName, type){
 	console.log('createButton . . .');
-
+	console.log(type);
 	if(type == 'subscription')
 	{
 		if(itemName.indexOf('two years') !== -1){
@@ -357,7 +357,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 							},
 							shipping: {
 								currency_code: currencyUppercase,
-								value: "10.00"
+								value: options[currencyUppercase][0].amount.value
 							}
 						}
                 	},
@@ -441,7 +441,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 		},
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(orderData) {
-            	if(isSubscriptions)
+            	if(type == 'subscription')
             		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
             	else
             		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";

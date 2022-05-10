@@ -74,7 +74,6 @@ function printPayPalButtons($currency, $productInfo, $itemName){
 	$output = '';
 	$price = $productInfo['price'];
 	$type = $productInfo['type'];
-
 	// $isSubscription = $type === 'subscription';
 	// var_dump($price);
 	// var_dump(floatval($price));
