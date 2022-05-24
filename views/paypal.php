@@ -1,4 +1,5 @@
 <script src="/static/js/shop.js"></script>
+<script src="/static/js/cookie.js"></script>
 <?
 function getProductInfo($currency, $priceField){
 	$price_pattern = '/\['.$currency.'\]\((.*?)\)/';
@@ -69,22 +70,17 @@ function getProductInfo($currency, $priceField){
 // }
 function printPayPalButtons($currency, $productInfo, $itemName){
 	global $acceptedCurrenciesSymbols;
-	$key = empty($key) ? '' : '-' . $key;
+	// $key = empty($key) ? '' : '-' . $key;
 	$key = slug($itemName);
 	$output = '';
 	$price = $productInfo['price'];
 	$type = $productInfo['type'];
-	// $isSubscription = $type === 'subscription';
-	// var_dump($price);
-	// var_dump(floatval($price));
-	// var_dump(!is_nan('ss'));
-	// var_dump(!is_nan($price));
-	// echo '<br><br><br>';
 	if( is_numeric($price) )
    	{
    		$output = '<section id="buy' . $key . '" class="buy-section">';
 		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area button-area-' . $currency . '">';
 		$output .= 		'<div id="paypal-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container"></div>';
+		$output .= 		'<div id="paypal-cart-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button' . $key . '-' . $currency . '" class="button paypal-cart-button" price="'. $price . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event)">ADD TO CART</button></div>';
 		$output .= 	'<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
 		$output .= 	'<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$type.'\')">' . $acceptedCurrenciesSymbols[$currency] . $price . '</button>';
 		$output .= '</div></div>';
@@ -97,7 +93,7 @@ function printPayPalButtons($currency, $productInfo, $itemName){
    	else if($price == 'sold out')
    	{
    		$output = '<section id="buy' . $key . '" class="buy-section">';
-		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red">SOLD OUT</div></div>';
+		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red pseudo-button">SOLD OUT</div></div>';
 		$output .= '</section>';
    	}
 
@@ -153,7 +149,6 @@ $isDonation = strpos(trim($item['notes']), '[donation]') !== false;
 // 	$product_type = $temp[1];
 // 	$product_price = $temp[2];
 // }
-
 ?>
 <? if($isShop){
 	$temp = $oo->urls_to_ids(array('shop', 'issues'));
@@ -248,12 +243,17 @@ if($this_page !== 'donation')
 <script>
 	var isDonation = '<?= $this_page === 'donation'; ?>';
 	var currency = '<?= $currency; ?>';
+	var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
 	paypal_url += '&currency='+currency.toUpperCase();
 	if(!isDonation) {
 		var paypal_script = loadScript(paypal_url);
 	}
 	document.body.classList.add('viewing-'+currency);
+
 </script>
+<?
+	if($isTestCart) require_once('shopping-cart.php');
+?>
 <style>
 	/*
 		tmp for dev only
@@ -319,23 +319,30 @@ if($this_page !== 'donation')
 	    /*left: 18px;*/
 	    /*bottom: 90px;*/
 	    /*width: 100px;*/
-	    display: block;
-	    opacity: 0.0;
-	    pointer-events: none;
-	    height: 0;
-	    overflow: hidden;
+	    /*display: block;*/
+	    display: none;
+	    height: 35px;
+	    /*opacity: 0.0;*/
+	    /*pointer-events: none;*/
+	    /*height: 0;*/
+	    /*overflow: hidden;*/
 	}
 
 	.paypal-button-container:hover {
 	    /* opacity: 1.0; */
 	}
+	.paypal-button-container > div
+	{
+		display: block;
+	}
 
 	.viewing-paypal .download-code-container,
 	.viewing-paypal .paypal-button-container
 	{
-	    opacity: 1;
-	    pointer-events: initial;
-	    height: initial;
+	    /*opacity: 1;*/
+	    display: block;
+	    /*pointer-events: initial;*/
+	    /*height: initial;*/
 	    /*margin-top: 11px;*/
 	}
 	.viewing-paypal .buy-button-container .button
@@ -391,7 +398,7 @@ if($this_page !== 'donation')
 		background-color: #0C0;
 		color: #fff;
 	}
-	.sold-out
+	.pseudo-button
 	{
 		width: 100%;
 	    height: 35px;
@@ -424,7 +431,30 @@ if($this_page !== 'donation')
 		width: 100%;
 		height: 100%;
 	}
-	
+	.payment-option
+	{
+		margin-bottom: 5px;
+	}
+	.paypal-cart-button
+	{
+		background-color: #999;
+		border-color: #999;
+	}
+	.paypal-cart-button:hover
+	{
+		background-color: #a9a9a9;
+		border-color: #a9a9a9;
+	}
+	.paypal-cart-button-container,
+	.viewing-paypal .paypal-cart-button-container
+	{
+		display: none;
+	}
+	/*.testCart .paypal-cart-button-container,*/
+	.testCart .viewing-paypal .paypal-cart-button-container
+	{
+		display: block;
+	}
 	/*form[name="Donate"]
 	{
 		margin-top: 21px;

@@ -314,12 +314,16 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
+		console.log(thisPaypalButtonContainer.id);
+		if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
+			createCartButton();
+		else
+			createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
 	}
 }
 function createButton(buttonContainerId, price, currency, itemName, type){
-	console.log('createButton . . .');
-	console.log(type);
+	// console.log('createButton . . .');
+	// console.log(type);
 	if(type == 'subscription')
 	{
 		if(itemName.indexOf('two years') !== -1){
@@ -331,7 +335,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 	}
 	else
 		var options = shippingOptions_arr[type];	
-	console.log(options);
+	// console.log(options);
 	var baseAmount = parseFloat(price, 10);
 	var totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
 	var currencyUppercase = currency.toUpperCase();
@@ -460,5 +464,140 @@ function createButton(buttonContainerId, price, currency, itemName, type){
         }
 
   	}).render('#' + buttonContainerId);
+}
+
+function createCartButton(){
+	let sItem_row = document.getElementsByClassName('item-row');
+
+	if(sItem_row.length > 0)
+	{
+		let currencyUppercase = currency.toUpperCase();
+		let buttonContainerId = 'paypal-button-container-cart';
+		let items = [];
+		let type = '';
+		let baseAmount = 0.0;
+		let shipping_option_priority = {
+			'subscription-12': 40,
+			'subscription-2': 30,
+			'issue': 20,
+			'archive': 15,
+			'annual': 10
+		};
+		[].forEach.call(sItem_row, function(el, i){
+			let thisItemName = el.querySelector('.item-name').innerText;
+			let thisItemPrice = el.querySelector('.item-price').innerText;
+			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+			let thisItem = {
+				name: thisItemName, 
+				unit_amount: {
+					currency_code: currencyUppercase,
+					value: thisItemPrice
+				},
+				quantity: thisItemQuantity
+			};
+			items.push(thisItem);
+
+			let thisType = el.getAttribute('type');
+			if(type == '')
+				type = thisType;
+			else 
+			{
+				if( typeof shipping_option_priority[thisType] === undefined )
+					thisType = 'issue';
+				if(shipping_option_priority[thisType] > shipping_option_priority[type])
+					type = thisType;
+			}
+
+			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
+
+		});
+		let options = shippingOptions_arr[type];
+		let totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
+		console.log('baseAmount = ' + baseAmount);
+		console.log('shipping = ' + parseFloat(options[currency.toUpperCase()][0].amount.value, 10));
+		console.log('totalValue = ' + totalValue);
+		console.log(items);
+		paypal.Buttons({
+	        createOrder: function(data, actions) {
+	        	console.log('createOrder . . .');
+	            return actions.order.create({
+	                purchase_units: [{
+	                	amount: {
+	                        currency_code: currencyUppercase,
+	                        value: totalValue,
+	                        breakdown: {
+								item_total: { 
+									currency_code: currencyUppercase,
+									value: baseAmount
+								},
+								shipping: {
+									currency_code: currencyUppercase,
+									value: options[currencyUppercase][0].amount.value
+								}
+							}
+	                	},
+		              	shipping: {
+			              	options: options[currencyUppercase]
+			            },
+			            items: items
+	                }]
+	                
+	            });
+	        },
+	        onShippingChange: function (data, actions) {
+				// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
+				
+				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
+				data.amount.value = data.amount.value + '';
+				return actions.order.patch([{
+					op: "replace",
+					path: "/purchase_units/@reference_id=='default'/amount",
+					value: { 
+						value: data.amount.value, 
+						currency_code: data.amount.currency_code,
+						breakdown: {
+							item_total: { 
+								currency_code: currencyUppercase,
+								value: baseAmount
+							},
+							shipping: {
+								currency_code: currencyUppercase,
+								value: parseFloat(data.selected_shipping_option.amount.value, 10)
+							}
+						}
+					}
+				}]);
+			},
+	        style: {
+	            color: 'black'
+	        },
+	        onError: function (err) {
+				// For example, redirect to a specific error page
+				// window.location.href = "/your-error-page-here";
+				// window.location.href = "/shop/issues/error";
+				console.log(err);
+			},
+	        onApprove: function(data, actions) {
+	            return actions.order.capture().then(function(orderData) {
+	            	if(type == 'subscription')
+	            		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
+	            	else
+	            		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
+	            	console.log(return_url);
+	                /* 
+	                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+	                var transaction = orderData.purchase_units[0].payments.captures[0];
+	                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+	                const element = document.getElementById('paypal-button-container');
+	                element.innerHTML = 'Thx.';
+	                */
+	                // let email = orderData.payer.email_address;
+	                window.location.href = return_url;
+	                console.log('on approve');
+	            });
+	        }
+
+	  	}).render('#' + buttonContainerId);
+	} else console.log('cart is empty');
 }
 

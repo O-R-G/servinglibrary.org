@@ -488,6 +488,14 @@ a.green:link {
 	color: #0B0;
 } 
 
+.flex-container:after
+{
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
 /* mobile styles */
 @media screen and (max-width: 568px)
 {
