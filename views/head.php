@@ -41,7 +41,6 @@ else if( $uri[1] == 'subscribe' && count($uri) == 2 )
 	} catch(Exception $err) {
 		$item = $oo->get(0);
 	}
-	
 }
 
 $title = "The Serving Library";
@@ -53,13 +52,8 @@ $isShop = ($uri[1] == 'shop' && count($uri) == 2);
 
 $bodyClass = '';
 if($uri[1] == 'shop')
-	$bodyClass .= 'shop ';
-
-$isTestCart = isset($_GET['testCart']);
-if($isTestCart)
-	$bodyClass .= 'testCart ';
-?>
-<!DOCTYPE html>
+	$bodyClass .= 'shop testCart ';
+?><!DOCTYPE html>
 <html>
 	<head>
 		<title><? echo $title; ?></title>

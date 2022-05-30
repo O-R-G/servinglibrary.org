@@ -1,6 +1,8 @@
-<?
-?>
-<div id="cart-symbol" class="time" onclick="toggleCart()">CART (<span id="item-count">0</span>)</div>
+<div id="cart-symbol" class="cart-button-container" onclick="toggleCart()">
+	<button id="" class="button" onclick="">
+		CART (<span id="item-count">0</span>)
+	</button>
+</div>
 <div id="cart-container" class="time">
 	<div id="btn-close-cart" onClick="toggleCart()">X</div>
 	<div id="" class="item-row-default">
@@ -13,24 +15,25 @@
 		</div>
 	</section>
 </div>
+
+<!--
 <style>
-	#cart-symbol
-	{
+	#cart-symbol {
 		position: fixed;
-		top: 55px;
-		right: 20px;
+		left: 20px;
+		bottom: 20px;
 		z-index: 1000;
 		padding: 2px 5px;
 		cursor: pointer;
 	}
+
 	#cart-symbol:hover,
-	.viewing-cart #cart-symbol
-	{
+	.viewing-cart #cart-symbol {
 		background-color: #0C0;
 		color: #fff;
 	}
-	#cart-container
-	{
+
+	#cart-container {
 		width: 100vw;
 		max-width: 100%;
 		position: fixed;
@@ -60,11 +63,9 @@
 		cursor: pointer;
 		padding: 5px 10px;
 	}
-	#buy-section-cart
-	{
+	#buy-section-cart {
 		position: absolute;
-	    right: 20px;
-	    left: auto;
+	    	left: 20px;
 	}
 	.item-row,
 	.item-row-default
@@ -123,6 +124,9 @@
 	}
 
 </style>
+-->
+
+
 <script>
 	function printToCart(rowId, itemName, type, price, quantity){
 		console.log('printToCart()');
@@ -270,6 +274,4 @@
 		// console.log(json);
 		createCookie( 'cart', JSON.stringify(json), '' );
 	}
-
-	
 </script>

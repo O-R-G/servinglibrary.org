@@ -1,6 +1,5 @@
 <script src="/static/js/shop.js"></script>
-<script src="/static/js/cookie.js"></script>
-<?
+<script src="/static/js/cookie.js"></script><?
 function getProductInfo($currency, $priceField){
 	$price_pattern = '/\['.$currency.'\]\((.*?)\)/';
 	$type_pattern = '/\[type\]\((.*?)\)/';
@@ -32,42 +31,9 @@ function getProductInfo($currency, $priceField){
 			$output['price'] = 'sold out';
 		}
 	}
-	
 	return $output;
 }
-// function getProductInfo($currency, $priceField){
-// 	$product_pattern = '/^\[(.*)\]\((?:\[.*\]\(.*\))*\['.$currency.'\]\((.*)\)(?:\[.*\]\(.*\))*\)/';
-// 	preg_match($product_pattern, trim($priceField), $temp);
-// 	var_dump($temp);
-// 	if( empty($temp) )
-// 	{
-// 		if(strpos(trim($item['notes']), '[donation]') !== false){
-// 			$product_type = 'donation';
-// 			$product_price = false;
-// 		}
-// 		else{
-// 			$product_type = false;
-// 			$product_price = false;
-// 		}
-// 	}
-// 	else if( empty($product_price) || strtolower($product_price) == 'sold out')
-// 	{
-// 		$product_type = false;
-// 		$product_price = false;
-// 	}
-// 	else
-// 	{
-// 		$product_type = $temp[1];
-// 		$product_price = $temp[2];
-// 	}
 
-// 	$output = array(
-// 		'type'  => $product_type,
-// 		'price' => $product_price
-// 	);
-
-// 	return $output;
-// }
 function printPayPalButtons($currency, $productInfo, $itemName){
 	global $acceptedCurrenciesSymbols;
 	// $key = empty($key) ? '' : '-' . $key;
@@ -118,46 +84,14 @@ $acceptedCurrenciesSymbols = array(
 );
 
 $isDonation = strpos(trim($item['notes']), '[donation]') !== false;
-
-// only show back button on internal references
-// $product_pattern = '/^\[(.*)\]\((?:\[.*\]\(.*\))*\['.$currency.'\]\((.*)\)(?:\[.*\]\(.*\))*\)/';
-// $product_pattern = '/^\[(.*)\]\(.*\)/';
-// preg_match($product_pattern, trim($item['notes']), $temp);
-// var_dump($temp);
-
-// $product_type = $temp[1];
-// $product_price = $temp[2];
-// echo 'type: ' . $product_type . '<br>';
-// echo 'price: ' . $product_price . ' ' . $currency . '<br>';
-// if( empty($temp) )
-// {
-// 	if(strpos(trim($item['notes']), '[donation]') !== false){
-// 		$product_type = 'donation';
-// 		$product_price = false;
-// 	}
-// 	else
-// 		$product_type = 'sold out';
-// 		$product_price = false;
-// }
-// else if( empty($product_price) || strtolower($product_price) == 'sold out')
-// {
-// 	$product_type = 'sold out';
-// 	$product_price = false;
-// }
-// else
-// {
-// 	$product_type = $temp[1];
-// 	$product_price = $temp[2];
-// }
-?>
-<? if($isShop){
+if($isShop){
 	$temp = $oo->urls_to_ids(array('shop', 'issues'));
 	$journal_children = $oo->children(end($temp));
 	$base_url = '/journal/';
 	$body = trim($item['body']);
-	?><div class="mainContainer">
+	?><div class="mainContainer body">
 	<div id="shopContainer" class="floatContainer">
-		<div class="thumbsContainer journalContainer"><?= $body; ?></div>
+		<div class="thumbsContainer shop"><?= $body; ?></div>
 		<? foreach($journal_children as $key => $child){
 			if( substr($child['name1'], 0, 1) != '.')
 			{
@@ -166,13 +100,11 @@ $isDonation = strpos(trim($item['notes']), '[donation]') !== false;
 					$cover = m_url($media[0]);
 				$isDonation = strpos(trim($child['notes']), '[donation]') !== false;
 				$productInfo = getProductInfo($currency, trim($child['notes']));
-				// $this_product = getProductInfo($currency, trim($child['notes']));
-				
 				$url = $base_url . $child['url'];
 				if($currency !== 'usd') $url .= '?currency=' . $currency;
 				$itemName = $child['name1'];
 
-				?><div class="thumbsContainer journalContainer"><?
+				?><div class="thumbsContainer shop"><?
 					if(isset($cover)){
 						?><a class="shopItemLink" href="<?= $url; ?>">
 							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
@@ -185,9 +117,7 @@ $isDonation = strpos(trim($item['notes']), '[donation]') !== false;
 		}
 	?></div>
 </div><?
-} 
-else if($this_page == 'subscription')
-{
+} else if($this_page == 'subscription') {
 	$children = $oo->children($item['id']);
 	foreach($children as $key => $child)
 	{
@@ -195,21 +125,17 @@ else if($this_page == 'subscription')
 		{
 			$itemName = 'Subscription - ' . $child['name1'];
 			$productInfo = getProductInfo($currency, trim($child['notes']));
-			// $this_product = getProductInfo($currency, trim($child['notes']));
 			echo printPayPalButtons($currency, $productInfo, $itemName);
 		}
 	}
 }
-else
-{
+else {
 	$productInfo = getProductInfo($currency, trim($item['notes']));
 	echo printPayPalButtons($currency, $productInfo, '');
 }
-if($this_page !== 'donation')
-{
-	?>
-	<div id="currencySwitchWrapper" class="time">
-	<? if(!$isDonation){
+if($this_page !== 'donation') {
+	?><div id="currencySwitchWrapper" class="time"><? 
+	if(!$isDonation){
 		foreach($acceptedCurrencies as $option){ 
 			if($option == $currency) { ?>
 				<span id="currencyOption-<?= $option; ?>" class="currencyOption active"><?= strtoupper($option); ?></span>
@@ -217,10 +143,10 @@ if($this_page !== 'donation')
 				<a id="currencyOption-<?= $option; ?>" class="currencyOption" href="?currency=<?= $option; ?>"><?= strtoupper($option); ?></a>
 			<? }
 		}
-	 } ?>
-	</div>
-	<?
-}else{ ?>
+	 }
+	?></div><?
+} else {
+	?>
 	<!-- <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script> -->
 	<div id="donate-buy-section" class="buy-section">
 		<form name="Donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -238,9 +164,9 @@ if($this_page !== 'donation')
 
 		<!-- <div id="paypal-donate-button-container"></div> -->
 		<!-- <button id="donate-btn" class="button">DONATE</button> -->
-	</div>
-<? } ?>
-<script>
+	</div><?
+}
+?><script>
 	var isDonation = '<?= $this_page === 'donation'; ?>';
 	var currency = '<?= $currency; ?>';
 	var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
@@ -249,41 +175,49 @@ if($this_page !== 'donation')
 		var paypal_script = loadScript(paypal_url);
 	}
 	document.body.classList.add('viewing-'+currency);
-
-</script>
-<?
-	if($isTestCart) require_once('shopping-cart.php');
-?>
-<style>
+</script><?
+	require_once('views/shopping-cart.php');
+?><style>
 	/*
 		tmp for dev only
 		should be cleaned up
 	*/
 
-	.thumbsContainer.journalContainer {
-		width: 300px;
+	body {
+		/* background-color: #666; */
+	}
+
+	.thumbsContainer.shop {
+		/*
+		display: inline-block;
+		float: initial;
+		*/
+		width: 250px;
 		margin-bottom: 10px;
 		position: relative;
+		padding: 30px;
+		padding-bottom: 40px;
 	}
-	.buy-section
-	{
+
+	.buy-section {
 		position: fixed;
 		width: 200px;
-		left: 20px;
-		bottom: 20px;
+		left: 30px;
+		bottom: 0px;
 	}
-	.thumbsContainer .buy-section
-	{
+
+	.thumbsContainer .buy-section {
 		position: absolute;
+		/*
 		text-align: right;
 		left: auto;
 		right: 0px;
 		bottom: 0px;
 		padding: 10px;
-		/*width: 200px;*/
+		*/
 	}
-	.buy-section + .buy-section
-	{
+
+	.buy-section + .buy-section {
 		left: 230px;
 	}
 
@@ -293,12 +227,13 @@ if($this_page !== 'donation')
 		display: inline-block;
 		width: 100%;
 	}
-	.issue-img
-	{
+
+	.issue-img {
 		display: block;
+		/* box-shadow: 0px 0px 10px 5px #999; */
 	}
-	.viewing-paypal .button-area
-	{
+
+	.viewing-paypal .button-area {
 	    background-color: #fff;
 	}
 
@@ -307,14 +242,12 @@ if($this_page !== 'donation')
 	.viewing-eur .button-area-usd,
 	.viewing-eur .button-area-gbp,
 	.viewing-gbp .button-area-usd,
-	.viewing-gbp .button-area-eur
-	{
+	.viewing-gbp .button-area-eur {
 		display: none;
 	}
 
-
 	.paypal-button-container,
-	body.loading .viewing-paypal .paypal-button-container{
+	body.loading .viewing-paypal .paypal-button-container {
 	    /*position: fixed;*/
 	    /*left: 18px;*/
 	    /*bottom: 90px;*/
@@ -322,17 +255,27 @@ if($this_page !== 'donation')
 	    /*display: block;*/
 	    display: none;
 	    height: 35px;
-	    /*opacity: 0.0;*/
-	    /*pointer-events: none;*/
-	    /*height: 0;*/
-	    /*overflow: hidden;*/
+	}
+
+	.cart-button-container {
+		display: block;
+		width: 200px;
+		height: 35px;
+	}
+
+	.cart-button-container button {
+		background-color: #0C0;
+	}
+
+	.cart-button-container button: hover {
+		background-color: #0F0;
 	}
 
 	.paypal-button-container:hover {
 	    /* opacity: 1.0; */
 	}
-	.paypal-button-container > div
-	{
+
+	.paypal-button-container > div {
 		display: block;
 	}
 
@@ -373,23 +316,23 @@ if($this_page !== 'donation')
 	    box-sizing: border-box;
 	    margin-bottom: 5px;
 	}
-	.shopItemLink
-	{
+	.shopItemLink {
 		display: block;
 	}
-	#currencySwitchWrapper
-	{
+
+	#currencySwitchWrapper {
 		position: fixed;
-		top: 30px;
+		bottom: 20px;
 		right: 20px;
 		z-index: 90;
 	}
-	.currencyOption
-	{
+
+	.currencyOption {
 		display: inline-block;
 		padding: 2px 5px;
 		cursor: pointer;
 	}
+
 	a.currencyOption.active,
 	a.currencyOption:hover,
 	.currencyOption.active,
@@ -431,17 +374,14 @@ if($this_page !== 'donation')
 		width: 100%;
 		height: 100%;
 	}
-	.payment-option
-	{
+	.payment-option	{
 		margin-bottom: 5px;
 	}
-	.paypal-cart-button
-	{
+	.paypal-cart-button {
 		background-color: #999;
 		border-color: #999;
 	}
-	.paypal-cart-button:hover
-	{
+	.paypal-cart-button:hover {
 		background-color: #a9a9a9;
 		border-color: #a9a9a9;
 	}
@@ -450,9 +390,7 @@ if($this_page !== 'donation')
 	{
 		display: none;
 	}
-	/*.testCart .paypal-cart-button-container,*/
-	.testCart .viewing-paypal .paypal-cart-button-container
-	{
+	.testCart .viewing-paypal .paypal-cart-button-container {
 		display: block;
 	}
 	/*form[name="Donate"]
@@ -463,7 +401,7 @@ if($this_page !== 'donation')
 		position: relative;
 		overflow: hidden;
 	}
-	
+
 	form[name="Donate"]:after
 	{
 		content: "DONATE";
@@ -475,4 +413,109 @@ if($this_page !== 'donation')
 		height: 100%;
 		pointer-events: none;
 	}*/
+
+        #cart-symbol {
+                position: fixed;
+                left: 20px;
+                bottom: 20px;
+                z-index: 1000;
+                padding: 2px 5px;
+                cursor: pointer;
+        }
+
+        #cart-symbol:hover,
+        .viewing-cart #cart-symbol {
+                background-color: #0C0;
+                color: #fff;
+        }
+
+        #cart-container {
+                width: 100vw;
+                max-width: 100%;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                transform: translate(0, 100%);
+                z-index: 1000;
+                padding: 20px;
+                padding-right: 60px;
+                padding-bottom: 75px;
+                background-color: #fff;
+                min-height: 25vh;
+                max-height: 50vh;
+                overflow: scroll;
+                box-sizing: border-box;
+        }
+        .viewing-cart #cart-container
+        {
+                transition: transform .5s;
+                transform: translate(0, 0%);
+        }
+        #btn-close-cart
+        {
+                position: absolute;
+                right: 10px;
+                top: 15px;
+                cursor: pointer;
+                padding: 5px 10px;
+        }
+        #buy-section-cart {
+                position: absolute;
+                left: 20px;
+        }
+        .item-row,
+        .item-row-default
+        {
+                display: flex;
+        }
+        .item-row
+        {
+                margin-top: 10px;
+        }
+
+        .item-column
+        {
+                display: inline-block;
+                flex-basis: 50px;
+                padding: 0 15px;
+                text-align: right;
+        }
+        .item-name.item-column
+        {
+                flex: 1;
+                text-align: left;
+        }
+        .item-remove
+        {
+                flex-basis: 80px;
+                cursor: pointer;
+        }
+        .item-row-default .item-remove
+        {
+                cursor: default;
+        }
+        .item-quantity-container
+        {
+                position: relative;
+        }
+        .item-quantity
+        {
+                text-align: center;
+        }
+        .item-quantity-minus,
+        .item-quantity-plus
+        {
+                position: absolute;
+                top: 0;
+                padding: 0 5px;
+                cursor: pointer;
+        }
+        .item-quantity-minus
+        {
+                left: 10px;
+        }
+        .item-quantity-plus
+        {
+                right: 10px;
+        }
 </style>
