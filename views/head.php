@@ -66,12 +66,11 @@ if($isTestCart)
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- Optimal Internet Explorer compatibility -->
-		<link rel="stylesheet" type="text/css" media="all" href="/static/css/global.css">
+		<link rel="stylesheet" type="text/css" media="all" href="/static/css/main.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/mtdbt2f.css">
 		<link rel="apple-touch-icon" href="/media/png/icon.png" />
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>
-		<!-- <script src="/static/pde/processing-1.4.1.min.js"></script> -->
 	</head>
 	<body class="<?= $bodyClass; ?>"> 
 		<div id='timeWrapper' class='timeContainerWrapper'>
