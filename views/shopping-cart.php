@@ -186,7 +186,11 @@
 		thisRemove.className = 'item-column item-remove';
 		thisRemove.innerText = 'remove';
 		thisRemove.onclick=function(){
-			thisRow.parentNode.removeChild(thisRow);
+			let temp = document.getElementById(rowId);
+			let sItem_count = document.getElementById('item-count');
+			sItem_count.innerHTML = parseInt(sItem_count.innerHTML) - parseInt(temp.querySelector('.item-quantity').innerText);
+			
+			temp.parentNode.removeChild(temp);
 			updateRowToCookie();
 		};
 		thisRow.appendChild(thisName);
