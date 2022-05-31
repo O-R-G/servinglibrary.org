@@ -446,8 +446,7 @@ a.green:link {
 	-webkit-animation-delay: 1s;
 }
 
-.floatContainer:after
-{
+.floatContainer:after {
 	content: "";
 	display: block;
 	height: 0;
@@ -467,13 +466,14 @@ a.green:link {
     vertical-align: top;
     cursor: pointer;
 }
-.button:hover
-{
+
+.button:hover {
     background-color: #0E0;
     border: 1px solid #0E0;
+    color: #FFF;
 }
-.button-area
-{
+
+.button-area {
     /*padding: 5px;*/
     /*width: 200px;*/
     box-sizing: content-box;

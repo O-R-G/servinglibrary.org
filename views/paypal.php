@@ -59,7 +59,7 @@ function printPayPalButtons($currency, $productInfo, $itemName){
    	else if($price == 'sold out')
    	{
    		$output = '<section id="buy' . $key . '" class="buy-section">';
-		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="sold-out red pseudo-button">SOLD OUT</div></div>';
+		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area"><div class="pseudo-button sold-out">SOLD OUT</div></div>';
 		$output .= '</section>';
    	}
 
@@ -91,7 +91,7 @@ if($isShop){
 	$body = trim($item['body']);
 	?><div class="mainContainer body">
 	<div id="shopContainer" class="floatContainer">
-		<div class="thumbsContainer shop"><?= $body; ?></div>
+		<!-- <div class="thumbsContainer shop"><?= $body; ?></div> -->
 		<? foreach($journal_children as $key => $child){
 			if( substr($child['name1'], 0, 1) != '.')
 			{
@@ -133,14 +133,15 @@ else {
 	$productInfo = getProductInfo($currency, trim($item['notes']));
 	echo printPayPalButtons($currency, $productInfo, '');
 }
-if($this_page !== 'donation') {
-	?><div id="currencySwitchWrapper" class="time"><? 
+
+if ($this_page !== 'donation') {
+	?><div id="currencySwitchWrapper" class="currency"><? 
 	if(!$isDonation){
 		foreach($acceptedCurrencies as $option){ 
 			if($option == $currency) { ?>
-				<span id="currencyOption-<?= $option; ?>" class="currencyOption active"><?= strtoupper($option); ?></span>
+				<button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button>
 			<? } else { ?>
-				<a id="currencyOption-<?= $option; ?>" class="currencyOption" href="?currency=<?= $option; ?>"><?= strtoupper($option); ?></a>
+				<button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button>
 			<? }
 		}
 	 }
@@ -183,38 +184,24 @@ if($this_page !== 'donation') {
 		should be cleaned up
 	*/
 
-	body {
-		/* background-color: #666; */
-	}
-
 	.thumbsContainer.shop {
-		/*
-		display: inline-block;
-		float: initial;
-		*/
 		width: 250px;
-		margin-bottom: 10px;
 		position: relative;
-		padding: 30px;
-		padding-bottom: 40px;
+		padding: 20px;
 	}
 
 	.buy-section {
 		position: fixed;
 		width: 200px;
-		left: 30px;
-		bottom: 0px;
+		left: 20px;
+		bottom: 20px;
 	}
 
 	.thumbsContainer .buy-section {
 		position: absolute;
-		/*
-		text-align: right;
-		left: auto;
-		right: 0px;
-		bottom: 0px;
-		padding: 10px;
-		*/
+        margin: initial;
+		left: 30px;
+		bottom: 30px;
 	}
 
 	.buy-section + .buy-section {
@@ -230,11 +217,10 @@ if($this_page !== 'donation') {
 
 	.issue-img {
 		display: block;
-		/* box-shadow: 0px 0px 10px 5px #999; */
 	}
 
 	.viewing-paypal .button-area {
-	    background-color: #fff;
+	    background-color: #FFF;
 	}
 
 	.viewing-usd .button-area-eur,
@@ -248,11 +234,6 @@ if($this_page !== 'donation') {
 
 	.paypal-button-container,
 	body.loading .viewing-paypal .paypal-button-container {
-	    /*position: fixed;*/
-	    /*left: 18px;*/
-	    /*bottom: 90px;*/
-	    /*width: 100px;*/
-	    /*display: block;*/
 	    display: none;
 	    height: 35px;
 	}
@@ -263,15 +244,16 @@ if($this_page !== 'donation') {
 		height: 35px;
 	}
 
-	.cart-button-container button {
+	.cart-button-container .button {
 		background-color: #0C0;
+        color: #FFF;
 	}
 
-	.cart-button-container button: hover {
+	.cart-button-container .button:hover {
 		background-color: #0F0;
 	}
 
-	.paypal-button-container:hover {
+	.paypal-button-container: hover {
 	    /* opacity: 1.0; */
 	}
 
@@ -280,24 +262,21 @@ if($this_page !== 'donation') {
 	}
 
 	.viewing-paypal .download-code-container,
-	.viewing-paypal .paypal-button-container
-	{
-	    /*opacity: 1;*/
-	    display: block;
+	.viewing-paypal .paypal-button-container {
+	    /* display: block; */
 	    /*pointer-events: initial;*/
 	    /*height: initial;*/
 	    /*margin-top: 11px;*/
 	}
-	.viewing-paypal .buy-button-container .button
-	{
-	    /*background-color: #ccc;*/
-	    /*border-color: #ccc;*/
+
+	.viewing-paypal .buy-button-container .button {
 	    background-color: #0E0;
 	    border-color: #0E0;
 	    position: relative;
+        color: #FFF;
 	}
-	body.loading .viewing-paypal:before
-	{
+
+	body.loading .viewing-paypal:before {
 		content: "Loading . . .";
 		/*position: absolute;*/
 		display: block;
@@ -316,6 +295,7 @@ if($this_page !== 'donation') {
 	    box-sizing: border-box;
 	    margin-bottom: 5px;
 	}
+
 	.shopItemLink {
 		display: block;
 	}
@@ -327,27 +307,30 @@ if($this_page !== 'donation') {
 		z-index: 90;
 	}
 
+    .currency {
+        color: #000;
+    }
+    
 	.currencyOption {
 		display: inline-block;
+        width: 40px;
 		padding: 2px 5px;
 		cursor: pointer;
-	}
+    	/* border-radius: 4px; */
+        text-align: center;
+    }
 
 	a.currencyOption.active,
 	a.currencyOption:hover,
 	.currencyOption.active,
-	.currencyOption:hover
-	{
+	.currencyOption:hover {
 		background-color: #0C0;
 		color: #fff;
 	}
-	.pseudo-button
-	{
+
+	.pseudo-button {
 		width: 100%;
 	    height: 35px;
-	    color: #FFF;
-	    background-color: #f00;
-	    border: 1px solid #f00;
 	    border-radius: 4px;
 	    box-sizing: border-box;
 	    font-size: 18px;
@@ -356,12 +339,18 @@ if($this_page !== 'donation') {
 	    padding-top: 7px;
 	    font-family: 'Arial', sans-serif;
 	}
-	#donate-btn
-	{
+
+    .pseudo-button.sold-out {
+	    color: #FFF;
+	    background-color: none;
+	    border: 1px solid #FFF;    
+    }
+
+	#donate-btn {
 		pointer-events: none;
 	}
-	#donate-buy-section form
-	{
+
+	#donate-buy-section form {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -378,21 +367,28 @@ if($this_page !== 'donation') {
 		margin-bottom: 5px;
 	}
 	.paypal-cart-button {
-		background-color: #999;
-		border-color: #999;
+		/*
+        background-color: #0C0;
+		border-color: #0C0;
+        */
 	}
+
 	.paypal-cart-button:hover {
-		background-color: #a9a9a9;
+		/*
+        background-color: #a9a9a9;
 		border-color: #a9a9a9;
+        */
 	}
+
 	.paypal-cart-button-container,
-	.viewing-paypal .paypal-cart-button-container
-	{
+	.viewing-paypal .paypal-cart-button-container {
 		display: none;
 	}
+
 	.testCart .viewing-paypal .paypal-cart-button-container {
 		display: block;
 	}
+
 	/*form[name="Donate"]
 	{
 		margin-top: 21px;
@@ -417,9 +413,8 @@ if($this_page !== 'donation') {
         #cart-symbol {
                 position: fixed;
                 left: 20px;
-                bottom: 20px;
+                bottom: -35px;
                 z-index: 1000;
-                padding: 2px 5px;
                 cursor: pointer;
         }
 
@@ -427,6 +422,11 @@ if($this_page !== 'donation') {
         .viewing-cart #cart-symbol {
                 background-color: #0C0;
                 color: #fff;
+        }
+
+        .viewing-cart-symbol#cart-symbol {
+            bottom: 20px;
+            transition: bottom 0.25s;
         }
 
         #cart-container {
@@ -446,13 +446,13 @@ if($this_page !== 'donation') {
                 overflow: scroll;
                 box-sizing: border-box;
         }
-        .viewing-cart #cart-container
-        {
-                transition: transform .5s;
+
+        .viewing-cart #cart-container {
+                /* transition: transform .5s; */
                 transform: translate(0, 0%);
         }
-        #btn-close-cart
-        {
+
+        #btn-close-cart {
                 position: absolute;
                 right: 10px;
                 top: 15px;
