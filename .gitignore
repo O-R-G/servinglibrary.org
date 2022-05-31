@@ -1,16 +1,29 @@
-# annoying sys files
-.DS_Store
+# machine-specific config files
+.htaccess
+.htpasswd
 
-# emacs backups
+# nano, emacs backups
 *~
 
-# config files
-config.php
-.htpasswd
-.htaccess
-
 # media
+*.gif
+*.jpg
+*.jpeg
+*.png
+*.pdf
+*.svg
+*.tif
+*.tiff
+*.mp4
+*.mov
 
-# media/*.jpg
-# media/*.png
-# media/*.pdf
+# macos
+.DS_Store
+
+# bash
+backup
+sync
+log
+
+
+

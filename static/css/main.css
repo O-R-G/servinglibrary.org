@@ -1,0 +1,564 @@
+/* Document */
+
+body {
+	font-family: 'mtdbt2fF', Helvetica, Arial, Verdana, sans-serif;
+	-webkit-font-smoothing: subpixel-antialiased;
+	text-align: left;
+	color: #000;
+	margin: 20px;
+}
+
+img {
+	border-style:none;
+	width: 100%;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+/* links */
+a:link,
+#download-button,
+#video-button {
+	color: #00E;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #00E;
+	text-decoration: none;
+}
+
+a:hover,
+#download-button:hover,
+#video-button:hover {
+	color: #000;
+	/* background:transparent; */
+	background:#FFF;
+	text-decoration: none;
+}
+
+a#badge:hover {
+	background: transparent;
+}
+
+canvas:focus {
+	outline: none;
+}
+
+a:active,
+#download-button:active {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#download-button,
+#video-button {
+	cursor: pointer;
+	padding-top: 20px;
+}
+
+#cover-container {
+	cursor: pointer;
+}
+
+a.tooltip span {
+	display:none;
+	padding:2px 3px;
+	margin-left:8px;
+	width:300px;
+}
+
+a.tooltip:hover span{
+	display:inline;
+	position:absolute;
+	/* background:transparent; */
+	background:#FFF;
+	border:1px solid #CCC;
+	color:#000;
+}
+
+/* issue hover colours */
+.issue0:hover { color:#F00; }
+.issue1:hover { color:#00E; }
+.issue2:hover { color:#0B0; }
+.issue3:hover { color:#FB0; }
+.issue4:hover { color:#90F; }
+.issue5:hover {	color:#0C9;}
+.issue6:hover {	color:#FF9;}
+.issue7:hover {	color:#009;}
+.issue8:hover {	color:#F90;}
+.issue9:hover {	color:#0CF;}
+.issue10:hover { color:#F3F;}
+.issue11:hover { color:#F90;}
+.issue12:hover { color:#009;}
+.issue13:hover { color:#909;}
+.object:hover { color:#F00;}
+
+iframe {
+	height: 400px;
+	width: 400px;
+}
+/* Containers */
+
+.announceContainer {
+	position: fixed;
+	top: 40px;
+	left: 40px;
+	width: 400px;
+	z-index: 10;
+}
+
+.sidebarContainer {
+	position: absolute;
+	top: 40px;
+	left: 75%;
+	width: 200px;
+	z-index: 10;
+}
+
+.TSLContainer {
+	z-index: 10;
+	/* position: relative;*/
+	/* top:10px; */
+	/* padding: 30px 0 0 0; */
+	position: fixed;
+	top: 20px;
+	/* bottom: 20px; */
+	clear: both;
+	z-index: 90;
+}
+
+.mainContainer {
+	position: relative;
+	/*width: 99%;*/ /* why is this at 99%? */
+	z-index: 50;
+}
+
+.dividerContainer {
+	/* clear: left; */
+	width: 100%;
+}
+
+.dividerContainer:hover {
+	/*border-top-color: #000;*/
+}
+
+.thumbsContainer {
+	width: 220px;
+	float: left;
+	margin: 0 10px 10px 0;
+}
+
+.detailContainer {
+	width: 400px;
+}
+
+.coverContainer {
+	width: 100%;
+}
+
+.coverContainer:hover {
+}
+
+.captionContainer {
+	width: 100%;
+	padding: 5px 0 0 0;
+}
+
+.captionContainer:hover {
+}
+
+.titleContainer {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	width: 400px;
+	z-index: 99;
+}
+
+.wordsContainer {
+	width: 500px;
+  padding-top: 20px;
+}
+
+.wordsPopContainer {
+	width: 400px;
+}
+
+.wordsContainer .cover {
+	padding-left: 12%;
+	padding-right: 12%;
+	padding-top: 7%;
+	padding-bottom: 7%;
+	width: 100%;
+	box-sizing: border-box;
+
+}
+
+.timeContainer {
+	float: right;
+}
+
+.timeContainerWrapper {
+	position: fixed;
+	top: 10px;
+	/*left: 98%;*/
+	right: 10px;
+	width: 150px;
+	margin: 0 0 0 -140px;
+	z-index: 90;
+}
+
+.servedContainer,
+#served-container {
+	padding: 30px;
+}
+
+#served-head {
+	padding-bottom: 20px;
+}
+
+.badgeContainer,
+#badge-container {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 130px;
+	height: 130px;
+	margin: -70px 0 0 -70px;
+	z-index: 90;
+}
+
+#badge {
+	position: absolute;
+	vertical-align: top;
+}
+
+.clockContainer {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 200px;
+	height: 200px;
+	margin: -100px 0 0 -100px;
+	z-index: 90;
+}
+
+.aboutContainer {
+	/* position: fixed; */
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	/* margin: -100px 0 0 -100px; */
+	z-index: 90;
+}
+
+.menuContainer {
+	position: fixed;
+	z-index: 90;
+	padding:10px;
+	bottom: 20px;
+	height:20px;
+	width: 250px;
+}
+
+.menuContainer:hover {
+	background-color:#FFFFFF;
+}
+
+.videoContainer {
+	margin:30px;
+}
+
+/* div table things */
+.table {
+	display: table;
+	width: auto;
+}
+
+.table-tr {
+	display: table-row;
+	width: auto;
+	clear: both;
+}
+
+.table-th,
+.table-td {
+	display: table-cell;
+	padding-right: 20px;
+}
+
+.table-th {
+	text-align: left;
+}
+
+/* Type */
+
+.caption {
+	font-size: 11px;
+	line-height: 12px;
+}
+
+.time {
+	font-family: 'mtdbt2fGG', Helvetica, Arial, Verdana, sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+}
+
+.time a {
+	color: #000;
+}
+
+.time a:hover {
+	color: #00E;
+}
+
+.time a:active {
+	color: #FFF;
+}
+
+.quote {
+	font-family: 'mtdbt2fOO', Helvetica, Arial, Verdana, sans-serif;
+}
+
+.body {
+	font-size: 18px;
+	line-height: 20px;
+}
+
+.detail {
+	font-size: 16px;
+	line-height: 18px;
+}
+
+/* Utility */
+
+.pad {
+	padding: 30px;
+}
+
+.red {
+	color: #F00;
+}
+
+.green {
+	color: #0B0;
+}
+
+.green a,
+.green a:link,
+a.green:link {
+	color: #0B0;
+}
+
+.green a:visited {
+	color: #0B0;
+}
+
+.green a:hover {
+	color: #000;
+}
+
+.green a:active {
+	color: #FFF;
+}
+
+.green-hi {
+	color: #FFF;
+	background-color: #0C0;
+}
+
+.green-hi a:link {
+	color: #FFF;
+	background-color: #0C0;
+}
+
+.green-hi a:visited {
+	color: #FFF;
+	background-color: #0C0;
+}
+
+.green-hi a:hover {
+	color: #0C0;
+	background-color: #FFF;
+}
+
+.green-hi a:active {
+	color: #FFF;
+	background-color: #FFF;
+}
+
+.arrow a {
+	background-image:url('/media/gif/arrow.gif');
+	background-repeat:no-repeat;
+	padding: 0 0 0 16px;
+}
+
+.pegboard {
+    	background-image: url("/media/gif/peg.gif");
+}
+
+.object {
+	width: 300px;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.videoContainer {
+	position: absolute;
+}
+
+/* animation */
+.blink {
+  animation: blink 2s steps(2, start) infinite;
+  -webkit-animation: blink 2s steps(2, start) infinite;
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+#ellipsis > span:nth-child(1),
+#ellipsis > span:nth-child(2),
+#ellipsis > span:nth-child(3){
+	animation: blink 3s steps(2, start) infinite;
+	-webkit-animation: blink 3s steps(2, start) infinite;
+}
+
+#ellipsis > span:nth-child(2){
+	animation-delay: 0.5s;
+	-webkit-animation-delay: 0.5s;
+}
+
+#ellipsis > span:nth-child(3){
+	animation-delay: 1s;
+	-webkit-animation-delay: 1s;
+}
+
+.floatContainer:after {
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
+.button {
+    width: 100%;
+    height: 35px;
+    color: #090;
+    background-color: #FFF;
+    border: 1px solid #0C0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #0E0;
+    border: 1px solid #0E0;
+    color: #FFF;
+}
+
+.button-area {
+    /*padding: 5px;*/
+    /*width: 200px;*/
+    box-sizing: content-box;
+}
+.button-area + .button-area
+{
+	/*margin-top: 11px;*/
+}
+#shopContainer a:link,
+#shopContainer a:visited
+{
+	color: #0B0;
+} 
+
+.flex-container:after
+{
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+}
+
+/* mobile styles */
+@media screen and (max-width: 568px)
+{
+	* {
+		box-sizing: border-box;
+ 		-moz-box-sizing: border-box;
+  		-webkit-box-sizing: border-box;
+	}
+	a:hover {
+		background: transparent;
+	}
+	iframe {
+		height: 100%;
+		width: 100%;
+	}
+	.mainContainer {
+		width: 100%;
+		padding-top: 30px;
+	}
+	.TSLContainer {
+		top: 25px;
+	}
+	.dividerContainer:before {
+		content: "--";
+	}
+	.timeContainerWrapper {
+		right: 10px;
+		/*bottom: 10px;*/
+		width: inherit;
+		left: inherit;
+		top: 10px;
+		margin: 0px;
+	}
+	.thumbsContainer {
+		width: inherit;
+		float: inherit;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.detailContainer,
+	.wordsContainer {
+		width: inherit;
+	}
+	.wordsContainer {
+		padding: 15px;
+        padding-top: 40px;
+	}
+	.videoContainer {
+		margin-top: 30px;
+	}
+	.sidebarContainer {
+	    position: relative;
+		width: inherit;
+        float: inherit;
+        top: 0px;
+		left: 0px;
+        margin-left: auto;
+        margin-right: auto;
+	}
+	.pad {
+		/*padding: 0px;*/
+	}
+	#video.hidden {
+		display: none;
+	}
+}

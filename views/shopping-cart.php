@@ -1,7 +1,9 @@
-<?
-?>
-<div id="cart-symbol" class="time" onclick="toggleCart()">CART (<span id="item-count">0</span>)</div>
-<div id="cart-container" class="time">
+<div id="cart-symbol" class="cart-button-container" onclick="toggleCart()">
+	<button id="" class="button" onclick="">
+		CART (<span id="item-count">0</span>)
+	</button>
+</div>
+<div id="cart-container" class="body">
 	<div id="btn-close-cart" onClick="toggleCart()">X</div>
 	<div id="" class="item-row-default">
 		<div class="item-column item-name">Item</div><div class="item-column item-price">Price</div><div class="item-column item-quantity-container flex-container"><span class="item-quantity">Quantity</span></div><div class="item-column item-amount"></div><div class="item-column item-remove"></div>
@@ -13,116 +15,7 @@
 		</div>
 	</section>
 </div>
-<style>
-	#cart-symbol
-	{
-		position: fixed;
-		top: 55px;
-		right: 20px;
-		z-index: 1000;
-		padding: 2px 5px;
-		cursor: pointer;
-	}
-	#cart-symbol:hover,
-	.viewing-cart #cart-symbol
-	{
-		background-color: #0C0;
-		color: #fff;
-	}
-	#cart-container
-	{
-		width: 100vw;
-		max-width: 100%;
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		transform: translate(0, 100%);
-		z-index: 1000;
-		padding: 20px;
-		padding-right: 60px;
-		padding-bottom: 75px;
-		background-color: #fff;
-		min-height: 25vh;
-		max-height: 50vh;
-		overflow: scroll;
-		box-sizing: border-box;
-	}
-	.viewing-cart #cart-container
-	{
-		transition: transform .5s;
-		transform: translate(0, 0%);
-	}
-	#btn-close-cart
-	{
-		position: absolute;
-		right: 10px;
-		top: 15px;
-		cursor: pointer;
-		padding: 5px 10px;
-	}
-	#buy-section-cart
-	{
-		position: absolute;
-	    right: 20px;
-	    left: auto;
-	}
-	.item-row,
-	.item-row-default
-	{
-		display: flex;
-	}
-	.item-row
-	{
-		margin-top: 10px;
-	}
 
-	.item-column
-	{
-		display: inline-block;
-		flex-basis: 50px;
-		padding: 0 15px;
-		text-align: right;
-	}
-	.item-name.item-column
-	{
-		flex: 1;
-		text-align: left;
-	}
-	.item-remove
-	{
-		flex-basis: 80px;
-		cursor: pointer;
-	}
-	.item-row-default .item-remove
-	{
-		cursor: default;
-	}
-	.item-quantity-container
-	{
-		position: relative;
-	}
-	.item-quantity
-	{
-		text-align: center;
-	}
-	.item-quantity-minus,
-	.item-quantity-plus
-	{
-		position: absolute;
-		top: 0;
-		padding: 0 5px;
-		cursor: pointer;
-	}
-	.item-quantity-minus
-	{
-		left: 10px;
-	}
-	.item-quantity-plus
-	{
-		right: 10px;
-	}
-
-</style>
 <script>
 	function printToCart(rowId, itemName, type, price, quantity){
 		console.log('printToCart()');
@@ -206,7 +99,10 @@
 		console.log('addToCartByClick()');
 		let thisElement = event.target;
 		let sCart_container = document.getElementById('cart-container');
-		
+
+		if (cart_symbol = document.getElementById('cart-symbol'))
+            cart_symbol.classList.add('viewing-cart-symbol');
+
 		let price = thisElement.getAttribute('price');
 		// check if this item exists in the cart
 		// let slug = ;
@@ -256,6 +152,7 @@
 	function toggleCart(){
 		document.body.classList.toggle('viewing-cart');
 	}
+
 	function updateRowToCookie(){
 		let sRows = document.getElementsByClassName('item-row');
 		let json = [];
@@ -274,6 +171,4 @@
 		// console.log(json);
 		createCookie( 'cart', JSON.stringify(json), '' );
 	}
-
-	
 </script>
