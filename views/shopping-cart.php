@@ -4,7 +4,7 @@
 	</button>
 </div>
 <div id="cart-container" class="body">
-	<div id="btn-close-cart" onClick="toggleCart()">X</div>
+	<div id="btn-close-cart" onClick="toggleCart()"><img src='/media/svg/x-3-k.svg'></div>
 	<div id="" class="item-row-default">
 		<div class="item-column item-name">Item</div><div class="item-column item-price">Price</div><div class="item-column item-quantity-container flex-container"><span class="item-quantity">Quantity</span></div><div class="item-column item-amount"></div><div class="item-column item-remove"></div>
 	</div>
