@@ -1,4 +1,4 @@
-/* Document */
+/* elements */
 
 body {
 	font-family: 'mtdbt2fF', Helvetica, Arial, Verdana, sans-serif;
@@ -101,6 +101,7 @@ iframe {
 	height: 400px;
 	width: 400px;
 }
+
 /* Containers */
 
 .announceContainer {

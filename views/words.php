@@ -1,9 +1,6 @@
 <?
-// namespace stuff
-// use \Michelf\Markdown;
-
-$displayHTML = isset($_GET['html']);
-
+$displayHTML = isset($_GET['html']);        // hack ** fix **
+$shop = ($uri[1] == 'shop');
 $body = trim($item['body']);
 $deck = trim($item['deck']);
 $media = $oo->media($item['id']);
@@ -15,9 +12,7 @@ else
 if($cover)
 	$cover_img = m_url($cover);
 
-if($displayHTML)
-{
-	
+if($displayHTML) {
 	$hyperlink_pattern = '/\[([^\]]*?)\]\((.*?)\)/';
 	$body_html = file_get_contents('temp.txt');
 	preg_match_all($hyperlink_pattern, $body_html, $temp);
@@ -53,7 +48,7 @@ if($displayHTML)
 $internal = isset($_SERVER['HTTP_REFERER']) && (substr($_SERVER['HTTP_REFERER'], 0, strlen($host)) === $host);
 $back_url = "javascript:self.history.back();";
 
-if(!$isShop && !$displayHTML){ ?> 
+if(!$shop && !$displayHTML){ ?> 
 <div class="mainContainer">
 	<div class="wordsContainer body"><?
 		// echo nl2br($deck);
@@ -64,7 +59,7 @@ if(!$isShop && !$displayHTML){ ?>
 		}
 		echo $body;
 	         if (isset($showsubscribe))
-	                require_once("views/subscribe.php");
+	                require_once("views/join.php");
 		if($internal && !isset($showsubscribe))
 		{
 		?><a href="<? echo $back_url; ?>">Go back</a><?

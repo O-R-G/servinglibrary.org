@@ -32,10 +32,10 @@ else if(!empty($_GET)) {
 		$item = $oo->get(0);
 	}
 }
-else if( $uri[1] == 'subscribe' && count($uri) == 2 )
+else if( $uri[1] == 'join' && count($uri) == 2 )
 {
 	try{
-		$temp = $oo->urls_to_ids(array('contact', 'subscribe'));
+		$temp = $oo->urls_to_ids(array('contact', 'join'));
 		$id = end($temp);
 		$item = $oo->get($id);
 	} catch(Exception $err) {
@@ -46,8 +46,7 @@ else if( $uri[1] == 'subscribe' && count($uri) == 2 )
 $title = "The Serving Library";
 $is_mobile = false;
 
-// require 'static/php/vendor/autoload.php';
-$isShop = ($uri[1] == 'shop' && count($uri) == 2);
+// $isShop = ($uri[1] == 'shop' && count($uri) == 2);
 // $isSubscriptions = ($uri[1] == 'shop' && count($uri) == 3 && $uri[2] == 'subscriptions');
 
 $bodyClass = '';
@@ -62,6 +61,7 @@ if($uri[1] == 'shop')
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- Optimal Internet Explorer compatibility -->
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/main.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/mtdbt2f.css">
+		<link rel="stylesheet" type="text/css" media="all" href="/static/css/shop.css">
 		<link rel="apple-touch-icon" href="/media/png/icon.png" />
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>

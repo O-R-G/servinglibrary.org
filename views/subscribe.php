@@ -1,22 +1,36 @@
-<section id="subscribe" class="visible"><?
-    $subscribe = isset($_POST['subscribe']) ? $_POST['subscribe'] : false;
-    $unsubscribe = isset($_POST['unsubscribe']) ? $_POST['unsubscribe'] : false;
-    $address = isset($_POST['address']) ? $_POST['address'] : false;
-    if (!$subscribe && !$unsubscribe) {	
-	?><form enctype='multipart/form-data' action='subscribe' 
-method='post'>
-            <textarea name='address' cols='30' rows='2'></textarea><br />    
-            <input name='subscribe' type='submit' value='Subscribe'>
-            <input name='unsubscribe' type='submit' value='Unsubscribe'>
-        </form><?
-    } else if (filter_var($address, FILTER_VALIDATE_EMAIL)) {
-        $to = "serving-library-request@servinglibrary.org";
-        $subject = ($subscribe) ? "subscribe" : "unsubscribe";
-        $body = "";
-        $headers = "From: " . $address;
-        mail($to,$subject,$body,$headers);
-        ?><p>Thanks.</p><?
-    } else {
-        ?><p>Please <a href="">enter a valid email address.</a></p><?
-    }
-?></section>
+<script src="/static/js/shop.js"></script>
+<script src="/static/js/cookie.js"></script><?
+
+    /*
+        a view for paypal multi-item shop w/ cart
+    */
+
+    require_once('static/php/paypal.php');
+	$children = $oo->children($item['id']);
+	foreach($children as $key => $child) {
+		if( substr($child['name1'], 0, 1) != '.') {
+			$itemName = 'Subscription - ' . $child['name1'];
+			$productInfo = getProductInfo($currency, trim($child['notes']));
+			echo printPayPalButtons($currency, $productInfo, $itemName);
+		}
+	}
+	?><div id="currencySwitchWrapper" class="currency"><? 
+	if(!$isDonation){
+		foreach($acceptedCurrencies as $option){ 
+			if($option == $currency) { 
+                ?><button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
+			} else {
+				?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
+			}
+		}
+	 }
+	?></div><?
+?><script>
+    var currency = '<?= $currency; ?>';
+    var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
+    paypal_url += '&currency='+currency.toUpperCase();
+    var paypal_script = loadScript(paypal_url);
+    document.body.classList.add('viewing-'+currency);
+</script><?
+    require_once('views/cart.php');
+?>

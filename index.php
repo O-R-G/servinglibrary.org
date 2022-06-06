@@ -1,23 +1,18 @@
-<?php
-
+<?
+// ini_set('display_errors', 1);
 // $uri = explode('/', $_SERVER['REQUEST_URI']);
 $request = $_SERVER['REQUEST_URI'];
 $requestclean = strtok($request,"?");
 $uri = explode('/', $requestclean);
 $view = "views/";
-// debug
-// ini_set('display_errors', 1);
 require_once("views/head.php");
 require_once("views/closed.php");
-if($uri[1])
-{
+if($uri[1]) {
 	if($uri[1] == "time"){
 		require_once('views/time.php');
-	}
-	else if($uri[1] == "table"){
+	} else if($uri[1] == "table"){
 		require_once('views/table.php');
-	}
-	else if(strcmp($uri[1], "journal") === 0 && count($uri) == 4)
+	} else if(strcmp($uri[1], "journal") === 0 && count($uri) == 4)
 		require_once('views/read.php');
 	else if($uri[1] == "collect")
 		require_once('views/collect.php');
@@ -25,35 +20,25 @@ if($uri[1])
 		require_once('views/collection.php');
 	else if($uri[1] == "collection" && isset($uri[2]))
 		require_once('views/words.php');
-	else if($uri[1] == "contact" || $uri[1] == "subscribe") {
+	else if($uri[1] == "contact" || $uri[1] == "join") {
     	$showsubscribe = true;
 		require_once('views/words.php');
-	}
-	// else if($uri[1] == "shop" && count($uri) == 2) 
-	// 	require_once('views/shop.php');
-	else
+	} else if($uri[1] == "donate") {
 		require_once('views/words.php');
-}
-else
+	    require_once('views/donate.php');
+	} else if($uri[1] == "journal") {
+		require_once('views/words.php');
+	    require_once('views/buy.php');
+	} else if($uri[1] == "shop") {
+		require_once('views/words.php');
+	    require_once('views/shop.php');
+	} else if($uri[1] == "subscribe") {
+		require_once('views/words.php');
+	    require_once('views/subscribe.php');
+    } else
+		require_once('views/words.php');
+} else
 	require_once('views/home.php');
-
-if( ($uri[1] == 'journal' && count($uri) == 3) ||
-	($uri[1] == "shop" && count($uri) == 2) ||
-	($uri[1] == "shop" && count($uri) == 3) ||
-	( count($uri) == 2 && (
-		$uri[1] == "programs" ||
-		$uri[1] == "introduction" ||
-		$uri[1] == "publication" ||
-		$uri[1] == "collection-new" ||
-		$uri[1] == "archive"
-	))
-	
-)
-	require_once('views/paypal.php');
-
-// show the things
-
-// require_once($view);
 if($uri[1] && $uri[1] == "time")
 	require_once("views/clock.php");
 else
