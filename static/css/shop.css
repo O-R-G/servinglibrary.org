@@ -263,12 +263,11 @@ a.currencyOption:hover,
 .paypal-cart-button:hover {
 }
 
-.paypal-cart-button-container,
-.viewing-paypal .paypal-cart-button-container {
+.paypal-cart-button-container {
 	display: none;
 }
 
-.testCart .viewing-paypal .paypal-cart-button-container {
+.viewing-paypal .paypal-cart-button-container {
 	display: block;
 }
 

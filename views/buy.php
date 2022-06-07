@@ -7,17 +7,16 @@
 
     require_once('static/php/paypal.php');
 	$productInfo = getProductInfo($currency, trim($item['notes']));
-	echo printPayPalButtons($currency, $productInfo, '');
+	// echo printPayPalButtons($currency, $productInfo, '');
+	echo printPayPalButtons($currency, $productInfo, $item['name1']);
 	?><div id="currencySwitchWrapper" class="currency"><? 
-    	if(!$isDonation){
-    		foreach($acceptedCurrencies as $option){ 
-    			if($option == $currency) { ?>
-    				<button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button>
-    			<? } else { ?>
-    				<button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button>
-    			<? }
-    		}
-    	}
+		foreach($acceptedCurrencies as $option){ 
+			if($option == $currency) { 
+				?><button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><? 
+            } else { 
+				?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
+			}
+		}
 	?></div><?
 ?><script>
 	var currency = '<?= $currency; ?>';

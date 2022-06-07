@@ -49,13 +49,14 @@
     	$price = $productInfo['price'];
     	$type = $productInfo['type'];
     	if( is_numeric($price) ) {
-       		$output = '<section id="buy' . $key . '" class="buy-section">';
+       		$output  = '<section id="buy' . $key . '" class="buy-section">';
     		$output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area button-area-' . $currency . '">';
-    		$output .= 		'<div id="paypal-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container"></div>';
-    		$output .= 		'<div id="paypal-cart-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button' . $key . '-' . $currency . '" class="button paypal-cart-button" price="'. $price . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event)">ADD TO CART</button></div>';
-    		$output .= 	'<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
-    		$output .= 	'<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$type.'\')">' . $acceptedCurrenciesSymbols[$currency] . $price . '</button>';
-    		$output .= '</div></div>';
+            $output .= '<div id="paypal-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container"></div>';
+            $output .= '<div id="paypal-cart-button-container' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button' . $key . '-' . $currency . '" class="button paypal-cart-button" price="'. $price . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event)">ADD TO CART</button></div>';
+    		$output .= '<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
+    		$output .= '<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$type.'\')">' . $acceptedCurrenciesSymbols[$currency] . $price . '</button>';
+    		$output .= '</div>';
+    		$output .= '</div>';
     	   	$output .= '</section>';
        	} else if($type == 'donation') {
        		$output = '<div id="donate-buy-section" class="buy-section"><div id="paypal-donate-button-container"></div><button id="donate-btn" class="button">DONATE</button></div>';
