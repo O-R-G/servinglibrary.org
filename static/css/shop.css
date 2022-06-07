@@ -64,6 +64,13 @@ form[name="Donate"]:after {
     box-sizing: border-box;
 }
 
+#cart-container .viewing-paypal .paypal-button-container {
+    display: block;
+    pointer-events: initial;
+    height: initial;
+    margin-top: 11px;
+}
+
 #btn-close-cart {
     position: absolute;
     right: 10px;
@@ -175,13 +182,15 @@ body.loading .viewing-paypal .paypal-button-container {
 	display: block;
 }
 
+/*
 .viewing-paypal .download-code-container,
 .viewing-paypal .paypal-button-container {
-    /* display: block; */
-    /*pointer-events: initial;*/
-    /*height: initial;*/
-    /*margin-top: 11px;*/
+    display: block;
+    pointer-events: initial;
+    height: initial;
+    margin-top: 11px;
 }
+*/
 
 .viewing-paypal .buy-button-container .button {
     background-color: #0E0;
