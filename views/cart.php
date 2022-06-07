@@ -15,8 +15,50 @@
 		</div>
 	</section>
 </div>
-
 <script>
+
+    /* 
+        shopping cart via paypal api
+    */
+
+	function addToCartByClick(event, quantityToAdd = 1){
+		console.log('addToCartByClick()');
+		let thisElement = event.target;
+        // hide add to cart button
+        thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
+		let sCart_container = document.getElementById('cart-container');
+		if (cart_symbol = document.getElementById('cart-symbol'))
+            cart_symbol.classList.add('viewing-cart-symbol');
+		let price = thisElement.getAttribute('price');
+		// check if this item exists in the cart
+		// let slug = ;
+		let rowId = 'item-row-'+thisElement.getAttribute('slug');
+		let thisRow = sCart_container.querySelector('#'+rowId);
+		let thisQuantity, thisAmount;
+		let quantity = 0;
+		if(!thisRow){
+			let itemName = thisElement.getAttribute('itemName');
+			let type = thisElement.getAttribute('type');
+			printToCart(rowId, itemName, type, price, 0);
+			thisRow = sCart_container.querySelector('#'+rowId);
+			// console.log('has been added to the cart');
+		}
+		thisQuantity = thisRow.querySelector('.item-quantity');
+		thisAmount = thisRow.querySelector('.item-amount');
+		quantity = parseFloat(thisQuantity.innerText);
+		let sItem_count = document.getElementById('item-count');
+		sItem_count.innerHTML = parseInt(sItem_count.innerHTML) + quantityToAdd;
+		quantity += quantityToAdd;
+		thisAmount.innerText = quantity * price;
+		thisQuantity.innerHTML = quantity;
+		updateRowToCookie();
+	}
+	
+	function addToCartFromJson(obj){
+		console.log('addToCartFromJson()');
+		printToCart(obj.id, obj.itemName, obj.type, obj.price, obj.quantity);
+	}
+
 	function printToCart(rowId, itemName, type, price, quantity){
 		console.log('printToCart()');
 		// let itemName = thisElement.getAttribute('itemName');
@@ -78,11 +120,15 @@
 		let thisRemove = document.createElement('DIV');
 		thisRemove.className = 'item-column item-remove';
 		thisRemove.innerText = 'remove';
-		thisRemove.onclick=function(){
+		thisRemove.onclick = function(){
 			let temp = document.getElementById(rowId);
 			let sItem_count = document.getElementById('item-count');
 			sItem_count.innerHTML = parseInt(sItem_count.innerHTML) - parseInt(temp.querySelector('.item-quantity').innerText);
-			
+			if (parseInt(sItem_count.innerHTML) <= 0) {
+                sItem_count.innerHTML = '0';
+                if (cart_symbol = document.getElementById('cart-symbol'))
+                    cart_symbol.classList.remove('viewing-cart-symbol');
+            }
 			temp.parentNode.removeChild(temp);
 			updateRowToCookie();
 		};
@@ -93,47 +139,6 @@
 		thisRow.appendChild(thisRemove);
 		let sCart_container = document.getElementById('cart-container');
 		if(sCart_container) sCart_container.appendChild(thisRow);
-	}
-
-	function addToCartByClick(event, quantityToAdd = 1){
-		console.log('addToCartByClick()');
-		let thisElement = event.target;
-		let sCart_container = document.getElementById('cart-container');
-
-		if (cart_symbol = document.getElementById('cart-symbol'))
-            cart_symbol.classList.add('viewing-cart-symbol');
-
-		let price = thisElement.getAttribute('price');
-		// check if this item exists in the cart
-		// let slug = ;
-		let rowId = 'item-row-'+thisElement.getAttribute('slug');
-		let thisRow = sCart_container.querySelector('#'+rowId);
-		let thisQuantity, thisAmount;
-		let quantity = 0;
-
-		if(!thisRow){
-			let itemName = thisElement.getAttribute('itemName');
-			let type = thisElement.getAttribute('type');
-			printToCart(rowId, itemName, type, price, 0);
-			thisRow = sCart_container.querySelector('#'+rowId);
-			// console.log('has been added to the cart');
-		}
-		
-		thisQuantity = thisRow.querySelector('.item-quantity');
-		thisAmount = thisRow.querySelector('.item-amount');
-		quantity = parseFloat(thisQuantity.innerText);
-
-		let sItem_count = document.getElementById('item-count');
-		sItem_count.innerHTML = parseInt(sItem_count.innerHTML) + quantityToAdd;
-		quantity += quantityToAdd;
-		thisAmount.innerText = quantity * price;
-		thisQuantity.innerHTML = quantity;
-		updateRowToCookie();
-	}
-	
-	function addToCartFromJson(obj){
-		console.log('addToCartFromJson()');
-		printToCart(obj.id, obj.itemName, obj.type, obj.price, obj.quantity);
 	}
 
 	var cart_cookie = readCookie('cart');
@@ -156,8 +161,7 @@
 	function updateRowToCookie(){
 		let sRows = document.getElementsByClassName('item-row');
 		let json = [];
-		if(sRows.length > 0)
-		{
+		if(sRows.length > 0){
 			[].forEach.call(sRows, function(el, i){
 				let this_obj = {};
 				this_obj.id = el.id;

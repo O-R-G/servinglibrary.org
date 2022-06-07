@@ -6,7 +6,6 @@ var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LY
 // paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
 
 var paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
-
 document.body.classList.add('loading');
 
 function loadScript(url){
@@ -20,9 +19,7 @@ function loadScript(url){
 	return script;
 }
 
-
-var shippingOptions_arr = 
-{
+var shippingOptions_arr = {
 	'issue' : {
 	    USD: [
 	    {
@@ -301,9 +298,7 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
 		sButtonArea.classList.remove('viewing-paypal');
-	}
-	else
-	{
+	} else {
 		let sViewing_paypal = document.querySelector('.button-area.viewing-paypal');
 		if(sViewing_paypal)
 			sViewing_paypal.classList.remove('viewing-paypal');
@@ -321,19 +316,18 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 			createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
 	}
 }
+
 function createButton(buttonContainerId, price, currency, itemName, type){
 	// console.log('createButton . . .');
 	// console.log(type);
-	if(type == 'subscription')
-	{
+	if(type == 'subscription') {
 		if(itemName.indexOf('two years') !== -1){
 			console.log(itemName.indexOf('two years'));
 			var options = shippingOptions_arr[type + '-2'];
 		}
 		else if(itemName.indexOf('twelve years') !== -1)
 			var options = shippingOptions_arr[type + '-12'];
-	}
-	else
+	} else
 		var options = shippingOptions_arr[type];	
 	// console.log(options);
 	var baseAmount = parseFloat(price, 10);
@@ -600,4 +594,3 @@ function createCartButton(){
 	  	}).render('#' + buttonContainerId);
 	} else console.log('cart is empty');
 }
-
