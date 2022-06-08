@@ -30,7 +30,6 @@ if($uri[1]) {
 		require_once('views/words.php');
 	    require_once('views/buy.php');
 	} else if($uri[1] == "shop") {
-		require_once('views/words.php');
 	    require_once('views/shop.php');
 	} else if($uri[1] == "subscribe") {
 		require_once('views/words.php');

@@ -6,6 +6,9 @@
     */    
 
     require_once('static/php/paypal.php');
+    $body = trim($item['body']);
+    $deck = trim($item['deck']);
+    $media = $oo->media($item['id']);
 	$temp = $oo->urls_to_ids(array('shop', 'issues'));
 	$journal_children = $oo->children(end($temp));
 	$base_url = '/journal/';
