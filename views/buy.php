@@ -19,11 +19,12 @@
 		}
 	?></div><?
 ?><script>
-	var currency = '<?= $currency; ?>';
-	var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
-	paypal_url += '&currency='+currency.toUpperCase();
+    // currency switch
+    var currency = '<?= $currency; ?>';
+    var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
+    paypal_url += '&currency='+currency.toUpperCase();
     var paypal_script = loadScript(paypal_url);
-	document.body.classList.add('viewing-'+currency);
+    document.body.classList.add('viewing-'+currency);
 </script><?
 	require_once('views/cart.php');
 ?>

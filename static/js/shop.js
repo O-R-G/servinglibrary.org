@@ -580,6 +580,7 @@ function createCartButton(){
 	            		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
 	            	else
 	            		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
+                    eraseCookie('cart');
 	            	console.log(return_url);
 	                /* 
 	                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
@@ -588,12 +589,12 @@ function createCartButton(){
 	                const element = document.getElementById('paypal-button-container');
 	                element.innerHTML = 'Thx.';
 	                */
-	                // let email = orderData.payer.email_address;
+	                let email = orderData.payer.email_address;
+	                console.log(email);
 	                window.location.href = return_url;
 	                console.log('on approve');
 	            });
 	        }
-
 	  	}).render('#' + buttonContainerId);
 	} else console.log('cart is empty');
 }
@@ -716,19 +717,6 @@ function printToCart(rowId, itemName, type, price, quantity){
 	thisRow.appendChild(thisRemove);
 	let sCart_container = document.getElementById('cart-container');
 	if(sCart_container) sCart_container.appendChild(thisRow);
-}
-
-var cart_cookie = readCookie('cart');
-// console.log(cart_cookie);
-if(cart_cookie){
-	let temp = 0;
-	cart_cookie = JSON.parse(cart_cookie);
-	cart_cookie.forEach(function(el, i){
-		console.log(el);
-		addToCartFromJson(el);
-		temp += parseInt(el.quantity);
-	});
-	document.getElementById('item-count').innerText = temp;
 }
 
 function toggleCart(){
