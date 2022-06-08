@@ -17,6 +17,6 @@ if(count($media) > 0) {
             echo $body;
 	        if (isset($showsubscribe))
                 require_once("views/join.php");
-            ?><a href="<? echo $back_url; ?>">Go back</a><?
+            ?><br><a href="/">Go back</a><?
         ?><div>
 </div>

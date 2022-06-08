@@ -23,6 +23,9 @@ if($uri[1]) {
 	else if($uri[1] == "contact" || $uri[1] == "join") {
     	$showsubscribe = true;
 		require_once('views/words.php');
+	} else if($uri[2] == "thx") {
+		require_once('views/words.php');
+	    // require_once('views/mail.php');
 	} else if($uri[1] == "donate") {
 		require_once('views/words.php');
 	    require_once('views/donate.php');

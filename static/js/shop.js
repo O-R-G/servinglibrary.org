@@ -580,12 +580,14 @@ function createCartButton(){
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
 	            	console.log(return_url);
 	                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    /*
 	                var transaction = orderData.purchase_units[0].payments.captures[0];
 	                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
 	                // const element = document.getElementById('paypal-button-container');
 	                // element.innerHTML = 'Thx.';
 	                let email = orderData.payer.email_address;
 	                console.log(email);
+                    */
 	                window.location.href = return_url;
 	                console.log('on approve');
 	            });
