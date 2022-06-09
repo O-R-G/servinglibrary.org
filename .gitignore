@@ -25,5 +25,4 @@ backup
 sync
 log
 
-
-
+static/php/vendor
