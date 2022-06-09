@@ -31,7 +31,7 @@ if($uri[1]) {
 	    require_once('views/donate.php');
 	} else if($uri[1] == "journal") {
 		require_once('views/words.php');
-	    require_once('views/buy.php');
+	    require_once('views/shop.php');
 	} else if($uri[1] == "shop") {
 	    require_once('views/shop.php');
 	} else if($uri[1] == "subscribe") {
