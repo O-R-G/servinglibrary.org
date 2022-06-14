@@ -124,6 +124,10 @@ body[paypal_layout="1"] .buy-section
 {
 	bottom: 60px;
 }
+body[paypal_layout="1"] .thumbsContainer .buy-section
+{
+	bottom: 30px;
+}
 body[paypal_layout="1"] #buy-section-cart
 {
 	bottom: 20px;
