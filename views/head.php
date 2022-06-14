@@ -52,6 +52,8 @@ $is_mobile = false;
 $bodyClass = '';
 if($uri[1] == 'shop')
 	$bodyClass .= 'shop testCart ';
+
+
 ?><!DOCTYPE html>
 <html>
 	<head>
@@ -66,7 +68,7 @@ if($uri[1] == 'shop')
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>
 	</head>
-	<body class="<?= $bodyClass; ?>"> 
+	<body class="<?= $bodyClass; ?>" <?= $paypal_layout ? 'paypal_layout="'.$paypal_layout.'"' : ''; ?>> 
 		<div id='timeWrapper' class='timeContainerWrapper'>
 			<div id='time' class='timeContainer time'>
 				<script type="text/javascript">

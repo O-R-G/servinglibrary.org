@@ -315,8 +315,8 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 		console.log(thisPaypalButtonContainer.id);
 		if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
 			createCartButton();
-		else
-			createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
+		// else
+		// 	createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
 	}
 }
 
@@ -688,6 +688,7 @@ function printToCart(rowId, itemName, type, price, quantity){
 	thisAmount_container.className = 'item-column item-amount-container';
 	thisAmount = document.createElement('SPAN');
 	thisAmount.className = 'item-amount';
+	thisAmount.innerText = quantity * price;
 	let thisAmount_symbol = document.createElement('SPAN');
 	thisAmount_symbol.innerHTML = acceptedCurrenciesSymbols[currency];
 	thisAmount_container.appendChild(thisAmount_symbol);

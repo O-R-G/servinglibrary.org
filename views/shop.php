@@ -6,13 +6,11 @@
     */    
 
     require_once('static/php/paypal.php');
-    $body = trim($item['body']);
-    $deck = trim($item['deck']);
-	$temp = $oo->urls_to_ids(array('shop', 'issues'));
-	$journal_children = $oo->children(end($temp));
-	$base_url = '/journal/';
-    $shop = ($uri[1] == 'shop');
+    $shop = ($uri[1] == 'shop' && count($uri) == 2);
     if ($shop) {
+        $temp = $oo->urls_to_ids(array('shop', 'issues'));
+        $journal_children = $oo->children(end($temp));
+        $base_url = '/journal/';
     	?><div class="mainContainer body">
         	<div id="shopContainer" class="floatContainer"><? 
                 foreach($journal_children as $key => $child){
@@ -21,17 +19,20 @@
         				if(count($media) > 0)
         					$cover = m_url($media[0]);
         				$isDonation = strpos(trim($child['notes']), '[donation]') !== false;
-        				$productInfo = getProductInfo($currency, trim($child['notes']));
+        				$paypal_products = getProductInfo($currency, $child);
+                        
         				$url = $base_url . $child['url'];
                         if($currency !== 'usd') $url .= '?currency=' . $currency;
-        				$itemName = $child['name1'];
+
         				?><div class="thumbsContainer shop"><?
         					if(isset($cover)){
         						?><a class="shopItemLink" href="<?= $url; ?>">
         							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
         						</a><?
         					}
-        					echo printPayPalButtons($currency, $productInfo, $itemName);
+                            foreach($paypal_products as $product){
+                                echo printPayPalButtons($currency, $product);
+                            }
         				?></div><?
         			}
         		}
@@ -47,8 +48,22 @@
     		}
     	?></div><?
     } else {
-        $productInfo = getProductInfo($currency, trim($item['notes']));
-        echo printPayPalButtons($currency, $productInfo, $item['name1']);
+        $paypal_products = getProductInfo($currency, $item);
+        if(!empty($paypal_products))
+        {
+            foreach($paypal_products as $product){
+                echo printPayPalButtons($currency, $product);
+            }
+            ?><div id="currencySwitchWrapper" class="currency"><? 
+                foreach($acceptedCurrencies as $option){ 
+                    if($option == $currency) { ?>
+                        <button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><? 
+                    } else {
+                        ?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
+                    }
+                }
+            ?></div><?
+        }
     }
 ?><div id="cart-symbol" class="cart-button-container" onclick="toggleCart()">
 	<button id="" class="button" onclick="">
@@ -81,10 +96,24 @@
     var cart_cookie = readCookie('cart');
     console.log(cart_cookie);
     if(cart_cookie){
+        <? if($paypal_layout == 1)
+        { ?>
+            if (cart_symbol = document.getElementById('cart-symbol'))
+                cart_symbol.classList.add('viewing-cart-symbol');
+            window.addEventListener('load', function(){
+                let links = document.getElementsByTagName('a');
+                [].forEach.call(links, function(el, i){
+                    el.href += '?paypal_layout=<?= $paypal_layout; ?>';
+                    // console.log(el); 
+                });
+            });
+            
+        <? } 
+        ?>
         let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
         cart_cookie.forEach(function(el, i){
-            console.log(el);
+            // console.log(el);
             addToCartFromJson(el);
             temp += parseInt(el.quantity);
         });

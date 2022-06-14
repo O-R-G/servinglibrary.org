@@ -5,6 +5,8 @@ $request = $_SERVER['REQUEST_URI'];
 $requestclean = strtok($request,"?");
 $uri = explode('/', $requestclean);
 $view = "views/";
+$paypal_layout = isset($_GET['paypal_layout']) ? $_GET['paypal_layout'] : 0;
+
 require_once("views/head.php");
 require_once("views/closed.php");
 if($uri[1]) {
@@ -23,16 +25,16 @@ if($uri[1]) {
 	else if($uri[1] == "contact" || $uri[1] == "join") {
     	$showsubscribe = true;
 		require_once('views/words.php');
-	} else if($uri[2] == "thx") {
+	} else if(isset($uri[2]) && $uri[2] == "thx") {
 		require_once('views/words.php');
 	    // require_once('views/mail.php');
 	} else if($uri[1] == "donate") {
 		require_once('views/words.php');
 	    require_once('views/donate.php');
-	} else if($uri[1] == "journal") {
+	} else if($uri[1] == "journal" || ($uri[1] == "shop" && isset($uri[2]) && $uri[2] == 'subscriptions') ) {
 		require_once('views/words.php');
 	    require_once('views/shop.php');
-	} else if($uri[1] == "shop") {
+	} else if($uri[1] == "shop" && count($uri) == 2) {
 	    require_once('views/shop.php');
 	} else if($uri[1] == "subscribe") {
 		require_once('views/words.php');
@@ -45,5 +47,7 @@ if($uri[1] && $uri[1] == "time")
 	require_once("views/clock.php");
 else
 	require_once("views/badge.php");
+if($paypal_layout == 1)
+	require_once('views/shop.php');
 require_once("views/foot.php");
 ?>
