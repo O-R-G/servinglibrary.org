@@ -273,7 +273,7 @@ if ($this_page !== 'donation') {
 	    background-color: #0E0;
 	    border-color: #0E0;
 	    position: relative;
-        color: #FFF;
+            color: #FFF;
 	}
 
 	body.loading .viewing-paypal:before {
