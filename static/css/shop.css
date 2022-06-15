@@ -242,11 +242,12 @@ body.loading .viewing-paypal:before {
 
 .currencyOption {
 	display: inline-block;
-    width: 40px;
+    	width: 40px;
 	padding: 2px 5px;
+	margin-left: 4px;
 	cursor: pointer;
 	/* border-radius: 4px; */
-    text-align: center;
+    	text-align: center;
 }
 
 a.currencyOption.active,
