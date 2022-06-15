@@ -12,12 +12,11 @@
         try {
             $mg = Mailgun::create($mailgun_client_id);
             $mg->messages()->send($domain, [
-    	        
-                'from'	=> $msg['from'],
-	            'to'	=> $msg['to'],
-	            'bcc'	=> $msg['bcc'],
+		'from'	=> $msg['from'],
+		'to'	=> $msg['to'],
+		'bcc'	=> $msg['bcc'],
     	        'subject' => $msg['subject'],
-	            'text'	=> $msg['text']
+		'text'	=> $msg['text']
             ]);
         } catch (Exception $e) {
         }

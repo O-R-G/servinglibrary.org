@@ -27,7 +27,7 @@ if($uri[1]) {
 		require_once('views/words.php');
 	} else if(isset($uri[2]) && $uri[2] == "thx") {
 		require_once('views/words.php');
-	    // require_once('views/mail.php');
+		require_once('views/thx.php');
 	} else if($uri[1] == "donate") {
 		require_once('views/words.php');
 	    require_once('views/donate.php');
