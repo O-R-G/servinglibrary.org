@@ -1,13 +1,16 @@
-+ mv to do, dns remains at pair, same pattern as o-r-g.com
++ mv to d-o, dns remains at pair, same pattern as o-r-g.com
 + staging.servinglibrary.orgo
 + ssl
-+ mailgun + servinglibrary.org domain
++ mailgun servinglibrary.org domain
 + views/thx
-- sync downloads database from www
-- www.servinglibrary.com 
-  dns
-  ssl
-- paypal live id
+- sync downloads table database from www
+  make new downloads database
+  remove downloads table from existing database
+  https://stackoverflow.com/questions/15558461/move-table-from-one-database-to-another-in-mysql
 - persistently show cart if there are items in it
 - cleanup paypal button layout logic which tries to use ?paypal_layout=1
   cleanup in shop.css and main.css also
+- paypal live id
+- www.servinglibrary.com 
+  dns
+  ssl
