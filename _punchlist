@@ -1,0 +1,2 @@
+- cleanup paypal button layout logic which tries to use ?paypal_layout=1
+  cleanup in shop.css and main.css also
