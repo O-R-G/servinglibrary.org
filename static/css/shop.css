@@ -107,7 +107,6 @@ form[name="Donate"]:after {
 
 /* classes */
 
-
 .thumbsContainer.shop {
 	width: 250px;
 	position: relative;
@@ -394,9 +393,14 @@ body[paypal_layout="1"].viewing-cart #buy-section-cart
         right: 10px;
 }
 
+/* mobile */
 
+@media screen and (max-width: 568px) {
+    .thumbsContainer.shop {
+	    width: 100%;
+    }
 
-
-
-
-
+    #btn-close-cart {
+        width: 60px;
+    }
+}

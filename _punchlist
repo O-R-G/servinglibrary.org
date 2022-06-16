@@ -5,8 +5,9 @@
 + views/thx
 / sync downloads table database from www
   account for character encodings and collation on pair.com vs d-o
-- views/time-ajax throwing error
-- views/home-ajax
++ views/time-ajax throwing error
+x views/home-ajax
++ cart mobile css
 - persistently show cart if there are items in it
 - cleanup paypal button layout logic which tries to use ?paypal_layout=1
   cleanup in shop.css and main.css also
