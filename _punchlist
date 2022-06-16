@@ -3,7 +3,7 @@
 + ssl
 + mailgun servinglibrary.org domain
 + views/thx
-/ sync downloads table database from www
++ sync downloads table database from www
   account for character encodings and collation on pair.com vs d-o
 + views/time-ajax throwing error
 x views/home-ajax
