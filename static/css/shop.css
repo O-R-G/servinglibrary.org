@@ -119,16 +119,12 @@ form[name="Donate"]:after {
 	left: 20px;
 	bottom: 20px;
 }
-body[paypal_layout="1"] .buy-section
-{
+
+.viewing-cart-symbol .buy-section {
 	bottom: 60px;
 }
-body[paypal_layout="1"] .thumbsContainer .buy-section
-{
-	bottom: 30px;
-}
-body[paypal_layout="1"] #buy-section-cart
-{
+
+.viewing-cart.viewing-cart-symbol .buy-section {
 	bottom: 20px;
 }
 
@@ -288,37 +284,12 @@ a.currencyOption:hover,
 .paypal-cart-button-container {
 	display: none;
 }
-body[paypal_layout="1"] .buy-section
-{
-	z-index: 10000;
-}
-body[paypal_layout="1"] .paypal-cart-button-container 
-{
-	position: absolute;
-    bottom: -45px;
-    width: 100%;
-    overflow: hidden;
-    display: block;
-    height: 0;
-}
-body[paypal_layout="1"] .viewing-paypal .paypal-cart-button-container 
-{
-    height: initial;
-}
-body[paypal_layout="1"] .paypal-cart-button
-{
-	transform: translate(0, -100%);
-	transition: transform .25s;
-}
-body[paypal_layout="1"] .viewing-paypal .paypal-cart-button
-{
-	transform: translate(0, 0%);
-}
+
 .viewing-paypal .paypal-cart-button-container {
 	display: block;
 }
 
-.viewing-cart-symbol#cart-symbol {
+.viewing-cart-symbol #cart-symbol {
     bottom: 20px;
     transition: bottom 0.25s;
 }
@@ -327,18 +298,7 @@ body[paypal_layout="1"] .viewing-paypal .paypal-cart-button
         /* transition: transform .5s; */
         transform: translate(0, 0%);
 }
-body[paypal_layout="1"] #cart-container
-{
-	transition: transform .25s;
-}
-body[paypal_layout="1"].viewing-cart .buy-section
-{
-	display: none;
-}
-body[paypal_layout="1"].viewing-cart #buy-section-cart
-{
-	display: block;
-}
+
 .item-row,
 .item-row-default {
         display: flex;

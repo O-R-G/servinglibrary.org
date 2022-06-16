@@ -5,7 +5,6 @@ $request = $_SERVER['REQUEST_URI'];
 $requestclean = strtok($request,"?");
 $uri = explode('/', $requestclean);
 $view = "views/";
-$paypal_layout = isset($_GET['paypal_layout']) ? $_GET['paypal_layout'] : 0;
 
 require_once("views/head.php");
 require_once("views/closed.php");
@@ -47,7 +46,5 @@ if($uri[1] && $uri[1] == "time")
 	require_once("views/clock.php");
 else
 	require_once("views/badge.php");
-if($paypal_layout == 1)
-	require_once('views/shop.php');
 require_once("views/foot.php");
 ?>

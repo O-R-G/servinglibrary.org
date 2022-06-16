@@ -8,9 +8,9 @@
 + views/time-ajax throwing error
 x views/home-ajax
 + cart mobile css
-- persistently show cart if there are items in it
-- cleanup paypal button layout logic which tries to use ?paypal_layout=1
-  cleanup in shop.css and main.css also
++ persistently show cart if there are items in it
++ cleanup paypal button layout logic which tries to use ?paypal_layout=1
+  cleanup all uses of paypal_layout
 - paypal live id
 - www.servinglibrary.com 
   dns

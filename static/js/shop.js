@@ -606,7 +606,7 @@ function addToCartByClick(event, quantityToAdd = 1){
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
 	let sCart_container = document.getElementById('cart-container');
 	if (cart_symbol = document.getElementById('cart-symbol'))
-        cart_symbol.classList.add('viewing-cart-symbol');
+        document.body.classList.add('viewing-cart-symbol');
 	let price = thisElement.getAttribute('price');
 	// check if this item exists in the cart
 	// let slug = ;
@@ -706,7 +706,7 @@ function printToCart(rowId, itemName, type, price, quantity){
 		if (parseInt(sItem_count.innerHTML) <= 0) {
             sItem_count.innerHTML = '0';
             if (cart_symbol = document.getElementById('cart-symbol'))
-                cart_symbol.classList.remove('viewing-cart-symbol');
+                document.body.classList.remove('viewing-cart-symbol');
         }
 		temp.parentNode.removeChild(temp);
 		updateRowToCookie();

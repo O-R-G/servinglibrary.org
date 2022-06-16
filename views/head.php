@@ -68,7 +68,7 @@ if($uri[1] == 'shop')
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>
 	</head>
-	<body class="<?= $bodyClass; ?>" <?= $paypal_layout ? 'paypal_layout="'.$paypal_layout.'"' : ''; ?>> 
+	<body class="<?= $bodyClass; ?>">
 		<div id='timeWrapper' class='timeContainerWrapper'>
 			<div id='time' class='timeContainer time'>
 				<script type="text/javascript">

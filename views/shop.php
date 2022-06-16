@@ -96,20 +96,6 @@
     var cart_cookie = readCookie('cart');
     console.log(cart_cookie);
     if(cart_cookie){
-        <? if($paypal_layout == 1)
-        { ?>
-            if (cart_symbol = document.getElementById('cart-symbol'))
-                cart_symbol.classList.add('viewing-cart-symbol');
-            window.addEventListener('load', function(){
-                let links = document.getElementsByTagName('a');
-                [].forEach.call(links, function(el, i){
-                    el.href += '?paypal_layout=<?= $paypal_layout; ?>';
-                    // console.log(el); 
-                });
-            });
-            
-        <? } 
-        ?>
         let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
         cart_cookie.forEach(function(el, i){
@@ -117,6 +103,9 @@
             addToCartFromJson(el);
             temp += parseInt(el.quantity);
         });
+        if (temp > 0)
+            if (cart_symbol = document.getElementById('cart-symbol'))
+                document.body.classList.add('viewing-cart-symbol');
         document.getElementById('item-count').innerText = temp;
     }
 </script>
