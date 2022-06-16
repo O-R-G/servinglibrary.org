@@ -121,7 +121,7 @@ if(count($media_all) > 2)
 	</form>
 	-->
 	</div>
-	<form id="download-form" action="/lib/download.php" method="post">
+	<form id="download-form" action="/static/php/download.php" method="post">
 		<input type="hidden" name="source_name" value="<? echo $source_name; ?>">
 		<input type="hidden" name="display_name" value="<? echo $display_name; ?>">
 		<input type="hidden" name="author" value="<? echo $author; ?>">
