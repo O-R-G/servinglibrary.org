@@ -11,7 +11,9 @@ x views/home-ajax
 + persistently show cart if there are items in it
 + cleanup paypal button layout logic which tries to use ?paypal_layout=1
   cleanup all uses of paypal_layout
-- paypal live id
-- www.servinglibrary.com 
-  dns
-  ssl
++ quiet errors
++ www.servinglibrary.org
+  + dns
+  + ssl
++ git pull
++ paypal live id
