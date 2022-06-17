@@ -12,7 +12,8 @@ x views/home-ajax
 + cleanup paypal button layout logic which tries to use ?paypal_layout=1
   cleanup all uses of paypal_layout
 + quiet errors
-/ www.servinglibrary.org
-  dns
-  ssl
-- paypal live id
++ www.servinglibrary.org
+  + dns
+  + ssl
++ git pull
++ paypal live id
