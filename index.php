@@ -30,7 +30,7 @@ if($uri[1]) {
 	} else if($uri[1] == "donate") {
 		require_once('views/words.php');
 	    require_once('views/donate.php');
-	} else if($uri[1] == "journal" || ($uri[1] == "shop" && isset($uri[2]) && $uri[2] == 'subscriptions') ) {
+	} else if($uri[1] == "journal" || ($uri[1] == "shop" && isset($uri[2])) ) {
 		require_once('views/words.php');
 	    require_once('views/shop.php');
 	} else if($uri[1] == "shop" && count($uri) == 2) {
