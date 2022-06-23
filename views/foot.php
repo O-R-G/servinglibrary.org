@@ -5,7 +5,7 @@
             echo ($uu->url != 'publication') ? "<a href='/publication'>Journal</a> / " : "Journal / ";
             echo ($uu->url != 'programs') ? "<a href='/programs'>Programs</a> / " : "Programs / ";
             echo ($uu->url != 'collection-new') ? "<a href='/collection-new'>Collection</a> / " : "Collection / ";
-            echo ($uu->url != 'shop') ? "<a href='/shop'>Shop</a>" : "Shop";
+            echo ($uu->url != 'shop') ? "<a href='/shop'>Shop</a>" : "Shop | <a href='/shop/subscriptions'>subscriptions</a> | <a href='/shop/edition'>edition</a>";
         ?>
         </div>
 
