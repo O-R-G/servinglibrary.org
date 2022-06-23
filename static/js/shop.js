@@ -497,15 +497,10 @@ function createCartButton(){
 			items.push(thisItem);
 
 			let thisType = el.getAttribute('type');
-			if(type == '')
+			if( shipping_option_priority[thisType] === undefined )
+				thisType = 'issue'; // set shipping plan of issue as fallback
+			if(type == '' || shipping_option_priority[thisType] > shipping_option_priority[type])
 				type = thisType;
-			else 
-			{
-				if( typeof shipping_option_priority[thisType] === undefined )
-					thisType = 'issue';
-				if(shipping_option_priority[thisType] > shipping_option_priority[type])
-					type = thisType;
-			}
 
 			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
 
