@@ -4,7 +4,7 @@
 if($uu->id)
 	$badge_url = "/";
 else
-	$badge_url = "/about/the-serving-library";
+	$badge_url = "/introduction/about/the-serving-library";
 
 $badge_src = "/media/gif/TSL-red.gif";
 ?>
