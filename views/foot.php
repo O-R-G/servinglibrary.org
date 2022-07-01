@@ -1,15 +1,13 @@
 		</div>
         <div id="Menu" class="TSLContainer body"><?
             // menu
-            echo ($uu->url != 'introduction') ? "<a href='/introduction'>Introduction</a> — " : "Introduction — ";
-            echo ($uu->url != 'publication') ? "<a href='/journal'>Journal</a> / " : "Journal / ";
-            echo ($uu->url != 'programs') ? "<a href='/programs'>Programs</a> / " : "Programs / ";
-            echo ($uu->url != 'collection') ? "<a href='/collection'>Collection</a> / " : "Collection / ";
-            echo ($uu->url != 'shop') ? "<a href='/shop'>Shop</a>" : "Shop : <a href='/shop/subscriptions'>Subscriptions</a> : <a href='/shop/edition'>Edition</a>";
-        ?>
-        </div>
-
-	</body>
+            echo ($uri[1] != 'introduction') ? "<a href='/introduction'>Introduction</a> — " : "Introduction — ";
+            echo ($uri[1] != 'journal') ? "<a href='/journal'>Journal</a> / " : "Journal / ";
+            echo ($uri[1] != 'collection') ? "<a href='/collection/about'>Collection</a> / " : "Collection / ";
+            echo ($uri[1] != 'programs') ? "<a href='/programs'>Programs</a> / " : "Programs / ";
+            echo ($uri[1] != 'shop') ? "<a href='/shop'>Shop</a>" : "Shop : <a href='/shop/subscriptions'>Subscriptions</a> : <a href='/shop/edition'>Edition</a>";
+        ?></div>
+    </body>
 </html><?
 $db->close();
 ?>
