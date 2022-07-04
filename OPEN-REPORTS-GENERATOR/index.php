@@ -1,18 +1,25 @@
-<?
-require_once("GLOBAL/head.php"); 
+<?php
+require_once("views/head.php");
+
+// UGH THIS IS HIDEOUS
+// $view is declared in head.php, in url_array()
+// (should definitely be somewhere else)
+// else is for backwards compatibility (maybe not necessary?)
+if($view){
+	if($view == 'report' || $view == 'info' || $view == 'cover')
+		$view_path = "views/".$view.".php";
+	else
+		$view_path = "open-records-generator/views/".$view.".php";
+}
+try {
+	if(!file_exists($view_path))
+		throw new Exception("404");
+}
+catch(Exception $e) {
+	$view_path = "views/errors/".$e->getMessage().".php";
+}
+
+require_once($view_path);
+require_once("views/foot.php"); 
+
 ?>
-
-
-<br />
-<br />
-<br />
-Welcome to the OPEN REPORTS GENERATOR.<br />
-<?php echo date("d M Y h:i:s"); ?><br />
-<br />
-<br />
-<a href="browse.php">ENTER DATABASE...</a><br />&nbsp;
-</td></tr>
-
-
-
-<?php require_once("GLOBAL/foot.php"); ?>
