@@ -8,20 +8,22 @@
     require_once('static/php/paypal.php');
     $shop = ($uri[1] == 'shop' && count($uri) == 2);
     if ($shop) {
-        $temp = $oo->urls_to_ids(array('shop', 'issues'));
-        $journal_children = $oo->children(end($temp));
+        $temp = $oo->urls_to_ids(array('shop'));
+        $shop_children = $oo->children(end($temp));
         $base_url = '/journal/';
     	?><div class="mainContainer body">
         	<div id="shopContainer" class="floatContainer"><? 
-                foreach($journal_children as $key => $child){
+                foreach($shop_children as $key => $child){
         			if( substr($child['name1'], 0, 1) != '.') {
         				$media = $oo->media($child['id']);
         				if(count($media) > 0)
         					$cover = m_url($media[0]);
         				$isDonation = strpos(trim($child['notes']), '[donation]') !== false;
         				$paypal_products = getProductInfo($currency, $child);
-                        
-        				$url = $base_url . $child['url'];
+                        if(is_numeric($child['url']))
+                            $url = '/journal/' . $child['url'];
+                        else
+        				    $url = '/shop/' . $child['url'];
                         if($currency !== 'usd') $url .= '?currency=' . $currency;
 
         				?><div class="thumbsContainer shop"><?
@@ -30,9 +32,10 @@
         							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
         						</a><?
         					}
-                            foreach($paypal_products as $product){
-                                echo printPayPalButtons($currency, $product);
-                            }
+                            // foreach($paypal_products as $product){
+                            //     echo printPayPalButtons($currency, $product);
+                            // }
+                            echo printPayPalButtons($currency, $paypal_products);
         				?></div><?
         			}
         		}
@@ -51,9 +54,10 @@
         $paypal_products = getProductInfo($currency, $item);
         if(!empty($paypal_products))
         {
-            foreach($paypal_products as $product){
-                echo printPayPalButtons($currency, $product);
-            }
+            // foreach($paypal_products as $product){
+            //     echo printPayPalButtons($currency, $product);
+            // }
+            echo printPayPalButtons($currency, $paypal_products);
             ?><div id="currencySwitchWrapper" class="currency"><? 
                 foreach($acceptedCurrencies as $option){ 
                     if($option == $currency) { ?>
@@ -80,12 +84,14 @@
         <div class="item-column item-amount"></div>
         <div class="item-column item-remove"></div>
 	</div>
-	<section id="buy-section-cart" class="buy-section">
-		<div id="button-area-cart" class="button-area">
-			<div id="paypal-button-container-cart" class="payment-option paypal-button-container"></div>
-			<button id="btn-checkout-cart" class="button" onclick="expandPaypal('button-area-cart', '', '', '')">Checkout</button>
-		</div>
-	</section>
+</div>
+<div id = "buy-section-container-cart" class="buy-section-container">
+    <section id="buy-section-cart" class="buy-section">
+        <div id="button-area-cart" class="button-area">
+            <div id="paypal-button-container-cart" class="payment-option paypal-button-container"></div>
+            <button id="btn-checkout-cart" class="button" onclick="expandPaypal('button-area-cart', '', '', '')">Checkout</button>
+        </div>
+    </section>
 </div>
 <script>
     var currency = '<?= $currency; ?>';

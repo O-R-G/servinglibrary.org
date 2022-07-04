@@ -64,7 +64,7 @@ form[name="Donate"]:after {
     box-sizing: border-box;
 }
 
-#cart-container .viewing-paypal .paypal-button-container {
+.viewing-paypal #paypal-button-container-cart {
     display: block;
     pointer-events: initial;
     height: initial;
@@ -80,11 +80,16 @@ form[name="Donate"]:after {
     width: 30px;
 }
 
-#buy-section-cart {
-    position: absolute;
+#buy-section-container-cart {
+    /*position: absolute;*/
     left: 20px;
+    z-index: 1001;
+    display: none;
 }
-
+.viewing-cart #buy-section-container-cart
+{
+	display: block;
+}
 #donate-btn {
 	pointer-events: none;
 }
@@ -113,32 +118,50 @@ form[name="Donate"]:after {
 	padding: 20px;
 }
 
-.buy-section {
+.buy-section-container
+{
 	position: fixed;
-	width: 200px;
+	/*width: 200px;*/
 	left: 20px;
 	bottom: 20px;
 }
 
-.viewing-cart-symbol .buy-section {
+/*.buy-section {
+	position: fixed;
+	width: 200px;
+	left: 20px;
+	bottom: 20px;
+}*/
+
+.viewing-cart-symbol .buy-section-container {
 	bottom: 60px;
 }
-
-.viewing-cart.viewing-cart-symbol .buy-section {
+.viewing-cart.viewing-cart-symbol .buy-section-container {
 	bottom: 20px;
 }
-
-.thumbsContainer .buy-section {
+.viewing-cart-symbol .thumbsContainer .buy-section-container,
+.viewing-cart.viewing-cart-symbol .thumbsContainer .buy-section-container
+{
+	bottom: 30px;
+}
+.thumbsContainer .buy-section-container {
 	position: absolute;
     margin: initial;
 	left: 30px;
 	bottom: 30px;
 }
-
-.buy-section + .buy-section {
-	left: 230px;
+.buy-section
+{
+	width: 200px;
+	display: inline-block;
 }
-
+.buy-section + .buy-section {
+	margin-left: 10px;
+}
+.thumbsContainer .buy-section + .buy-section {
+	margin-top: 5px;
+	margin-left: 0;
+}
 .buy-button-container {
 	display: inline-block;
 	width: 100%;

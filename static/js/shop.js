@@ -310,6 +310,7 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 		// let thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 	}
 	let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
+	console.log('hasButton = '+hasButton);
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
@@ -507,10 +508,10 @@ function createCartButton(){
 		});
 		let options = shippingOptions_arr[type];
 		let totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
-		console.log('baseAmount = ' + baseAmount);
-		console.log('shipping = ' + parseFloat(options[currency.toUpperCase()][0].amount.value, 10));
-		console.log('totalValue = ' + totalValue);
-		console.log(items);
+		// console.log('baseAmount = ' + baseAmount);
+		// console.log('shipping = ' + parseFloat(options[currency.toUpperCase()][0].amount.value, 10));
+		// console.log('totalValue = ' + totalValue);
+		// console.log(items);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
 	        	console.log('createOrder . . .');
