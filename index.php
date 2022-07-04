@@ -8,6 +8,7 @@ $view = "views/";
 
 require_once("views/head.php");
 require_once("views/closed.php");
+require_once('views/menu.php');
 if($uri[1]) {
 	if($uri[1] == "time"){
 		require_once('views/time.php');

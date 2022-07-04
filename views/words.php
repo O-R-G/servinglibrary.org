@@ -7,7 +7,6 @@ if(count($media) > 0) {
 	$cover_img = m_url($cover);
 } else
 	$cover = false;
-
 ?><div class="mainContainer">
         <div class="wordsContainer body"><?
     		echo $deck;

@@ -42,7 +42,6 @@ else if( $uri[1] == 'join' && count($uri) == 2 )
 		$item = $oo->get(0);
 	}
 }
-
 $title = "The Serving Library";
 $is_mobile = false;
 
