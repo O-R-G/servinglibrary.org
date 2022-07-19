@@ -24,6 +24,7 @@
 backup
 sync
 log
+backup-subscriptions
 
 # php composer
 static/php/vendor
