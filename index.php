@@ -22,8 +22,9 @@ if($uri[1]) {
 		require_once('views/collection.php');
 	else if($uri[1] == "collection" && isset($uri[2]))
 		require_once('views/words.php');
-	else if($uri[1] == "contact" || $uri[1] == "join") {
-    	$showsubscribe = true;
+	else if($uri[1] == "contact" || $uri[1] == "join" || $uri[1] == "subscribe") {
+	    	// require_once('views/subscribe.php');
+    		$showsubscribe = true;
 		require_once('views/words.php');
 	} else if(isset($uri[2]) && $uri[2] == "thx") {
 		require_once('views/words.php');
@@ -36,9 +37,6 @@ if($uri[1]) {
 	    require_once('views/shop.php');
 	} else if($uri[1] == "shop" && count($uri) == 2) {
 	    require_once('views/shop.php');
-	} else if($uri[1] == "subscribe") {
-		require_once('views/words.php');
-	    require_once('views/subscribe.php');
     } else
 		require_once('views/words.php');
 } else
