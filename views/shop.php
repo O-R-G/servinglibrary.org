@@ -96,15 +96,20 @@
 <script>
     var currency = '<?= $currency; ?>';
     var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
-    if(currency.toUpperCase() == 'USD')
+    if(currency.toUpperCase() == 'USD'){
+        console.log('USD');
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
-    else
+    }
+    else{
+        console.log('none USD');
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id_eu+'&disable-funding=credit,card';
+    }
     paypal_url += '&currency='+currency.toUpperCase();
+    console.log(paypal_url);
     var paypal_script = loadScript(paypal_url);
     document.body.classList.add('viewing-'+currency);
     var cart_cookie = readCookie('cart');
-    console.log(cart_cookie);
+    // console.log(cart_cookie);
     if(cart_cookie){
         let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
