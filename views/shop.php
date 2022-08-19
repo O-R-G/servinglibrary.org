@@ -101,7 +101,7 @@
     else
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id_eu+'&disable-funding=credit,card';
     paypal_url += '&currency='+currency.toUpperCase();
-    console.log(paypal_url);
+    // console.log(paypal_url);
     var paypal_script = loadScript(paypal_url);
     document.body.classList.add('viewing-'+currency);
     var cart_cookie = readCookie('cart');

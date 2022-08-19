@@ -312,11 +312,11 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 		// let thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 	}
 	let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
-	console.log('hasButton = '+hasButton);
+	// console.log('hasButton = '+hasButton);
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		console.log(thisPaypalButtonContainer.id);
+		// console.log(thisPaypalButtonContainer.id);
 		if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
 			createCartButton();
 		// else
@@ -329,7 +329,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 	// console.log(type);
 	if(type == 'subscription') {
 		if(itemName.indexOf('two years') !== -1){
-			console.log(itemName.indexOf('two years'));
+			// console.log(itemName.indexOf('two years'));
 			var options = shippingOptions_arr[type + '-2'];
 		}
 		else if(itemName.indexOf('twelve years') !== -1)
@@ -343,7 +343,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 	
 	paypal.Buttons({
         createOrder: function(data, actions) {
-        	console.log('createOrder . . .');
+        	// console.log('createOrder . . .');
             return actions.order.create({
                 // application_context: {
                 //     brand_name: 'O-R-G',
@@ -450,7 +450,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
             		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
             	else
             		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
-            	console.log(return_url);
+            	// console.log(return_url);
                 /*
                 console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                 var transaction = orderData.purchase_units[0].payments.captures[0];
@@ -461,7 +461,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 		let email = orderData.payer.email_address;
 		return_url += '?email=' + email;
 		actions.redirect(return_url);
-                console.log('on approve');
+                // console.log('on approve');
             });
         }
 
@@ -516,7 +516,7 @@ function createCartButton(){
 		// console.log(items);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
-	        	console.log('createOrder . . .');
+	        	// console.log('createOrder . . .');
 	            return actions.order.create({
 	                purchase_units: [{
 	                	amount: {
@@ -578,8 +578,8 @@ function createCartButton(){
 	            return actions.order.capture().then(function(orderData) {
                     eraseCookie('cart');
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
-	            	console.log(return_url);
-	                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+	            	// console.log(return_url);
+	                // console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                     	/*
 	                var transaction = orderData.purchase_units[0].payments.captures[0];
 	                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
@@ -591,7 +591,7 @@ function createCartButton(){
 			let email = orderData.payer.email_address;
 			return_url += '?email=' + email;
 			actions.redirect(return_url);
-	                console.log('on approve');
+	                // console.log('on approve');
 	            });
 	        }
 	  	}).render('#' + buttonContainerId);
@@ -599,7 +599,7 @@ function createCartButton(){
 }
 
 function addToCartByClick(event, quantityToAdd = 1){
-	console.log('addToCartByClick()');
+	// console.log('addToCartByClick()');
 	let thisElement = event.target;
     // hide add to cart button
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
@@ -632,12 +632,12 @@ function addToCartByClick(event, quantityToAdd = 1){
 }
 
 function addToCartFromJson(obj){
-	console.log('addToCartFromJson()');
+	// console.log('addToCartFromJson()');
 	printToCart(obj.id, obj.itemName, obj.type, obj.price, obj.quantity);
 }
 
 function printToCart(rowId, itemName, type, price, quantity){
-	console.log('printToCart()');
+	// console.log('printToCart()');
 	// let itemName = thisElement.getAttribute('itemName');
 	// let type = thisElement.getAttribute('type');
 	thisRow = document.createElement('DIV');
