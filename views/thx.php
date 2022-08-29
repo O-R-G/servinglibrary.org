@@ -17,14 +17,13 @@
         $msg['to'] = $email;
         $msg['bcc'] = $debug_email;
         $msg['subject'] = 'The Serving Library says thanks for your order';
-        $msg['text'] = "*\n\nThank you for purchasing the following item(s):";
+        $msg['text'] = "*\n\nThank you for purchasing the following item(s):\n";
         foreach($items as $it)
             $msg['text'] .= "\n" . $it;
-        $msg['text'] .= "The order will ship from ";
-        $msg['text'] .= $_GET['currency'] == 'USD' ? 'US ' : 'EU ';
-        $msg['text'] .= 'as soon as possible';
 
-        $msg['text'] .= "*\n\nWe appreciate the order -- this really keeps our publishing engine running. Shipping takes approximately five days.";
+        $msg['text'] .= "\n\n*\n\nWe appreciate the order -- this really keeps our publishing engine running. Shipping is from ";
+        $msg['text'] .= $_GET['currency'] == 'USD' ? 'US ' : 'EU ';
+        $msg['text'] .= "and takes approximately five days.";
         $msg['text'] .= "\n\nAny questions or concerns, please email info@servinglibrary.org.";
         $msg['text'] .= "\n\n*\n\nEnjoy, tell your friends, and so forth.\n\n*\n\nhttps://www.servinglibrary.org";
 
