@@ -8,7 +8,7 @@
     $items = $_GET['items'];
 	require_once('static/php/mail.php');
 	// $debug_email = 'david@servinglibrary.org';
-    $debug_email = 'weiwanghasbeenused@gmail.com';
+    $debug_email = 'drxk41012@gmail.com';
 
 	$email = isset($_GET['email']) ? $_GET['email'] : $debug_email;
     if(!empty($email)) {
