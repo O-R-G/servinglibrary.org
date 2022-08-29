@@ -3,12 +3,12 @@
 */
 
 // sandbox
-// var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LYZL0aY-f1dRRF138bGmC4KoOs';
-// var paypal_client_id_eu = 'AXn_nFsUAS9wwsD7ArbuKnwPPmgsMKqxLyEIHT7d-oIEVbU-x36TMkKV7v-biQA8O3fZcycLEYvWQtBG';
+var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LYZL0aY-f1dRRF138bGmC4KoOs';
+var paypal_client_id_eu = 'AXn_nFsUAS9wwsD7ArbuKnwPPmgsMKqxLyEIHT7d-oIEVbU-x36TMkKV7v-biQA8O3fZcycLEYvWQtBG';
 
 // live
-var paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
-var paypal_client_id_eu = 'AZq6zNkJKOzSqFyhO67YyWPxQEqQ10aS1zlMSsnd-QPzCyOZhSUTvhPwMP_r7Dh3ybEhgtZbhJA12Ro_';
+// var paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
+// var paypal_client_id_eu = 'AZq6zNkJKOzSqFyhO67YyWPxQEqQ10aS1zlMSsnd-QPzCyOZhSUTvhPwMP_r7Dh3ybEhgtZbhJA12Ro_';
 
 var paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
 document.body.classList.add('loading');
@@ -312,11 +312,11 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 		// let thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 	}
 	let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
-	console.log('hasButton = '+hasButton);
+	// console.log('hasButton = '+hasButton);
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		console.log(thisPaypalButtonContainer.id);
+		// console.log(thisPaypalButtonContainer.id);
 		if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
 			createCartButton();
 		// else
@@ -329,7 +329,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 	// console.log(type);
 	if(type == 'subscription') {
 		if(itemName.indexOf('two years') !== -1){
-			console.log(itemName.indexOf('two years'));
+			// console.log(itemName.indexOf('two years'));
 			var options = shippingOptions_arr[type + '-2'];
 		}
 		else if(itemName.indexOf('twelve years') !== -1)
@@ -343,15 +343,9 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 	
 	paypal.Buttons({
         createOrder: function(data, actions) {
-        	console.log('createOrder . . .');
+        	// console.log('createOrder . . .');
             return actions.order.create({
-                // application_context: {
-                //     brand_name: 'O-R-G',
-                //     shipping_method: "United Postal Service"
-                //     // shipping_preference: 'NO_SHIPPING'
-                // },
                 purchase_units: [{
-                	// description: itemName,
                 	amount: {
                         currency_code: currencyUppercase,
                         value: totalValue,
@@ -381,36 +375,6 @@ function createButton(buttonContainerId, price, currency, itemName, type){
                 
             });
         },
-    //  createOrder: (data, actions) => {
-    //   return actions.order.create({
-    //      "purchase_units": [{
-    //         "amount": {
-    //           "currency_code": "USD",
-    //           "value": "100",
-    //           "breakdown": {
-    //             "item_total": {  /* Required when including the `items` array */
-    //               "currency_code": "USD",
-    //               "value": "100"
-    //             }
-    //           }
-    //         },
-    //         "items": [
-    //           {
-    //             "name": "First Product Name",  Shows within upper-right dropdown during payment approval 
-    //             "description": "Optional descriptive text..", /* Item details will also be in the completed paypal.com transaction view */
-    //             "unit_amount": {
-    //               "currency_code": "USD",
-    //               "value": "50"
-    //             },
-    //             "quantity": "2"
-    //           },
-    //         ],
-    //         // shipping: {
-    //         //   	options: shippingOptions[currencyUppercase]
-    //         // },
-    //       }]
-    //   });
-    // },
         onShippingChange: function (data, actions) {
 			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
 			
@@ -450,7 +414,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
             		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
             	else
             		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
-            	console.log(return_url);
+            	// console.log(return_url);
                 /*
                 console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                 var transaction = orderData.purchase_units[0].payments.captures[0];
@@ -461,7 +425,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 		let email = orderData.payer.email_address;
 		return_url += '?email=' + email;
 		actions.redirect(return_url);
-                console.log('on approve');
+                // console.log('on approve');
             });
         }
 
@@ -516,7 +480,7 @@ function createCartButton(){
 		// console.log(items);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
-	        	console.log('createOrder . . .');
+	        	// console.log('createOrder . . .');
 	            return actions.order.create({
 	                purchase_units: [{
 	                	amount: {
@@ -578,8 +542,8 @@ function createCartButton(){
 	            return actions.order.capture().then(function(orderData) {
                     eraseCookie('cart');
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
-	            	console.log(return_url);
-	                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+	            	// console.log(return_url);
+	                // console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                     	/*
 	                var transaction = orderData.purchase_units[0].payments.captures[0];
 	                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
@@ -588,10 +552,13 @@ function createCartButton(){
 	                let email = orderData.payer.email_address;
 	                console.log(email);
                     	*/
-			let email = orderData.payer.email_address;
-			return_url += '?email=' + email;
-			actions.redirect(return_url);
-	                console.log('on approve');
+					let email = orderData.payer.email_address;
+					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
+					[].forEach.call(items, function(el){
+						return_url += '&items[]='+ encodeURIComponent(el['name'] + ' X '+ el['quantity']);
+					});
+					actions.redirect(return_url);
+	                // console.log('on approve');
 	            });
 	        }
 	  	}).render('#' + buttonContainerId);
@@ -599,7 +566,7 @@ function createCartButton(){
 }
 
 function addToCartByClick(event, quantityToAdd = 1){
-	console.log('addToCartByClick()');
+	// console.log('addToCartByClick()');
 	let thisElement = event.target;
     // hide add to cart button
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
@@ -632,12 +599,12 @@ function addToCartByClick(event, quantityToAdd = 1){
 }
 
 function addToCartFromJson(obj){
-	console.log('addToCartFromJson()');
+	// console.log('addToCartFromJson()');
 	printToCart(obj.id, obj.itemName, obj.type, obj.price, obj.quantity);
 }
 
 function printToCart(rowId, itemName, type, price, quantity){
-	console.log('printToCart()');
+	// console.log('printToCart()');
 	// let itemName = thisElement.getAttribute('itemName');
 	// let type = thisElement.getAttribute('type');
 	thisRow = document.createElement('DIV');
