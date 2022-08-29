@@ -21,7 +21,7 @@
         foreach($items as $it)
             $msg['text'] .= "\n" . $it;
 
-        $msg['text'] .= "\n\n*\n\nWe appreciate the order -- this really keeps our publishing engine running. Shipping is from ";
+        $msg['text'] .= "\n\nWe appreciate the order -- this really keeps our publishing engine running. Shipping from ";
         $msg['text'] .= $_GET['currency'] == 'USD' ? 'US ' : 'EU ';
         $msg['text'] .= "and takes approximately five days.";
         $msg['text'] .= "\n\nAny questions or concerns, please email info@servinglibrary.org.";
