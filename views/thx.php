@@ -7,8 +7,7 @@
     // think it uses get or maybe post in teiger
     $items = $_GET['items'];
 	require_once('static/php/mail.php');
-	// $debug_email = 'david@servinglibrary.org';
-    $debug_email = 'drxk41012@gmail.com';
+	$debug_email = 'david@servinglibrary.org';
 
 	$email = isset($_GET['email']) ? $_GET['email'] : $debug_email;
     if(!empty($email)) {
@@ -17,11 +16,11 @@
         $msg['to'] = $email;
         $msg['bcc'] = $debug_email;
         $msg['subject'] = 'The Serving Library says thanks for your order';
-        // $msg['text'] = "*\n\nThank you for purchasing the following item(s):\n";
-        // foreach($items as $it)
-        //     $msg['text'] .= "\n" . $it;
+        $msg['text'] = "*\n\nThank you for purchasing the following item(s):\n";
+        foreach($items as $it)
+            $msg['text'] .= "\n" . $it;
 
-        $msg['text'] = "\n\nWe appreciate the order -- this really keeps our publishing engine running. Shipping from ";
+        $msg['text'] .= "\n\nWe appreciate the order -- this really keeps our publishing engine running. Shipping from ";
         $msg['text'] .= $_GET['currency'] == 'USD' ? 'US ' : 'EU ';
         $msg['text'] .= "and takes approximately five days.";
         $msg['text'] .= "\n\nAny questions or concerns, please email info@servinglibrary.org.";
