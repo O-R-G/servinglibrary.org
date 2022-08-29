@@ -31,5 +31,4 @@
         mailgun($domain, $msg);
 	}
 
-
 ?>
