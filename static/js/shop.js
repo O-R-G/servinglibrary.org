@@ -3,12 +3,12 @@
 */
 
 // sandbox
-// var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LYZL0aY-f1dRRF138bGmC4KoOs';
-// var paypal_client_id_eu = 'AXn_nFsUAS9wwsD7ArbuKnwPPmgsMKqxLyEIHT7d-oIEVbU-x36TMkKV7v-biQA8O3fZcycLEYvWQtBG';
+var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LYZL0aY-f1dRRF138bGmC4KoOs';
+var paypal_client_id_eu = 'AXn_nFsUAS9wwsD7ArbuKnwPPmgsMKqxLyEIHT7d-oIEVbU-x36TMkKV7v-biQA8O3fZcycLEYvWQtBG';
 
 // live
-var paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
-var paypal_client_id_eu = 'AZq6zNkJKOzSqFyhO67YyWPxQEqQ10aS1zlMSsnd-QPzCyOZhSUTvhPwMP_r7Dh3ybEhgtZbhJA12Ro_';
+// var paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
+// var paypal_client_id_eu = 'AZq6zNkJKOzSqFyhO67YyWPxQEqQ10aS1zlMSsnd-QPzCyOZhSUTvhPwMP_r7Dh3ybEhgtZbhJA12Ro_';
 
 var paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
 document.body.classList.add('loading');
@@ -345,13 +345,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
         createOrder: function(data, actions) {
         	// console.log('createOrder . . .');
             return actions.order.create({
-                // application_context: {
-                //     brand_name: 'O-R-G',
-                //     shipping_method: "United Postal Service"
-                //     // shipping_preference: 'NO_SHIPPING'
-                // },
                 purchase_units: [{
-                	// description: itemName,
                 	amount: {
                         currency_code: currencyUppercase,
                         value: totalValue,
@@ -381,36 +375,6 @@ function createButton(buttonContainerId, price, currency, itemName, type){
                 
             });
         },
-    //  createOrder: (data, actions) => {
-    //   return actions.order.create({
-    //      "purchase_units": [{
-    //         "amount": {
-    //           "currency_code": "USD",
-    //           "value": "100",
-    //           "breakdown": {
-    //             "item_total": {  /* Required when including the `items` array */
-    //               "currency_code": "USD",
-    //               "value": "100"
-    //             }
-    //           }
-    //         },
-    //         "items": [
-    //           {
-    //             "name": "First Product Name",  Shows within upper-right dropdown during payment approval 
-    //             "description": "Optional descriptive text..", /* Item details will also be in the completed paypal.com transaction view */
-    //             "unit_amount": {
-    //               "currency_code": "USD",
-    //               "value": "50"
-    //             },
-    //             "quantity": "2"
-    //           },
-    //         ],
-    //         // shipping: {
-    //         //   	options: shippingOptions[currencyUppercase]
-    //         // },
-    //       }]
-    //   });
-    // },
         onShippingChange: function (data, actions) {
 			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
 			
@@ -588,9 +552,12 @@ function createCartButton(){
 	                let email = orderData.payer.email_address;
 	                console.log(email);
                     	*/
-			let email = orderData.payer.email_address;
-			return_url += '?email=' + email;
-			actions.redirect(return_url);
+					let email = orderData.payer.email_address;
+					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
+					[].forEach.call(items, function(el){
+						return_url += '&items[]='+ encodeURIComponent(el['name'] + ' X '+ el['quantity']);
+					});
+					actions.redirect(return_url);
 	                // console.log('on approve');
 	            });
 	        }
