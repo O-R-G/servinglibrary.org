@@ -2,13 +2,18 @@
     buy now and shopping cart via paypal api
 */
 
-// sandbox
-// var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LYZL0aY-f1dRRF138bGmC4KoOs';
-// var paypal_client_id_eu = 'AXn_nFsUAS9wwsD7ArbuKnwPPmgsMKqxLyEIHT7d-oIEVbU-x36TMkKV7v-biQA8O3fZcycLEYvWQtBG';
-
-// live
-var paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
-var paypal_client_id_eu = 'AZq6zNkJKOzSqFyhO67YyWPxQEqQ10aS1zlMSsnd-QPzCyOZhSUTvhPwMP_r7Dh3ybEhgtZbhJA12Ro_';
+if(isSandbox)
+{
+	// sandbox
+	var paypal_client_id = 'AZOWN6t-ioLBjw9HiXfGexBtH5WsFqAy92SU5CTHYeX8PwBSk8j-C5LYZL0aY-f1dRRF138bGmC4KoOs';
+	var paypal_client_id_eu = 'AXn_nFsUAS9wwsD7ArbuKnwPPmgsMKqxLyEIHT7d-oIEVbU-x36TMkKV7v-biQA8O3fZcycLEYvWQtBG';
+}
+else
+{
+	// live
+	var paypal_client_id = 'Afwppna4LpZ2tpCOVh4kfISR2Q-VgcwX6nihNbf7hm3ATsDMvDY4TRaTQ47IUxAjSaou9QQYB4ccXxqt';
+	var paypal_client_id_eu = 'AZq6zNkJKOzSqFyhO67YyWPxQEqQ10aS1zlMSsnd-QPzCyOZhSUTvhPwMP_r7Dh3ybEhgtZbhJA12Ro_';
+}
 
 var paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
 document.body.classList.add('loading');
@@ -28,16 +33,26 @@ function loadScript(url){
 var shippingOptions_arr = {
 	'issue' : {
 	    USD: [
-	    {
-	    	id: "SHIP_US",
-	        label: "DOMESTIC",
-	        type: "SHIPPING",
-	        selected: true,
-	        amount: {
-	            value: "10.00",
-	            currency_code: "USD"
+		    {
+		    	id: "SHIP_US",
+		        label: "DOMESTIC",
+		        type: "SHIPPING",
+		        selected: true,
+		        amount: {
+		            value: "10.00",
+		            currency_code: "USD"
+		        }
+			},
+			{
+	        	id: "SHIP_EU",
+	            label: "WITHIN EU",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: "10.00",
+	                currency_code: "USD"
+	            }
 	        }
-		}
 		], 
 	    EUR: [
 	        {
@@ -340,6 +355,17 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 	var baseAmount = parseFloat(price, 10);
 	var totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
 	var currencyUppercase = currency.toUpperCase();
+
+	let items = [];
+	let thisItem = {
+		name: itemName, 
+		unit_amount: {
+			currency_code: currencyUppercase,
+			value: price
+		},
+		quantity: 1
+	};
+	items.push(thisItem);
 	
 	paypal.Buttons({
         createOrder: function(data, actions) {
@@ -377,7 +403,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
         },
         onShippingChange: function (data, actions) {
 			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
-			
+			console.log(data);
 			data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
 			data.amount.value = data.amount.value + '';
 			return actions.order.patch([{
@@ -422,10 +448,12 @@ function createButton(buttonContainerId, price, currency, itemName, type){
                 const element = document.getElementById('paypal-button-container');
                 element.innerHTML = 'Thx.';
                 */
-		let email = orderData.payer.email_address;
-		return_url += '?email=' + email;
-		actions.redirect(return_url);
-                // console.log('on approve');
+				let email = orderData.payer.email_address;
+				return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
+				[].forEach.call(items, function(el){
+					return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
+				});
+				actions.redirect(return_url);
             });
         }
 
@@ -503,7 +531,7 @@ function createCartButton(){
 	        },
 	        onShippingChange: function (data, actions) {
 				// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
-				
+				console.log(data);
 				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
 				data.amount.value = data.amount.value + '';
 				return actions.order.patch([{
@@ -538,16 +566,6 @@ function createCartButton(){
 	            return actions.order.capture().then(function(orderData) {
                     eraseCookie('cart');
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
-	            	// console.log(return_url);
-	                // console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                    	/*
-	                var transaction = orderData.purchase_units[0].payments.captures[0];
-	                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
-	                // const element = document.getElementById('paypal-button-container');
-	                // element.innerHTML = 'Thx.';
-	                let email = orderData.payer.email_address;
-	                console.log(email);
-                    	*/
 					let email = orderData.payer.email_address;
 					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
 					[].forEach.call(items, function(el){
