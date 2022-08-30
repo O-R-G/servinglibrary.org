@@ -474,10 +474,6 @@ function createCartButton(){
 		});
 		let options = shippingOptions_arr[type];
 		let totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
-		// console.log('baseAmount = ' + baseAmount);
-		// console.log('shipping = ' + parseFloat(options[currency.toUpperCase()][0].amount.value, 10));
-		// console.log('totalValue = ' + totalValue);
-		// console.log(items);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
 	        	// console.log('createOrder . . .');
@@ -555,7 +551,7 @@ function createCartButton(){
 					let email = orderData.payer.email_address;
 					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
 					[].forEach.call(items, function(el){
-						return_url += '&items[]='+ encodeURIComponent(el['name'] + ' X '+ el['quantity']);
+						return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
 					});
 					actions.redirect(return_url);
 	                // console.log('on approve');
