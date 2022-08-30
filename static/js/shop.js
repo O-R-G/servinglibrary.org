@@ -1,7 +1,7 @@
 /* 
     buy now and shopping cart via paypal api
 */
-
+console.log(isSandbox);
 if(isSandbox)
 {
 	// sandbox
