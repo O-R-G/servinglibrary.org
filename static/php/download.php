@@ -1,8 +1,15 @@
 <?
+if( isset($_POST) && !empty($_POST) && isset($_POST['source_name']) && !empty($_POST['source_name']) && isset($_POST['display_name']) && !empty($_POST['display_name']) && isset($_POST['author']) && !empty($_POST['author']) && isset($_POST['issue']) && !empty($_POST['issue']))
+{
 // path to config file
 $config = $_SERVER["DOCUMENT_ROOT"];
 $config = $config."/open-records-generator/config/config.php";
 require_once($config);
+
+$config = $_SERVER["DOCUMENT_ROOT"];
+$config = $config."/static/php/config_download.php";
+require_once($config);
+
 require_once("Zend/Pdf.php");
 require_once("downloadPDF.php");
 
@@ -10,8 +17,13 @@ require_once("downloadPDF.php");
 // ini_set('display_errors', 1);
 // var_dump($_POST['source_name']);
 
+$source_name = $_POST['source_name'];
+$display_name = $_POST['display_name'];
+$author = $_POST['author'];
+$issue = $_POST['issue'];
+
 // user must have write access to database
-$db = db_connect('main');
+$db_download = db_connect_download('main');
 
 // check format
 $smallformat = ($issue > 10) ? true : false; 
@@ -23,42 +35,51 @@ $font_size = ($smallformat == true) ? 5 : 7;
 $note_font_path = $root.'static/fonts/mtdbt2f-f.ttf';
 $note_font_size = 13;
 
-$source_name = $_POST['source_name'];
-$display_name = $_POST['display_name'];
-$author = $_POST['author'];
-$issue = $_POST['issue'];
+
 
 
 // 1. Init
 $now = time();
 $timestamp = strtoupper(date('Y M d g:i A', $now));
-$name1 = $display_name;
-$deck = $author;
+$name1 = trim($display_name);
+$deck = trim($author);
 $body = $_SERVER['REMOTE_ADDR'];
-$notes = $source_name;
+$notes = trim($source_name);
 $created = $modified = date('Y-m-d H:i:s', $now);
 
 // 2. Write database record
-$sql = "INSERT INTO
-			downloads
-			(
-				name1,
-				deck,
-				body,
-				created,
-				modified,
-				notes
-			)
-		VALUES
-		(
-			'$name1',
-			'$deck',
-			'$body',
-			'$created',
-			'$created',
-			'$notes'
-		)";
-$db->query($sql);
+$allowed_repeat = 2;
+$isAllowed = false;
+$sql = "SELECT name1, body FROM downloads ORDER BY created DESC LIMIT " . $allowed_repeat;
+// $previous_ips = array();
+$res = $db_download->query($sql);
+
+while($object = $res->fetch_assoc())
+{
+	if( $body != $object['body'] || $name1 != $object['name1']){
+		$isAllowed = true;
+	}
+}
+
+if($isAllowed)
+{
+	$keys = array('`name1`','`deck`','`body`','`created`','`modified`','`notes`');
+	$values = array($name1, $deck, $body, $created, $created, $notes);
+	$question_marks = [];
+	$data_types = [];
+	foreach($keys as $k){
+	    $question_marks[] = '?';
+	    $data_types[] = 's';
+	}
+	$keys = implode(", ", $keys);
+	$question_marks = implode(", ", $question_marks);
+	$data_types = implode("", $data_types);
+
+	$sql = "INSERT INTO downloads (" . $keys . ") VALUES(" . $question_marks . ")";
+	$stmt = $db_download->prepare($sql);
+	$stmt->bind_param($data_types, ...$values);
+	$res = $stmt->execute();
+}
 
 // 3. Load PDF (Zend_PDF)
 $source_filename = $media_root.$source_name.".pdf";
@@ -143,3 +164,9 @@ $pdf_data = $pdf->render();
 
 // 7. Download PDF stream
 downloadPDFfromStream($pdf_data, $display_name, $timestamp);
+}
+else
+{
+
+}
+?>

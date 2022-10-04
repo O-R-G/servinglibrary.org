@@ -37,6 +37,8 @@ if($uri[1]) {
 	    require_once('views/shop.php');
 	} else if($uri[1] == "shop" && count($uri) == 2) {
 	    require_once('views/shop.php');
+    } else if($uri[1] == "temp") {
+	    require_once('views/temp.php');
     } else
 		require_once('views/words.php');
 } else

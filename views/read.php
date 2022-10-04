@@ -29,7 +29,7 @@ $source_name = m_pad($pdf['id']);
 if($pdf['caption'])
 	$display_name = $pdf['caption'];
 else
-	$display_name = $source_name;
+	$display_name = $title;
 
 $display_name = htmlspecialchars($display_name, ENT_QUOTES);
 

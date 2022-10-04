@@ -1,11 +1,11 @@
 <?php
 
-$sourceFile = $_REQUEST['sourceFile'];          // no register globals
-$downloadFile = $_REQUEST['downloadFile'];      // no register globals
-$author = $_REQUEST['author'];                  // no register globals
-$issue = $_REQUEST['issue'];                    // no register globals
-$timeStamp = $_REQUEST['timeStamp'];            // no register globals
-$sourceFileStream  = $_REQUEST['sourceFileStream'];            // no register globals
+// $sourceFile = $_REQUEST['sourceFile'];          // no register globals
+// $downloadFile = $_REQUEST['downloadFile'];      // no register globals
+// $author = $_REQUEST['author'];                  // no register globals
+// $issue = $_REQUEST['issue'];                    // no register globals
+// $timeStamp = $_REQUEST['timeStamp'];            // no register globals
+// $sourceFileStream  = $_REQUEST['sourceFileStream'];            // no register globals
 
 
   //////////////////

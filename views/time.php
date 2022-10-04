@@ -1,3 +1,6 @@
+<?
+	require_once('static/php/config_download.php');
+?>
 <script type="text/javascript" src="/static/js/ajax.js"></script>
 <div id="served-container" class="body">
 	<div id="served-head">* Recently Served *</div>

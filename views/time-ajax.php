@@ -1,27 +1,16 @@
 <?
-if (!isset($db)) {
+// if (!isset($db)) {
     // only when called via ajax
     $config = $_SERVER["DOCUMENT_ROOT"];
-    $config = $config."/open-records-generator/config/config.php";
+    // $config = $config."/open-records-generator/config/config.php";
+    $config .= "/static/php/config_download.php";
     require_once($config);
-    $db = db_connect("guest");
-} 
+    $db = db_connect_download("guest");
+// } 
 $page = isset($_GET['page']) ? $_GET['page'] : 0;
 $posts_per_page = 100;
 $offset = ($page != 0) ? $posts_per_page*$page : 0;
-$sql = "SELECT
-			id,
-			name1,
-			deck,
-			body,
-			created,
-			notes
-		FROM
-			downloads
-		ORDER BY
-			created DESC
-		LIMIT $posts_per_page
-		OFFSET $offset";
+$sql = "SELECT * FROM downloads ORDER BY created DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
 $res = $db->query($sql);		
 while($r = mysqli_fetch_assoc($res)) {
 	$download_file = $title = strtoupper($r['name1']);
