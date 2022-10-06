@@ -63,7 +63,7 @@ foreach($issues as $issue)
 						// G-e-s-t-a-l-t exception
 						if($b['id'] == $gestalt_id and !$is_mobile)
 						{
-						?><scripÃt>
+						?><script>
 							var thisW = 220; 
 							var thisH = 313;
 						</script>
