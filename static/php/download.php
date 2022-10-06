@@ -26,11 +26,18 @@ $issue = $_POST['issue'];
 $db_download = db_connect_download('main');
 
 // check format
-$smallformat = ($issue > 10) ? true : false; 
+$A4_issues = array(13, 14, 15, 16, 17);
+$format = 'default';
+if(in_array($issue, $A4_issues))
+	$format = 'A4';
+else if ($issue > 10)
+	$format = 'small';
+// $smallformat = ($issue > 10) ? true : false; 
+
 
 // set font
 $font_path = $root.'static/fonts/mtdbt2f-gg.ttf';
-$font_size = ($smallformat == true) ? 5 : 7; 
+$font_size = $format == 'small' ? 5 : 7; 
 
 $note_font_path = $root.'static/fonts/mtdbt2f-f.ttf';
 $note_font_size = 13;
@@ -102,7 +109,7 @@ $bulletin_style->setFillColor($white);
 $bulletin_style->setLineColor($white); 
 $bulletin_style->setFont(Zend_Pdf_Font::fontWithPath($font_path), $font_size);
 
-if ($smallformat == true) {
+if ($format == 'small') {
     foreach ($pdf->pages as $num => $obj) {
         $obj->setStyle($bulletin_style); 
         $obj->drawRectangle(22, 24, 120, 13);
@@ -110,7 +117,16 @@ if ($smallformat == true) {
         $obj->drawText($stamp, 25, 17); // stamp
         $pdf->pages[$num] = $obj; // save
     }
-} else { 
+} 
+else if ($format == 'A4'){
+	foreach ($pdf->pages as $num => $obj) {
+        $obj->setStyle($bulletin_style); 
+        $obj->drawRectangle(48, 46, 154, 40);
+        $obj->setFillColor($black); 
+        $obj->drawText($stamp, 49, 41); // stamp
+        $pdf->pages[$num] = $obj; // save
+    }
+}else { 
     foreach ($pdf->pages as $num => $obj) {
         $obj->setStyle($bulletin_style); 
         $obj->drawRectangle(30, 32, 150, 20);
