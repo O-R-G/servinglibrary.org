@@ -61,9 +61,12 @@ foreach($issues as $issue)
 				<a href="<? echo $b_url; ?>">
 					<div class="coverContainer"><?
 						// G-e-s-t-a-l-t exception
+
 						if($b['id'] == $gestalt_id and !$is_mobile)
 						{
-						?><script>
+						?>
+						<script src="static/pde/processing-1.4.1.min.js"></script>
+						<script>
 							var thisW = 220; 
 							var thisH = 313;
 						</script>
