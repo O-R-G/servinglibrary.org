@@ -7,7 +7,8 @@
     // think it uses get or maybe post in teiger
     $items = $_GET['items'];
 	require_once('static/php/mail.php');
-	$debug_email = 'david@servinglibrary.org';
+	// $debug_email = 'david@servinglibrary.org';
+    $debug_email = 'info@servinglibrary.org';
 
 	$email = isset($_GET['email']) ? $_GET['email'] : $debug_email;
     if(!empty($email)) {
