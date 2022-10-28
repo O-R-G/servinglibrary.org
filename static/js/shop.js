@@ -43,16 +43,16 @@ var shippingOptions_arr = {
 		            currency_code: "USD"
 		        }
 			},
-			{
-	        	id: "SHIP_EU",
-	            label: "WITHIN EU",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: "10.00",
-	                currency_code: "USD"
-	            }
-	        }
+			// {
+	  //       	id: "SHIP_EU",
+	  //           label: "WITHIN EU",
+	  //           type: "SHIPPING",
+	  //           selected: false,
+	  //           amount: {
+	  //               value: "10.00",
+	  //               currency_code: "USD"
+	  //           }
+	  //       }
 		], 
 	    EUR: [
 	        {
