@@ -1,3 +1,9 @@
+<?
+$isSandbox = isset($_GET['isSandbox']);
+?>
+<script>
+    var isSandbox = <?= json_encode($isSandbox); ?>;
+</script>
 <script src="/static/js/shop.js"></script>
 <script src="/static/js/cookie.js"></script><?
 
@@ -23,12 +29,21 @@
     	</form> -->
     	<!-- <div id="paypal-donate-button-container"></div> -->
     	<!-- <button id="donate-btn" class="button">DONATE</button> -->
-    </div><?
-?><script>
+    </div>
+    <div id="currencySwitchWrapper" class="currency"><? 
+        foreach($acceptedCurrencies as $option){ 
+            if($option == $currency) { ?>
+                <button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><? 
+            } else {
+                ?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
+            }
+        }
+    ?></div>
+<script>
 	var currency = '<?= $currency; ?>';
 	var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
 	paypal_url += '&currency='+currency.toUpperCase();
 	document.body.classList.add('viewing-'+currency);
 </script><?
-	require_once('views/cart.php');
+	// require_once('views/cart.php');
 ?>

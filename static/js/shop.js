@@ -43,16 +43,6 @@ var shippingOptions_arr = {
 		            currency_code: "USD"
 		        }
 			},
-			// {
-	  //       	id: "SHIP_EU",
-	  //           label: "WITHIN EU",
-	  //           type: "SHIPPING",
-	  //           selected: false,
-	  //           amount: {
-	  //               value: "10.00",
-	  //               currency_code: "USD"
-	  //           }
-	  //       }
 		], 
 	    EUR: [
 	        {
@@ -226,16 +216,6 @@ var shippingOptions_arr = {
 		            value: "10.00",
 		            currency_code: "USD"
 		        }
-			},
-			{
-		    	id: "SHIP_WORLD",
-		        label: "ELSEWHERE",
-		        type: "SHIPPING",
-		        selected: false,
-		        amount: {
-		            value: "35.00",
-		            currency_code: "USD"
-		        }
 			}
 		], 
 	    EUR: [
@@ -274,16 +254,6 @@ var shippingOptions_arr = {
 		            value: "10.00",
 		            currency_code: "USD"
 		        }
-			},
-			{
-		    	id: "SHIP_WORLD",
-		        label: "ELSEWHERE",
-		        type: "SHIPPING",
-		        selected: false,
-		        amount: {
-		            value: "220.00",
-		            currency_code: "USD"
-		        }
 			}
 		], 
 	    EUR: [
@@ -310,6 +280,64 @@ var shippingOptions_arr = {
 	            }
 	        }
 	    ]
+	}
+}
+
+var shippingFee_arr = {
+	'USD': {
+		'10.00': {
+			'1': '10.00',
+			'2': '9.00',
+			'3': '8.00',
+			'4': '7.00',
+			'5': '6.00'
+		}
+	},
+	'EUR': {
+		'8.00': {
+			'1': '8.00',
+			'2': '7.00',
+			'3': '6.00',
+			'4': '5.00',
+			'5': '4.00'
+		},
+		'10.00': {
+			'1': '10.00',
+			'2': '9.00',
+			'3': '8.00',
+			'4': '7.00',
+			'5': '6.00'
+		},
+		'40.00': {
+			'1': '40.00',
+			'2': '37.00',
+			'3': '34.00',
+			'4': '31.00',
+			'5': '29.00'
+		},
+	},
+	'GBP': {
+		'5.00': {
+			'1': '5.00',
+			'2': '4.50',
+			'3': '3.50'
+			// '4': '3.50',
+			// '5': '3.50'
+		},
+		'10.00': {
+			'1': '10.00',
+			'2': '9.00',
+			'3': '8.00',
+			'4': '7.00',
+			'5': '6.00'
+		},
+		'30.00': {
+			'1': '30.00',
+			'2': '28.00',
+			'3': '26.00',
+			'4': '24.00',
+			'5': '22.00'
+		},
 	}
 }
 
@@ -403,27 +431,35 @@ function createButton(buttonContainerId, price, currency, itemName, type){
         },
         onShippingChange: function (data, actions) {
 			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
+			console.log('onshippingchange');
 			console.log(data);
-			data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
-			data.amount.value = data.amount.value + '';
-			return actions.order.patch([{
-				op: "replace",
-				path: "/purchase_units/@reference_id=='default'/amount",
-				value: { 
-					value: data.amount.value, 
-					currency_code: data.amount.currency_code,
-					breakdown: {
-						item_total: { 
-							currency_code: currencyUppercase,
-							value: baseAmount
-						},
-						shipping: {
-							currency_code: currencyUppercase,
-							value: parseFloat(data.selected_shipping_option.amount.value, 10)
+			console.log(data.amount.currency_code, data.shipping_address.country_code);
+			if(data.amount.currency_code == 'USD' && data.shipping_address.country_code != 'US'){
+				return actions.reject();
+			}
+			else
+			{
+				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
+				data.amount.value = data.amount.value + '';
+				return actions.order.patch([{
+					op: "replace",
+					path: "/purchase_units/@reference_id=='default'/amount",
+					value: { 
+						value: data.amount.value, 
+						currency_code: data.amount.currency_code,
+						breakdown: {
+							item_total: { 
+								currency_code: currencyUppercase,
+								value: baseAmount
+							},
+							shipping: {
+								currency_code: currencyUppercase,
+								value: parseFloat(data.selected_shipping_option.amount.value, 10)
+							}
 						}
 					}
-				}
-			}]);
+				}]);
+			}
 		},
         style: {
             color: 'black'
@@ -460,6 +496,22 @@ function createButton(buttonContainerId, price, currency, itemName, type){
   	}).render('#' + buttonContainerId);
 }
 
+function getTotalShippingFee(elements, option, totalAmount, currency){
+	var output = 0;
+	console.log(totalAmount);
+	[].forEach.call(elements, function(el, i){
+		let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+		let thisType = el.getAttribute('type');
+		if(thisType == '')
+			thisType = 'issue';
+		var thisBasicShippingFee = option['amount']['value'];
+		var thisFinalShippingFee = shippingFee_arr[currency][thisBasicShippingFee][totalAmount];
+		output += thisFinalShippingFee * parseInt(thisItemQuantity);
+	});
+
+	return output;
+}
+
 function createCartButton(){
 	let sItem_row = document.getElementsByClassName('item-row');
 
@@ -470,17 +522,23 @@ function createCartButton(){
 		let items = [];
 		let type = '';
 		let baseAmount = 0.0;
-		let shipping_option_priority = {
-			'subscription-12': 40,
-			'subscription-2': 30,
-			'issue': 20,
-			'archive': 15,
-			'annual': 10
-		};
+		// let shipping_option_priority = {
+		// 	'subscription-12': 40,
+		// 	'subscription-2': 30,
+		// 	'issue': 20,
+		// 	'archive': 15,
+		// 	'annual': 10
+		// };
+		var totalShippingFee = 0;
+		var totalItemQuantity = 0;
 		[].forEach.call(sItem_row, function(el, i){
 			let thisItemName = el.querySelector('.item-name').innerText;
 			let thisItemPrice = el.querySelector('.item-price').innerText;
 			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+			var thisType = el.getAttribute('type');
+			if(thisType == '')
+				thisType = 'issue';
+			// console.log()
 			let thisItem = {
 				name: thisItemName, 
 				unit_amount: {
@@ -490,18 +548,17 @@ function createCartButton(){
 				quantity: thisItemQuantity
 			};
 			items.push(thisItem);
-
-			let thisType = el.getAttribute('type');
-			if( shipping_option_priority[thisType] === undefined )
-				thisType = 'issue'; // set shipping plan of issue as fallback
-			if(type == '' || shipping_option_priority[thisType] > shipping_option_priority[type])
-				type = thisType;
-
+			type = thisType;
 			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
-
+			totalItemQuantity += parseInt(thisItemQuantity);
 		});
-		let options = shippingOptions_arr[type];
-		let totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
+		let options = shippingOptions_arr[type][currencyUppercase];
+		options.forEach(function(el, i){
+			el['amount']['value'] = getTotalShippingFee(sItem_row, el, totalItemQuantity, currencyUppercase);
+		});
+		// options[currencyUppercase][0]['amount']['value'] = totalShippingFee;
+		// console.log(totalShippingFee);
+		let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
 	        	// console.log('createOrder . . .');
@@ -517,12 +574,12 @@ function createCartButton(){
 								},
 								shipping: {
 									currency_code: currencyUppercase,
-									value: options[currencyUppercase][0].amount.value
+									value: options[0].amount.value
 								}
 							}
 	                	},
 		              	shipping: {
-			              	options: options[currencyUppercase]
+			              	options: options
 			            },
 			            items: items
 	                }]
@@ -530,28 +587,32 @@ function createCartButton(){
 	            });
 	        },
 	        onShippingChange: function (data, actions) {
-				// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
-				console.log(data);
-				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
-				data.amount.value = data.amount.value + '';
-				return actions.order.patch([{
-					op: "replace",
-					path: "/purchase_units/@reference_id=='default'/amount",
-					value: { 
-						value: data.amount.value, 
-						currency_code: data.amount.currency_code,
-						breakdown: {
-							item_total: { 
-								currency_code: currencyUppercase,
-								value: baseAmount
-							},
-							shipping: {
-								currency_code: currencyUppercase,
-								value: parseFloat(data.selected_shipping_option.amount.value, 10)
+				if(data.amount.currency_code == 'USD' && data.shipping_address.country_code != 'US'){
+					return actions.reject();
+				}
+				else
+				{
+					data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
+					data.amount.value = data.amount.value + '';
+					return actions.order.patch([{
+						op: "replace",
+						path: "/purchase_units/@reference_id=='default'/amount",
+						value: { 
+							value: data.amount.value, 
+							currency_code: data.amount.currency_code,
+							breakdown: {
+								item_total: { 
+									currency_code: currencyUppercase,
+									value: baseAmount
+								},
+								shipping: {
+									currency_code: currencyUppercase,
+									value: parseFloat(data.selected_shipping_option.amount.value, 10)
+								}
 							}
 						}
-					}
-				}]);
+					}]);
+				}
 			},
 	        style: {
 	            color: 'black'

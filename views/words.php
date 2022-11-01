@@ -1,7 +1,7 @@
 <?
-$body = trim($item['body']);
-$deck = trim($item['deck']);
-$media = $oo->media($item['id']);
+$body = isset($item) ? trim($item['body']) : '';
+$deck = isset($item) ? trim($item['deck']) : '';
+$media = isset($item) ? $oo->media($item['id']) : array();
 if(count($media) > 0) {
 	$cover = $media[0];
 	$cover_img = m_url($cover);
