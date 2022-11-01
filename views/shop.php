@@ -7,7 +7,7 @@ $isSandbox = isset($_GET['isSandbox']);
 <script src="/static/js/shop.js"></script>
 <script src="/static/js/cookie.js"></script><?
 
-    /*
+    /*currency
         a view for paypal multi-item shop w/ cart
     */    
 
@@ -38,9 +38,6 @@ $isSandbox = isset($_GET['isSandbox']);
         							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
         						</a><?
         					}
-                            // foreach($paypal_products as $product){
-                            //     echo printPayPalButtons($currency, $product);
-                            // }
                             echo printPayPalButtons($currency, $paypal_products);
         				?></div><?
         			}
@@ -101,6 +98,15 @@ $isSandbox = isset($_GET['isSandbox']);
 </div>
 <script>
     var currency = '<?= $currency; ?>';
+    // var savedCurrency = readCookie('cart-currency');
+    // console.log('currency = ' + currency);
+    // console.log('savedCurrency = ' + savedCurrency);
+
+    // if(savedCurrency == null || currency != savedCurrency){
+    //     console.log('not the same currency');
+    //     eraseCookie('cart');
+    //     createCookie( 'cart-currency', currency, '' );
+    // }
     var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
     if(currency.toUpperCase() == 'USD')
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
@@ -117,6 +123,7 @@ $isSandbox = isset($_GET['isSandbox']);
         cart_cookie = JSON.parse(cart_cookie);
         cart_cookie.forEach(function(el, i){
             // console.log(el);
+            console.log(el);
             addToCartFromJson(el);
             temp += parseInt(el.quantity);
         });
