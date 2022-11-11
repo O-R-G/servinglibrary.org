@@ -179,7 +179,14 @@ var shippingFeeByAmount_arr = {
 			'3': '8.00',
 			'4': '7.00',
 			'5': '6.00'
-		}
+		},
+		'20.00': {
+			'1': '20.00',
+			'2': '18.00',
+			'3': '16.00',
+			'4': '14.00',
+			'5': '12.00'
+		},
 	},
 	'EUR': {
 		'8.00': {
@@ -195,6 +202,13 @@ var shippingFeeByAmount_arr = {
 			'3': '8.00',
 			'4': '7.00',
 			'5': '6.00'
+		},
+		'20.00': {
+			'1': '20.00',
+			'2': '18.00',
+			'3': '16.00',
+			'4': '14.00',
+			'5': '12.00'
 		},
 		'40.00': {
 			'1': '40.00',
@@ -218,6 +232,13 @@ var shippingFeeByAmount_arr = {
 			'3': '8.00',
 			'4': '7.00',
 			'5': '6.00'
+		},
+		'20.00': {
+			'1': '20.00',
+			'2': '18.00',
+			'3': '16.00',
+			'4': '14.00',
+			'5': '12.00'
 		},
 		'30.00': {
 			'1': '30.00',
@@ -373,10 +394,13 @@ function getTotalShippingFee(elements, option, totalAmount, currency){
 		let thisType = el.getAttribute('type');
 		if(thisType == '')
 			thisType = 'issue';
-		let thisSubType = el.getAttribute('subType');
+		console.log(el);
+		let thisSubType = el.getAttribute('subtype');
 		if(thisSubType != undefined)
 			thisType = thisType + '-' + thisSubType;
+		console.log(thisType);
 		var thisBasicShippingFee = shippingFeeByItem_arr[currency][option.id][thisType].toFixed(2);
+		console.log(thisBasicShippingFee);
 		var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
 		// if totalAmount is larger than the defined shipping fee array, use the last item in the array.
 		if(thisFinalShippingFee == undefined)
@@ -422,7 +446,7 @@ function createCartButton(){
 			totalItemQuantity += parseInt(thisItemQuantity);
 		});
 		if(hasSubscription)
-			var options = shippingOptions_arr[type];
+			var options = shippingOptions_arr['subscription'];
 		else
 			var options = shippingOptions_arr['default'];
 		options = options[currencyUppercase];
@@ -537,6 +561,7 @@ function addToCartByClick(event, quantityToAdd = 1){
 			else if(thisElement.getAttribute('slug') == 'subscription-2-years')
 				subType = '2';
 		}
+		console.log(subType);
 		printToCart(rowId, itemName, type, price_all, 0, subType);
 		thisRow = sCart_container.querySelector('#'+rowId);
 	}
@@ -552,7 +577,7 @@ function addToCartByClick(event, quantityToAdd = 1){
 }
 
 function addToCartFromJson(obj){
-	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity);
+	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity, obj.sunType);
 }
 
 function printToCart(rowId, itemName, type, prices, quantity, subType = false){
@@ -653,6 +678,7 @@ function updateRowToCookie(){
 			this_obj.id = el.id;
 			this_obj.itemName = el.querySelector('.item-name').innerText;
 			this_obj.type = el.getAttribute('type');
+			this_obj.subType = el.getAttribute('subType') ? el.getAttribute('subType') : '';
 			let prices = {};
 			acceptedCurrencies.forEach(function(c, i){
 				prices[c] = el.getAttribute(c);
