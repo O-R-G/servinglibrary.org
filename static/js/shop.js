@@ -1,7 +1,6 @@
 /* 
     buy now and shopping cart via paypal api
 */
-console.log(isSandbox);
 if(isSandbox)
 {
 	// sandbox
@@ -31,83 +30,15 @@ function loadScript(url){
 }
 
 var shippingOptions_arr = {
-	'issue' : {
-	    USD: [
-		    {
-		    	id: "SHIP_US",
-		        label: "DOMESTIC",
-		        type: "SHIPPING",
-		        selected: true,
-		        amount: {
-		            value: "10.00",
-		            currency_code: "USD"
-		        }
-			},
-			// {
-	  //       	id: "SHIP_EU",
-	  //           label: "WITHIN EU",
-	  //           type: "SHIPPING",
-	  //           selected: false,
-	  //           amount: {
-	  //               value: "10.00",
-	  //               currency_code: "USD"
-	  //           }
-	  //       }
-		], 
-	    EUR: [
-	        {
-	        	id: "SHIP_EU",
-	            label: "WITHIN EU",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: "10.00",
-	                currency_code: "EUR"
-	            }
-	        },
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: "40.00",
-	                currency_code: "EUR"
-	            }
-	        }
-	    ],
-	    GBP: [
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: "10.00",
-	                currency_code: "GBP"
-	            }
-	        },
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: "30.00",
-	                currency_code: "GBP"
-	            }
-	        }
-	    ]
-	},
-	'annual': {
-	    USD: [
+	'default':{
+		USD: [
 	    {
 	    	id: "SHIP_US",
 	        label: "DOMESTIC",
 	        type: "SHIPPING",
 	        selected: true,
 	        amount: {
-	            value: "10.00",
+	            value: 0,
 	            currency_code: "USD"
 	        }
 		}
@@ -119,7 +50,7 @@ var shippingOptions_arr = {
 	            type: "SHIPPING",
 	            selected: true,
 	            amount: {
-	                value: "8.00",
+	                value: 0,
 	                currency_code: "EUR"
 	            }
 	        },
@@ -129,65 +60,7 @@ var shippingOptions_arr = {
 	            type: "SHIPPING",
 	            selected: false,
 	            amount: {
-	                value: "40.00",
-	                currency_code: "EUR"
-	            }
-	        }
-	    ],
-	    GBP: [
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: "5.00",
-	                currency_code: "GBP"
-	            }
-	        },
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: "30.00",
-	                currency_code: "GBP"
-	            }
-	        }
-	    ]
-	},
-	'archive': {
-	    USD: [
-	    {
-	    	id: "SHIP_US",
-	        label: "DOMESTIC",
-	        type: "SHIPPING",
-	        selected: true,
-	        amount: {
-	            value: "10.00",
-	            currency_code: "USD"
-	        }
-		}
-		], 
-	    EUR: [
-	        {
-	        	id: "SHIP_EU",
-	            label: "WITHIN EU",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: "8.00",
-	                currency_code: "EUR"
-	            }
-	        },
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: "40.00",
+	                value: 0,
 	                currency_code: "EUR"
 	            }
 	        }
@@ -199,7 +72,7 @@ var shippingOptions_arr = {
 	            type: "SHIPPING",
 	            selected: true,
 	            amount: {
-	                value: "5.00",
+	                value: 0,
 	                currency_code: "GBP"
 	            }
 	        },
@@ -209,31 +82,21 @@ var shippingOptions_arr = {
 	            type: "SHIPPING",
 	            selected: false,
 	            amount: {
-	                value: "30.00",
+	                value: 0,
 	                currency_code: "GBP"
 	            }
 	        }
 	    ]
 	},
-	'subscription-2': {
-	    USD: [
+	'subscription': {
+		USD: [
 		    {
 		    	id: "SHIP_US",
 		        label: "DOMESTIC",
 		        type: "SHIPPING",
 		        selected: true,
 		        amount: {
-		            value: "10.00",
-		            currency_code: "USD"
-		        }
-			},
-			{
-		    	id: "SHIP_WORLD",
-		        label: "ELSEWHERE",
-		        type: "SHIPPING",
-		        selected: false,
-		        amount: {
-		            value: "35.00",
+		            value: 0,
 		            currency_code: "USD"
 		        }
 			}
@@ -245,7 +108,7 @@ var shippingOptions_arr = {
 	            type: "SHIPPING",
 	            selected: true,
 	            amount: {
-	                value: "10.00",
+	                value: 0,
 	                currency_code: "EUR"
 	            }
 	        }
@@ -257,63 +120,135 @@ var shippingOptions_arr = {
 	            type: "SHIPPING",
 	            selected: true,
 	            amount: {
-	                value: "10.00",
-	                currency_code: "GBP"
-	            }
-	        }
-	    ]
-	},
-	'subscription-12': {
-	    USD: [
-		    {
-		    	id: "SHIP_US",
-		        label: "DOMESTIC",
-		        type: "SHIPPING",
-		        selected: true,
-		        amount: {
-		            value: "10.00",
-		            currency_code: "USD"
-		        }
-			},
-			{
-		    	id: "SHIP_WORLD",
-		        label: "ELSEWHERE",
-		        type: "SHIPPING",
-		        selected: false,
-		        amount: {
-		            value: "220.00",
-		            currency_code: "USD"
-		        }
-			}
-		], 
-	    EUR: [
-	        {
-	        	id: "SHIP_EU",
-	            label: "WITHIN EU",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: "10.00",
-	                currency_code: "EUR"
-	            }
-	        }
-	    ],
-	    GBP: [
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: "10.00",
+	                value: 0,
 	                currency_code: "GBP"
 	            }
 	        }
 	    ]
 	}
+};
+var shippingFeeByItem_arr = {
+	'USD': {
+		"SHIP_US": {
+			'issue': 10.00,
+			'annual': 10.00,
+			'archive': 10.00,
+			'edition': 10.00,
+			'subscription-2': 20.00,
+			'subscription-12': 120.00
+		}
+	},
+	'EUR': {
+		"SHIP_EU": {
+			'issue': 10.00,
+			'annual': 8.00,
+			'archive': 8.00,
+			'edition': 8.00,
+			'subscription-2': 20.00,
+			'subscription-12': 120.00
+		},
+		"SHIP_WORLD": {
+			'issue': 40.00,
+			'annual': 40.00,
+			'archive': 40.00,
+			'edition': 40.00
+		}
+	},
+	'GBP': {
+		"SHIP_UK": {
+			'issue': 10.00,
+			'annual': 5.00,
+			'archive': 5.00,
+			'edition': 5.00,
+			'subscription-2': 20.00,
+			'subscription-12': 120.00
+		},
+		"SHIP_WORLD": {
+			'issue': 30.00,
+			'annual': 30.00,
+			'archive': 30.00,
+			'edition': 30.00
+		}
+	}
+};
+var shippingFeeByAmount_arr = {
+	'USD': {
+		'10.00': {
+			'1': '10.00',
+			'2': '9.00',
+			'3': '8.00',
+			'4': '7.00',
+			'5': '6.00'
+		},
+		'20.00': {
+			'1': '20.00',
+			'2': '18.00',
+			'3': '16.00',
+			'4': '14.00',
+			'5': '12.00'
+		},
+	},
+	'EUR': {
+		'8.00': {
+			'1': '8.00',
+			'2': '7.00',
+			'3': '6.00',
+			'4': '5.00',
+			'5': '4.00'
+		},
+		'10.00': {
+			'1': '10.00',
+			'2': '9.00',
+			'3': '8.00',
+			'4': '7.00',
+			'5': '6.00'
+		},
+		'20.00': {
+			'1': '20.00',
+			'2': '18.00',
+			'3': '16.00',
+			'4': '14.00',
+			'5': '12.00'
+		},
+		'40.00': {
+			'1': '40.00',
+			'2': '37.00',
+			'3': '34.00',
+			'4': '31.00',
+			'5': '29.00'
+		},
+	},
+	'GBP': {
+		'5.00': {
+			'1': '5.00',
+			'2': '4.50',
+			'3': '3.50'
+			// '4': '3.50',
+			// '5': '3.50'
+		},
+		'10.00': {
+			'1': '10.00',
+			'2': '9.00',
+			'3': '8.00',
+			'4': '7.00',
+			'5': '6.00'
+		},
+		'20.00': {
+			'1': '20.00',
+			'2': '18.00',
+			'3': '16.00',
+			'4': '14.00',
+			'5': '12.00'
+		},
+		'30.00': {
+			'1': '30.00',
+			'2': '28.00',
+			'3': '26.00',
+			'4': '24.00',
+			'5': '22.00'
+		},
+	}
 }
-
-// var shippingOptions = shippingOptions_arr[type];
 
 function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 	let sButtonArea = document.getElementById(buttonAreaId);
@@ -324,37 +259,29 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 		if(sViewing_paypal)
 			sViewing_paypal.classList.remove('viewing-paypal');
 		sButtonArea.classList.add('viewing-paypal');
-		// let thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 	}
 	let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
-	// console.log('hasButton = '+hasButton);
 	if(!hasButton){
 		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
 		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		// console.log(thisPaypalButtonContainer.id);
 		if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
 			createCartButton();
-		// else
-		// 	createButton(thisPaypalButtonContainer.id, thisPrice, currency, itemName, type);
 	}
 }
-
+/*
 function createButton(buttonContainerId, price, currency, itemName, type){
-	// console.log('createButton . . .');
-	// console.log(type);
-	if(type == 'subscription') {
-		if(itemName.indexOf('two years') !== -1){
-			// console.log(itemName.indexOf('two years'));
-			var options = shippingOptions_arr[type + '-2'];
-		}
-		else if(itemName.indexOf('twelve years') !== -1)
-			var options = shippingOptions_arr[type + '-12'];
-	} else
-		var options = shippingOptions_arr[type];	
-	// console.log(options);
-	var baseAmount = parseFloat(price, 10);
-	var totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
 	var currencyUppercase = currency.toUpperCase();
+	var options = shippingOptions_arr[type];
+	if(options == undefined)
+		options = shippingOptions_arr['default'];
+	options = options[currencyUppercase];
+	for (const [key, value] of Object.entries(options)) {
+		options[key].amount.value = shippingFeeByItem_arr[currencyUppercase][value.id][type];
+	}
+	var shippingFee = shippingFeeByItem_arr[currencyUppercase][0][type];
+	var baseAmount = parseFloat(price, 10);
+	var totalValue = baseAmount + parseFloat(shippingFee, 10);
+	
 
 	let items = [];
 	let thisItem = {
@@ -390,7 +317,7 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 		              	options: options[currencyUppercase]
 		            },
 		            items: [{
-						name: itemName, /* Shows within upper-right dropdown during payment approval */
+						name: itemName,
 						unit_amount: {
 							currency_code: currencyUppercase,
 							value: baseAmount
@@ -403,135 +330,14 @@ function createButton(buttonContainerId, price, currency, itemName, type){
         },
         onShippingChange: function (data, actions) {
 			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
+			console.log('onshippingchange');
 			console.log(data);
-			data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
-			data.amount.value = data.amount.value + '';
-			return actions.order.patch([{
-				op: "replace",
-				path: "/purchase_units/@reference_id=='default'/amount",
-				value: { 
-					value: data.amount.value, 
-					currency_code: data.amount.currency_code,
-					breakdown: {
-						item_total: { 
-							currency_code: currencyUppercase,
-							value: baseAmount
-						},
-						shipping: {
-							currency_code: currencyUppercase,
-							value: parseFloat(data.selected_shipping_option.amount.value, 10)
-						}
-					}
-				}
-			}]);
-		},
-        style: {
-            color: 'black'
-        },
-        onError: function (err) {
-			// For example, redirect to a specific error page
-			// window.location.href = "/your-error-page-here";
-			// window.location.href = "/shop/issues/error";
-			console.log(err);
-		},
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(orderData) {
-            	if(type == 'subscription')
-            		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
-            	else
-            		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
-            	// console.log(return_url);
-                /*
-                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                var transaction = orderData.purchase_units[0].payments.captures[0];
-                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
-                const element = document.getElementById('paypal-button-container');
-                element.innerHTML = 'Thx.';
-                */
-				let email = orderData.payer.email_address;
-				return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
-				[].forEach.call(items, function(el){
-					return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
-				});
-				actions.redirect(return_url);
-            });
-        }
-
-  	}).render('#' + buttonContainerId);
-}
-
-function createCartButton(){
-	let sItem_row = document.getElementsByClassName('item-row');
-
-	if(sItem_row.length > 0)
-	{
-		let currencyUppercase = currency.toUpperCase();
-		let buttonContainerId = 'paypal-button-container-cart';
-		let items = [];
-		let type = '';
-		let baseAmount = 0.0;
-		let shipping_option_priority = {
-			'subscription-12': 40,
-			'subscription-2': 30,
-			'issue': 20,
-			'archive': 15,
-			'annual': 10
-		};
-		[].forEach.call(sItem_row, function(el, i){
-			let thisItemName = el.querySelector('.item-name').innerText;
-			let thisItemPrice = el.querySelector('.item-price').innerText;
-			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
-			let thisItem = {
-				name: thisItemName, 
-				unit_amount: {
-					currency_code: currencyUppercase,
-					value: thisItemPrice
-				},
-				quantity: thisItemQuantity
-			};
-			items.push(thisItem);
-
-			let thisType = el.getAttribute('type');
-			if( shipping_option_priority[thisType] === undefined )
-				thisType = 'issue'; // set shipping plan of issue as fallback
-			if(type == '' || shipping_option_priority[thisType] > shipping_option_priority[type])
-				type = thisType;
-
-			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
-
-		});
-		let options = shippingOptions_arr[type];
-		let totalValue = baseAmount + parseFloat(options[currency.toUpperCase()][0].amount.value, 10);
-		paypal.Buttons({
-	        createOrder: function(data, actions) {
-	        	// console.log('createOrder . . .');
-	            return actions.order.create({
-	                purchase_units: [{
-	                	amount: {
-	                        currency_code: currencyUppercase,
-	                        value: totalValue,
-	                        breakdown: {
-								item_total: { 
-									currency_code: currencyUppercase,
-									value: baseAmount
-								},
-								shipping: {
-									currency_code: currencyUppercase,
-									value: options[currencyUppercase][0].amount.value
-								}
-							}
-	                	},
-		              	shipping: {
-			              	options: options[currencyUppercase]
-			            },
-			            items: items
-	                }]
-	                
-	            });
-	        },
-	        onShippingChange: function (data, actions) {
-				// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
-				console.log(data);
+			console.log(data.amount.currency_code, data.shipping_address.country_code);
+			if(data.amount.currency_code == 'USD' && data.shipping_address.country_code != 'US'){
+				return actions.reject();
+			}
+			else
+			{
 				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
 				data.amount.value = data.amount.value + '';
 				return actions.order.patch([{
@@ -552,6 +358,156 @@ function createCartButton(){
 						}
 					}
 				}]);
+			}
+		},
+        style: {
+            color: 'black'
+        },
+        onError: function (err) {
+			// For example, redirect to a specific error page
+			// window.location.href = "/your-error-page-here";
+			// window.location.href = "/shop/issues/error";
+			console.log(err);
+		},
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+            	if(type == 'subscription')
+            		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
+            	else
+            		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
+				let email = orderData.payer.email_address;
+				return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
+				[].forEach.call(items, function(el){
+					return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
+				});
+				actions.redirect(return_url);
+            });
+        }
+
+  	}).render('#' + buttonContainerId);
+}
+*/
+function getTotalShippingFee(elements, option, totalAmount, currency){
+	var output = 0;
+	[].forEach.call(elements, function(el, i){
+		let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+		let thisType = el.getAttribute('type');
+		if(thisType == '')
+			thisType = 'issue';
+		console.log(el);
+		let thisSubType = el.getAttribute('subtype');
+		if(thisSubType != undefined)
+			thisType = thisType + '-' + thisSubType;
+		console.log(thisType);
+		var thisBasicShippingFee = shippingFeeByItem_arr[currency][option.id][thisType].toFixed(2);
+		console.log(thisBasicShippingFee);
+		var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
+		// if totalAmount is larger than the defined shipping fee array, use the last item in the array.
+		if(thisFinalShippingFee == undefined)
+			thisFinalShippingFee = Object.values(shippingFeeByAmount_arr[currency][thisBasicShippingFee]).pop();
+		output += thisFinalShippingFee * parseInt(thisItemQuantity);
+	});
+	return output;
+}
+
+function createCartButton(){
+	let sItem_row = document.getElementsByClassName('item-row');
+
+	if(sItem_row.length > 0)
+	{
+		let currencyUppercase = currency.toUpperCase();
+		let buttonContainerId = 'paypal-button-container-cart';
+		let items = [];
+		let type = '';
+		let baseAmount = 0.0;
+		var totalShippingFee = 0;
+		var totalItemQuantity = 0;
+		var hasSubscription = false;
+
+		[].forEach.call(sItem_row, function(el, i){
+			let thisItemName = el.querySelector('.item-name').innerText;
+			let thisItemPrice = el.querySelector('.item-price').innerText;
+			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+			var thisType = el.getAttribute('type');
+			if(thisType == '')
+				thisType = 'issue';
+			let thisItem = {
+				name: thisItemName, 
+				unit_amount: {
+					currency_code: currencyUppercase,
+					value: thisItemPrice
+				},
+				quantity: thisItemQuantity
+			};
+			items.push(thisItem);
+			if(thisType == 'subscription')
+				hasSubscription = true;
+			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
+			totalItemQuantity += parseInt(thisItemQuantity);
+		});
+		if(hasSubscription)
+			var options = shippingOptions_arr['subscription'];
+		else
+			var options = shippingOptions_arr['default'];
+		options = options[currencyUppercase];
+		options.forEach(function(el, i){
+			el['amount']['value'] = getTotalShippingFee(sItem_row, el, totalItemQuantity, currencyUppercase);
+		});
+		let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
+		paypal.Buttons({
+	        createOrder: function(data, actions) {
+	        	// console.log('createOrder . . .');
+	            return actions.order.create({
+	                purchase_units: [{
+	                	amount: {
+	                        currency_code: currencyUppercase,
+	                        value: totalValue,
+	                        breakdown: {
+								item_total: { 
+									currency_code: currencyUppercase,
+									value: baseAmount
+								},
+								shipping: {
+									currency_code: currencyUppercase,
+									value: options[0].amount.value
+								}
+							}
+	                	},
+		              	shipping: {
+			              	options: options
+			            },
+			            items: items
+	                }]
+	                
+	            });
+	        },
+	        onShippingChange: function (data, actions) {
+				if(data.amount.currency_code == 'USD' && data.shipping_address.country_code != 'US'){
+					return actions.reject();
+				}
+				else
+				{
+					data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
+					data.amount.value = data.amount.value + '';
+					return actions.order.patch([{
+						op: "replace",
+						path: "/purchase_units/@reference_id=='default'/amount",
+						value: { 
+							value: data.amount.value, 
+							currency_code: data.amount.currency_code,
+							breakdown: {
+								item_total: { 
+									currency_code: currencyUppercase,
+									value: baseAmount
+								},
+								shipping: {
+									currency_code: currencyUppercase,
+									value: parseFloat(data.selected_shipping_option.amount.value, 10)
+								}
+							}
+						}
+					}]);
+				}
 			},
 	        style: {
 	            color: 'black'
@@ -564,7 +520,7 @@ function createCartButton(){
 			},
 	        onApprove: function(data, actions) {
 	            return actions.order.capture().then(function(orderData) {
-                    eraseCookie('cart');
+                    eraseCookie('serving-library-shop-cart');
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
 					let email = orderData.payer.email_address;
 					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
@@ -572,7 +528,6 @@ function createCartButton(){
 						return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
 					});
 					actions.redirect(return_url);
-	                // console.log('on approve');
 	            });
 	        }
 	  	}).render('#' + buttonContainerId);
@@ -580,16 +535,18 @@ function createCartButton(){
 }
 
 function addToCartByClick(event, quantityToAdd = 1){
-	// console.log('addToCartByClick()');
+	console.log('addToCartByClick()');
 	let thisElement = event.target;
-    // hide add to cart button
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
 	let sCart_container = document.getElementById('cart-container');
 	if (cart_symbol = document.getElementById('cart-symbol'))
         document.body.classList.add('viewing-cart-symbol');
-	let price = thisElement.getAttribute('price');
+	let price_all = {
+		'usd': thisElement.getAttribute('usd'),
+		'eur': thisElement.getAttribute('eur'),
+		'gbp': thisElement.getAttribute('gbp')
+	};
 	// check if this item exists in the cart
-	// let slug = ;
 	let rowId = 'item-row-'+thisElement.getAttribute('slug');
 	let thisRow = sCart_container.querySelector('#'+rowId);
 	let thisQuantity, thisAmount;
@@ -597,9 +554,16 @@ function addToCartByClick(event, quantityToAdd = 1){
 	if(!thisRow){
 		let itemName = thisElement.getAttribute('itemName');
 		let type = thisElement.getAttribute('type');
-		printToCart(rowId, itemName, type, price, 0);
+		let subType = false;
+		if(type == 'subscription'){
+			if(thisElement.getAttribute('slug') == 'subscription-12-years')
+				subType = '12';
+			else if(thisElement.getAttribute('slug') == 'subscription-2-years')
+				subType = '2';
+		}
+		console.log(subType);
+		printToCart(rowId, itemName, type, price_all, 0, subType);
 		thisRow = sCart_container.querySelector('#'+rowId);
-		// console.log('has been added to the cart');
 	}
 	thisQuantity = thisRow.querySelector('.item-quantity');
 	thisAmount = thisRow.querySelector('.item-amount');
@@ -607,24 +571,22 @@ function addToCartByClick(event, quantityToAdd = 1){
 	let sItem_count = document.getElementById('item-count');
 	sItem_count.innerHTML = parseInt(sItem_count.innerHTML) + quantityToAdd;
 	quantity += quantityToAdd;
-	thisAmount.innerText = quantity * price;
+	thisAmount.innerText = quantity * price_all[currency];
 	thisQuantity.innerHTML = quantity;
 	updateRowToCookie();
 }
 
 function addToCartFromJson(obj){
-	// console.log('addToCartFromJson()');
-	printToCart(obj.id, obj.itemName, obj.type, obj.price, obj.quantity);
+	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity, obj.subType);
 }
 
-function printToCart(rowId, itemName, type, price, quantity){
-	// console.log('printToCart()');
-	// let itemName = thisElement.getAttribute('itemName');
-	// let type = thisElement.getAttribute('type');
+function printToCart(rowId, itemName, type, prices, quantity, subType = false){
 	thisRow = document.createElement('DIV');
 	thisRow.id = rowId;
 	thisRow.className = 'item-row';
 	thisRow.setAttribute('type', type);
+	if(subType)
+		thisRow.setAttribute('subType', subType);
 	let thisName = document.createElement('DIV');
 	thisName.className = 'item-column item-name';
 	thisName.innerHTML = itemName;
@@ -632,11 +594,16 @@ function printToCart(rowId, itemName, type, price, quantity){
 	thisPrice_container.className = 'item-column item-price-container';
 	let thisPrice = document.createElement('SPAN');
 	thisPrice.className = 'item-price';
-	thisPrice.innerHTML = price;
+	thisPrice.innerHTML = prices[currency];
 	let thisPrice_symbol = document.createElement('SPAN');
+	thisPrice_symbol.className = 'item-price-symbol';
 	thisPrice_symbol.innerHTML = acceptedCurrenciesSymbols[currency];
 	thisPrice_container.appendChild(thisPrice_symbol);
 	thisPrice_container.appendChild(thisPrice);
+
+	for (const [key, value] of Object.entries(prices)) {
+		thisRow.setAttribute(key, value);
+	}
 	let thisQuantity_container = document.createElement('DIV');
 	thisQuantity_container.className = 'item-column item-quantity-container flex-container';
 	let thisQuantity_plus = document.createElement('SPAN');
@@ -645,7 +612,7 @@ function printToCart(rowId, itemName, type, price, quantity){
 	thisQuantity_plus.onclick = function(event){
 		let newQuantity = parseInt(event.target.parentNode.querySelector('.item-quantity').innerText) + 1;
 		event.target.parentNode.querySelector('.item-quantity').innerText = newQuantity;
-		thisAmount.innerText = parseFloat(price, 10) * newQuantity;
+		thisAmount.innerText = parseFloat(prices[currency], 10) * newQuantity;
 		updateRowToCookie();
 	}
 	let thisQuantity_minus = document.createElement('SPAN');
@@ -655,11 +622,9 @@ function printToCart(rowId, itemName, type, price, quantity){
 		let newQuantity = parseInt(event.target.parentNode.querySelector('.item-quantity').innerText) - 1;
 		if(newQuantity != 0){
 			event.target.parentNode.querySelector('.item-quantity').innerText = newQuantity; 
-			thisAmount.innerText = parseFloat(price, 10) * newQuantity;
+			thisAmount.innerText = parseFloat(prices[currency], 10) * newQuantity;
 			updateRowToCookie();
 		}
-		// else
-		// 	thisRow.parentNode.removeChild(thisRow);
 	}
 	thisQuantity = document.createElement('DIV');
 	thisQuantity.className = 'item-quantity';
@@ -671,7 +636,7 @@ function printToCart(rowId, itemName, type, price, quantity){
 	thisAmount_container.className = 'item-column item-amount-container';
 	thisAmount = document.createElement('SPAN');
 	thisAmount.className = 'item-amount';
-	thisAmount.innerText = quantity * price;
+	thisAmount.innerText = quantity * prices[currency];
 	let thisAmount_symbol = document.createElement('SPAN');
 	thisAmount_symbol.innerHTML = acceptedCurrenciesSymbols[currency];
 	thisAmount_container.appendChild(thisAmount_symbol);
@@ -713,11 +678,16 @@ function updateRowToCookie(){
 			this_obj.id = el.id;
 			this_obj.itemName = el.querySelector('.item-name').innerText;
 			this_obj.type = el.getAttribute('type');
-			this_obj.price = el.querySelector('.item-price').innerText;
+			this_obj.subType = el.getAttribute('subType') ? el.getAttribute('subType') : '';
+			console.log(this_obj);
+			let prices = {};
+			acceptedCurrencies.forEach(function(c, i){
+				prices[c] = el.getAttribute(c);
+			});
+			this_obj.prices = prices;
 			this_obj.quantity = el.querySelector('.item-quantity').innerText;
 			json.push(this_obj);
 		});
 	}
-	// console.log(json);
-	createCookie( 'cart', JSON.stringify(json), '' );
+	createCookie( 'serving-library-shop-cart', JSON.stringify(json), '' );
 }
