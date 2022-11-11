@@ -126,5 +126,4 @@ $isSandbox = isset($_GET['isSandbox']);
                 document.body.classList.add('viewing-cart-symbol');
         document.getElementById('item-count').innerText = temp;
     }
-*/
 </script>
