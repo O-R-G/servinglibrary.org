@@ -14,37 +14,21 @@
     );
 
     function getProductInfo($currency, $child){
+        global $acceptedCurrenciesSymbols;
+
         $priceField = trim($child['notes']);
         $output = array();
         $paypal_item_pattern = '/\[paypal\-item\]\(((?:\[.*?\]\(.*?\))*)\)/';
-    	// $price_pattern = '/\['.$currency.'\]\((.*?)\)/';
-    	// $type_pattern = '/\[type\]\((.*?)\)/';
-    	// preg_match($price_pattern, trim($priceField), $temp);
         preg_match_all($paypal_item_pattern, trim($priceField), $items_temp);
-        // foreach($temp[1] as $t)
-        // {
-        //     var_dump($t);
-        //     echo '<br>';
-        // }
-        // var_dump($temp);
-        // die();
-    	if(!empty($items_temp[1])){
-            // $price_pattern = '/\['.$currency.'\]\((.*?)\)/';
+    	if(!empty($items_temp) && !empty($items_temp[1])){
             $tag_pattern = '/\[(.*?)\]\((.*?)\)/';
-            
             foreach($items_temp[1] as $info_string)
             {
                 $item = array();
-                // preg_match($price_pattern, trim($priceField), $price);
-                // if(!empty($price[1]))
-                //     $product['price'] = 'empty';
-                // else
-                //     $product['price'] = 'empty';
-
-                // $output[] = $product;
                 preg_match_all($tag_pattern, $info_string, $info_arr);
-                if( !empty($info_arr[0]) )
+                if( !empty($info_arr) && !empty($info_arr[0]))
                 {
+                    $price_arr = array();
                     foreach($info_arr[0] as $key => $info)
                     {
                         $item[$info_arr[1][$key]] = $info_arr[2][$key];
@@ -92,13 +76,15 @@
             $key = slug($itemName);
             // $output = '';
             $price = $productInfo['price'];
+            $usd = $productInfo['usd'];
+            $eur = $productInfo['eur'];
+            $gbp = $productInfo['gbp'];
             $type = $productInfo['type'];
             
             if( is_numeric($price) ) {
                 $output .= '<section id="buy' . $key . '" class="buy-section">';
                 $output .= '<div id="button-area' . $key . '-' . $currency . '" class="button-area button-area-' . $currency . '">';
-                // $output .= '<div id="paypal-button-container-' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container"></div>';
-                $output .= '<div id="paypal-cart-button-container-' . $key . '-' . $currency . '" price="'. $price . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button' . $key . '-' . $currency . '" class="button paypal-cart-button" price="'. $price . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event)">ADD TO CART</button></div>';
+                $output .= '<div id="paypal-cart-button-container-' . $key . '-' . $currency . '" price="'. $price . '" usd="'. $usd . '" eur="'. $eur . '" gbp="'. $gbp . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button-' . $key . '-' . $currency . '" class="button paypal-cart-button" price="'. $price . '" usd="'. $usd . '" eur="'. $eur . '" gbp="'. $gbp . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event)">ADD TO CART</button></div>';
                 $output .= '<div id="buy-button-container' . $key . '-' . $currency . '" class="buy-button-container">';
                 $output .= '<button id="cost' . $key . '-' . $currency . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currency . '\', \'' . $currency . '\', \''.$itemName.'\', \''.$type.'\')">' . $acceptedCurrenciesSymbols[$currency] . $price . '</button>';
                 $output .= '</div>';

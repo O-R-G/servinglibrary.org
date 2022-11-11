@@ -108,6 +108,7 @@ $isSandbox = isset($_GET['isSandbox']);
     //     createCookie( 'cart-currency', currency, '' );
     // }
     var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
+    var acceptedCurrencies = <?= json_encode($acceptedCurrencies, true); ?>;
     if(currency.toUpperCase() == 'USD')
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
     else
@@ -117,10 +118,10 @@ $isSandbox = isset($_GET['isSandbox']);
     var paypal_script = loadScript(paypal_url);
     document.body.classList.add('viewing-'+currency);
     var cart_cookie = readCookie('cart');
-    // console.log(cart_cookie);
     if(cart_cookie){
         let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
+        console.log(cart_cookie);
         cart_cookie.forEach(function(el, i){
             // console.log(el);
             console.log(el);

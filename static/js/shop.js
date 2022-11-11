@@ -369,7 +369,6 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 */
 function getTotalShippingFee(elements, option, totalAmount, currency){
 	var output = 0;
-	console.log('getTotalShippingFee');
 	[].forEach.call(elements, function(el, i){
 		let thisItemQuantity = el.querySelector('.item-quantity').innerText;
 		let thisType = el.getAttribute('type');
@@ -379,8 +378,6 @@ function getTotalShippingFee(elements, option, totalAmount, currency){
 		if(thisSubType != undefined)
 			thisType = thisType + '-' + thisSubType;
 		var thisBasicShippingFee = shippingFeeByItem_arr[currency][option.id][thisType].toFixed(2);
-		console.log(thisType);
-		console.log('thisBasicShippingFee = ' +thisBasicShippingFee);
 		var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
 		// if totalAmount is larger than the defined shipping fee array, use the last item in the array.
 		if(thisFinalShippingFee == undefined)
@@ -515,13 +512,17 @@ function createCartButton(){
 }
 
 function addToCartByClick(event, quantityToAdd = 1){
+	console.log('addToCartByClick()');
 	let thisElement = event.target;
-    // hide add to cart button
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
 	let sCart_container = document.getElementById('cart-container');
 	if (cart_symbol = document.getElementById('cart-symbol'))
         document.body.classList.add('viewing-cart-symbol');
-	let price = thisElement.getAttribute('price');
+	let price_all = {
+		'usd': thisElement.getAttribute('usd'),
+		'eur': thisElement.getAttribute('eur'),
+		'gbp': thisElement.getAttribute('gbp')
+	};
 	// check if this item exists in the cart
 	let rowId = 'item-row-'+thisElement.getAttribute('slug');
 	let thisRow = sCart_container.querySelector('#'+rowId);
@@ -537,7 +538,7 @@ function addToCartByClick(event, quantityToAdd = 1){
 			else if(thisElement.getAttribute('slug') == 'subscription-2-years')
 				subType = '2';
 		}
-		printToCart(rowId, itemName, type, price, 0, subType);
+		printToCart(rowId, itemName, type, price_all, 0, subType);
 		thisRow = sCart_container.querySelector('#'+rowId);
 	}
 	thisQuantity = thisRow.querySelector('.item-quantity');
@@ -546,16 +547,17 @@ function addToCartByClick(event, quantityToAdd = 1){
 	let sItem_count = document.getElementById('item-count');
 	sItem_count.innerHTML = parseInt(sItem_count.innerHTML) + quantityToAdd;
 	quantity += quantityToAdd;
-	thisAmount.innerText = quantity * price;
+	thisAmount.innerText = quantity * price_all[currency];
 	thisQuantity.innerHTML = quantity;
 	updateRowToCookie();
 }
 
 function addToCartFromJson(obj){
-	printToCart(obj.id, obj.itemName, obj.type, obj.price, obj.quantity);
+	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity);
 }
 
-function printToCart(rowId, itemName, type, price, quantity, subType = false){
+function printToCart(rowId, itemName, type, prices, quantity, subType = false){
+	console.log('quantity1 = ' + quantity);
 	thisRow = document.createElement('DIV');
 	thisRow.id = rowId;
 	thisRow.className = 'item-row';
@@ -569,11 +571,16 @@ function printToCart(rowId, itemName, type, price, quantity, subType = false){
 	thisPrice_container.className = 'item-column item-price-container';
 	let thisPrice = document.createElement('SPAN');
 	thisPrice.className = 'item-price';
-	thisPrice.innerHTML = price;
+	thisPrice.innerHTML = prices[currency];
 	let thisPrice_symbol = document.createElement('SPAN');
+	thisPrice_symbol.className = 'item-price-symbol';
 	thisPrice_symbol.innerHTML = acceptedCurrenciesSymbols[currency];
 	thisPrice_container.appendChild(thisPrice_symbol);
 	thisPrice_container.appendChild(thisPrice);
+
+	for (const [key, value] of Object.entries(prices)) {
+		thisRow.setAttribute(key, value);
+	}
 	let thisQuantity_container = document.createElement('DIV');
 	thisQuantity_container.className = 'item-column item-quantity-container flex-container';
 	let thisQuantity_plus = document.createElement('SPAN');
@@ -582,7 +589,7 @@ function printToCart(rowId, itemName, type, price, quantity, subType = false){
 	thisQuantity_plus.onclick = function(event){
 		let newQuantity = parseInt(event.target.parentNode.querySelector('.item-quantity').innerText) + 1;
 		event.target.parentNode.querySelector('.item-quantity').innerText = newQuantity;
-		thisAmount.innerText = parseFloat(price, 10) * newQuantity;
+		thisAmount.innerText = parseFloat(prices[currency], 10) * newQuantity;
 		updateRowToCookie();
 	}
 	let thisQuantity_minus = document.createElement('SPAN');
@@ -592,12 +599,13 @@ function printToCart(rowId, itemName, type, price, quantity, subType = false){
 		let newQuantity = parseInt(event.target.parentNode.querySelector('.item-quantity').innerText) - 1;
 		if(newQuantity != 0){
 			event.target.parentNode.querySelector('.item-quantity').innerText = newQuantity; 
-			thisAmount.innerText = parseFloat(price, 10) * newQuantity;
+			thisAmount.innerText = parseFloat(prices[currency], 10) * newQuantity;
 			updateRowToCookie();
 		}
 	}
 	thisQuantity = document.createElement('DIV');
 	thisQuantity.className = 'item-quantity';
+	console.log('quantity2 = '+ quantity);
 	thisQuantity.innerText = quantity;
 	thisQuantity_container.appendChild(thisQuantity_minus);
 	thisQuantity_container.appendChild(thisQuantity);
@@ -606,7 +614,7 @@ function printToCart(rowId, itemName, type, price, quantity, subType = false){
 	thisAmount_container.className = 'item-column item-amount-container';
 	thisAmount = document.createElement('SPAN');
 	thisAmount.className = 'item-amount';
-	thisAmount.innerText = quantity * price;
+	thisAmount.innerText = quantity * prices[currency];
 	let thisAmount_symbol = document.createElement('SPAN');
 	thisAmount_symbol.innerHTML = acceptedCurrenciesSymbols[currency];
 	thisAmount_container.appendChild(thisAmount_symbol);
@@ -648,8 +656,13 @@ function updateRowToCookie(){
 			this_obj.id = el.id;
 			this_obj.itemName = el.querySelector('.item-name').innerText;
 			this_obj.type = el.getAttribute('type');
-			this_obj.price = el.querySelector('.item-price').innerText;
+			let prices = {};
+			acceptedCurrencies.forEach(function(c, i){
+				prices[c] = el.getAttribute(c);
+			});
+			this_obj.prices = prices;
 			this_obj.quantity = el.querySelector('.item-quantity').innerText;
+			console.log('quantity3 = ' + this_obj.quantity);
 			json.push(this_obj);
 		});
 	}
