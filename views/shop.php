@@ -118,8 +118,6 @@ $isSandbox = isset($_GET['isSandbox']);
        let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
         cart_cookie.forEach(function(el, i){
-            console.log('el = ');
-            console.log(el);
             addToCartFromJson(el);
             temp += parseInt(el.quantity);
         });

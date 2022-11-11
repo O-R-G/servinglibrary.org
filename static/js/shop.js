@@ -394,13 +394,10 @@ function getTotalShippingFee(elements, option, totalAmount, currency){
 		let thisType = el.getAttribute('type');
 		if(thisType == '')
 			thisType = 'issue';
-		console.log(el);
 		let thisSubType = el.getAttribute('subtype');
 		if(thisSubType != undefined)
 			thisType = thisType + '-' + thisSubType;
-		console.log(thisType);
 		var thisBasicShippingFee = shippingFeeByItem_arr[currency][option.id][thisType].toFixed(2);
-		console.log(thisBasicShippingFee);
 		var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
 		// if totalAmount is larger than the defined shipping fee array, use the last item in the array.
 		if(thisFinalShippingFee == undefined)
