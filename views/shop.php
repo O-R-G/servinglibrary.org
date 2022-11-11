@@ -30,8 +30,14 @@ $isSandbox = isset($_GET['isSandbox']);
                             $url = '/journal/' . $child['url'];
                         else
         				    $url = '/shop/' . $child['url'];
-                        if($currency !== 'usd') $url .= '?currency=' . $currency;
-
+                        $query = array();
+                        if($currency !== 'usd') $query[] = 'currency = ' . $currency;
+                        if($isSandbox) $query[] = 'isSandbox';
+                        if(!empty($query))
+                        {
+                            $query_string = '?' . implode('&', $query);
+                            $url .=  $query_string;
+                        }
         				?><div class="thumbsContainer shop"><?
         					if(isset($cover)){
         						?><a class="shopItemLink" href="<?= $url; ?>">
@@ -49,7 +55,7 @@ $isSandbox = isset($_GET['isSandbox']);
     			if($option == $currency) { ?>
     				<button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><? 
                 } else {
-    				?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
+    				?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $isSandbox ? $option . '&isSandbox' : $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
     			}
     		}
     	?></div><?
@@ -98,15 +104,6 @@ $isSandbox = isset($_GET['isSandbox']);
 </div>
 <script>
     var currency = '<?= $currency; ?>';
-    // var savedCurrency = readCookie('cart-currency');
-    // console.log('currency = ' + currency);
-    // console.log('savedCurrency = ' + savedCurrency);
-
-    // if(savedCurrency == null || currency != savedCurrency){
-    //     console.log('not the same currency');
-    //     eraseCookie('cart');
-    //     createCookie( 'cart-currency', currency, '' );
-    // }
     var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
     var acceptedCurrencies = <?= json_encode($acceptedCurrencies, true); ?>;
     if(currency.toUpperCase() == 'USD')
@@ -114,17 +111,13 @@ $isSandbox = isset($_GET['isSandbox']);
     else
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id_eu+'&disable-funding=credit,card';
     paypal_url += '&currency='+currency.toUpperCase();
-    // console.log(paypal_url);
     var paypal_script = loadScript(paypal_url);
     document.body.classList.add('viewing-'+currency);
     var cart_cookie = readCookie('cart');
     if(cart_cookie){
         let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
-        console.log(cart_cookie);
         cart_cookie.forEach(function(el, i){
-            // console.log(el);
-            console.log(el);
             addToCartFromJson(el);
             temp += parseInt(el.quantity);
         });

@@ -1,7 +1,6 @@
 /* 
     buy now and shopping cart via paypal api
 */
-console.log(isSandbox);
 if(isSandbox)
 {
 	// sandbox
@@ -557,7 +556,6 @@ function addToCartFromJson(obj){
 }
 
 function printToCart(rowId, itemName, type, prices, quantity, subType = false){
-	console.log('quantity1 = ' + quantity);
 	thisRow = document.createElement('DIV');
 	thisRow.id = rowId;
 	thisRow.className = 'item-row';
@@ -605,7 +603,6 @@ function printToCart(rowId, itemName, type, prices, quantity, subType = false){
 	}
 	thisQuantity = document.createElement('DIV');
 	thisQuantity.className = 'item-quantity';
-	console.log('quantity2 = '+ quantity);
 	thisQuantity.innerText = quantity;
 	thisQuantity_container.appendChild(thisQuantity_minus);
 	thisQuantity_container.appendChild(thisQuantity);
@@ -662,7 +659,6 @@ function updateRowToCookie(){
 			});
 			this_obj.prices = prices;
 			this_obj.quantity = el.querySelector('.item-quantity').innerText;
-			console.log('quantity3 = ' + this_obj.quantity);
 			json.push(this_obj);
 		});
 	}
