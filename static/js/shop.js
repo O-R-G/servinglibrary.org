@@ -577,7 +577,7 @@ function addToCartByClick(event, quantityToAdd = 1){
 }
 
 function addToCartFromJson(obj){
-	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity, obj.sunType);
+	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity, obj.subType);
 }
 
 function printToCart(rowId, itemName, type, prices, quantity, subType = false){
@@ -679,6 +679,7 @@ function updateRowToCookie(){
 			this_obj.itemName = el.querySelector('.item-name').innerText;
 			this_obj.type = el.getAttribute('type');
 			this_obj.subType = el.getAttribute('subType') ? el.getAttribute('subType') : '';
+			console.log(this_obj);
 			let prices = {};
 			acceptedCurrencies.forEach(function(c, i){
 				prices[c] = el.getAttribute(c);
