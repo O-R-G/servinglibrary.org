@@ -112,8 +112,9 @@ $isSandbox = isset($_GET['isSandbox']);
     document.body.classList.add('viewing-'+currency);
     var cart_cookie = readCookie('cart');
     // console.log(cart_cookie);
+/*
     if(cart_cookie){
-        let temp = 0;
+       let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
         cart_cookie.forEach(function(el, i){
             // console.log(el);
@@ -125,4 +126,5 @@ $isSandbox = isset($_GET['isSandbox']);
                 document.body.classList.add('viewing-cart-symbol');
         document.getElementById('item-count').innerText = temp;
     }
+*/
 </script>
