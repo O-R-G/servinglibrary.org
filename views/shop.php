@@ -31,7 +31,7 @@ $isSandbox = isset($_GET['isSandbox']);
                         else
         				    $url = '/shop/' . $child['url'];
                         $query = array();
-                        if($currency !== 'usd') $query[] = 'currency = ' . $currency;
+                        if($currency !== 'usd') $query[] = 'currency=' . $currency;
                         if($isSandbox) $query[] = 'isSandbox';
                         if(!empty($query))
                         {
@@ -113,7 +113,7 @@ $isSandbox = isset($_GET['isSandbox']);
     paypal_url += '&currency='+currency.toUpperCase();
     var paypal_script = loadScript(paypal_url);
     document.body.classList.add('viewing-'+currency);
-    var cart_cookie = readCookie('cart');
+    var cart_cookie = readCookie('serving-library-shop-cart');
     if(cart_cookie){
         let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);

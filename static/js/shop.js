@@ -496,7 +496,7 @@ function createCartButton(){
 			},
 	        onApprove: function(data, actions) {
 	            return actions.order.capture().then(function(orderData) {
-                    eraseCookie('cart');
+                    eraseCookie('serving-library-shop-cart');
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
 					let email = orderData.payer.email_address;
 					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
@@ -662,5 +662,5 @@ function updateRowToCookie(){
 			json.push(this_obj);
 		});
 	}
-	createCookie( 'cart', JSON.stringify(json), '' );
+	createCookie( 'serving-library-shop-cart', JSON.stringify(json), '' );
 }

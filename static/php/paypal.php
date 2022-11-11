@@ -5,7 +5,18 @@
     */ 
 
     $acceptedCurrencies = array('usd','gbp','eur');
-    $currency = isset($_GET['currency']) ? $_GET['currency'] : 'usd';
+    if(isset($_GET['currency']))
+    {
+        $currency = $_GET['currency'];
+        setcookie('serving-library-shop-currency', $currency);
+    }
+    else if(isset($_COOKIE['serving-library-shop-currency']))
+    {
+        $currency = $_COOKIE['serving-library-shop-currency'];
+    }
+    else
+        $currency = 'usd';
+    isset($_GET['currency']) ? $_GET['currency'] : 'usd';
     if(!in_array($currency, $acceptedCurrencies)) $currency = 'usd';
     $acceptedCurrenciesSymbols = array(
     	'usd' => '$',
