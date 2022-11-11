@@ -134,8 +134,8 @@ var shippingFeeByItem_arr = {
 			'annual': 10.00,
 			'archive': 10.00,
 			'edition': 10.00,
-			'subscription-2': 10.00,
-			'subscription-12': 10.00
+			'subscription-2': 20.00,
+			'subscription-12': 120.00
 		}
 	},
 	'EUR': {
@@ -144,8 +144,8 @@ var shippingFeeByItem_arr = {
 			'annual': 8.00,
 			'archive': 8.00,
 			'edition': 8.00,
-			'subscription-2': 10.00,
-			'subscription-12': 10.00
+			'subscription-2': 20.00,
+			'subscription-12': 120.00
 		},
 		"SHIP_WORLD": {
 			'issue': 40.00,
@@ -160,8 +160,8 @@ var shippingFeeByItem_arr = {
 			'annual': 5.00,
 			'archive': 5.00,
 			'edition': 5.00,
-			'subscription-2': 10.00,
-			'subscription-12': 10.00
+			'subscription-2': 20.00,
+			'subscription-12': 120.00
 		},
 		"SHIP_WORLD": {
 			'issue': 30.00,
