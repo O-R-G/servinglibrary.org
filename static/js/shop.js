@@ -532,7 +532,6 @@ function createCartButton(){
 }
 
 function addToCartByClick(event, quantityToAdd = 1){
-	console.log('addToCartByClick()');
 	let thisElement = event.target;
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
 	let sCart_container = document.getElementById('cart-container');
@@ -558,7 +557,6 @@ function addToCartByClick(event, quantityToAdd = 1){
 			else if(thisElement.getAttribute('slug') == 'subscription-2-years')
 				subType = '2';
 		}
-		console.log(subType);
 		printToCart(rowId, itemName, type, price_all, 0, subType);
 		thisRow = sCart_container.querySelector('#'+rowId);
 	}
@@ -676,7 +674,6 @@ function updateRowToCookie(){
 			this_obj.itemName = el.querySelector('.item-name').innerText;
 			this_obj.type = el.getAttribute('type');
 			this_obj.subType = el.getAttribute('subType') ? el.getAttribute('subType') : '';
-			console.log(this_obj);
 			let prices = {};
 			acceptedCurrencies.forEach(function(c, i){
 				prices[c] = el.getAttribute(c);

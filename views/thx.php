@@ -15,7 +15,7 @@
         $domain = 'mail.servinglibrary.org';
         $msg['from'] = 'shop@servinglibrary.org';
         $msg['to'] = $email;
-        $msg['bcc'] = $debug_email;
+        $msg['bcc'] = $_GET['currency'] == 'USD' ? $debug_email : 'stuart@servinglibrary.org';
         $msg['subject'] = 'The Serving Library says thanks for your order';
         $msg['text'] = "*\n\nThank you for purchasing the following item(s):\n";
         foreach($items as $it)
