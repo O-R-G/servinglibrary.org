@@ -3,7 +3,8 @@
 ?>
 <div class="mainContainer">
     <div class="wordsContainer body">
-        <?= $item['deck']; ?>
+        <?= $item['body']; ?>
+        <br>
         <div id="donate-section" class="buy-section">
             <button id="pseudo-donate-button" class="button">Donate</button>
             <div id="donate-button-container">
