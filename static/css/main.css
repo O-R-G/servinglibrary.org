@@ -576,4 +576,9 @@ a.green:link {
 	#video.hidden {
 		display: none;
 	}
+	#served-container {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
 }
