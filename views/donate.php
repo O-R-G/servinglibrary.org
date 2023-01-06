@@ -4,7 +4,7 @@
 <div class="mainContainer">
     <div class="wordsContainer body">
         <?= $item['body']; ?>
-        <br>
+        <br><br>
         <div id="donate-section" class="buy-section">
             <button id="pseudo-donate-button" class="button">Donate</button>
             <div id="donate-button-container">
