@@ -1,3 +1,8 @@
+// query string
+const params = new Proxy(new URLSearchParams(window.location.search), {
+ 	get: (searchParams, prop) => searchParams.get(prop),
+});
+const fullQueryString = window.location.href.lastIndexOf('?') === -1 ? '' : window.location.href.substr(window.location.href.lastIndexOf('?') + 1);
 // implement infinite scrolling via ajax
 var page = 1;
 var isWaiting = false;
@@ -55,6 +60,8 @@ function test()
 			}
 		}
 	}
-	xmlhttp.open("GET", "views/time-ajax.php?page="+(page++), true);
+	const requestUrl = 
+
+	xmlhttp.open("GET", "views/time-ajax.php?page="+(page++) + '&' + fullQueryString, true);
 	xmlhttp.send();
 }

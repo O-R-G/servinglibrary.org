@@ -489,12 +489,26 @@ a.green:link {
 	color: #0B0;
 } 
 
-.flex-container:after
+.flex-container:after,
+.float-container:after
 {
 	content: "";
 	display: block;
 	height: 0;
 	clear: both;
+}
+.time-row.flex-container
+{
+	display: flex;
+}
+.time-row.flex-container:hover
+{
+	color: #00f;
+}
+.time-row.flex-container .download-info
+{
+	flex: 1;
+	margin-right: 10px;
 }
 
 /* mobile styles */
