@@ -222,6 +222,11 @@ iframe {
 	padding-bottom: 20px;
 }
 
+#served-container .flex-container
+{
+	width: 600px;
+}
+
 .badgeContainer,
 #badge-container {
 	position: fixed;
@@ -509,6 +514,13 @@ a.green:link {
 {
 	flex: 1;
 	margin-right: 10px;
+}
+@media screen and (max-width: 700px)
+{
+	#served-container .flex-container
+	{
+		width: auto;
+	}
 }
 
 /* mobile styles */
