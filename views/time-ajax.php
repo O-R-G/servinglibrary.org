@@ -20,7 +20,11 @@
     	}
     	else if($filter == 'totals')
     	{
-    		$output .= '</div><div class="download-count">' . $r['count'] . ' downloads</div>';
+    		$output .= '</div><div class="download-count">' . $r['count'] . ' DOWNLOADS</div>';
+    	}
+    	else if($filter == 'weighed')
+    	{
+    		$output .= '</div><div class="download-weighed">' . $r['weighed'] . ' DOWNLOADS/DAY</div>';
     	}
     	$output .= '</div>';
     	return $output;
@@ -33,6 +37,10 @@ $filter = '';
 if(isset($_GET['totals'])){
 	$filter = 'totals';
 	$sql = "SELECT name1, deck, COUNT(*) as count FROM downloads GROUP BY name1, deck ORDER BY count DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
+}
+else if(isset($_GET['weighed'])){
+	$filter = 'weighed';
+	$sql = "SELECT name1, deck, (COUNT(*) / DATEDIFF(CURDATE(), MIN(created))) as weighed FROM downloads GROUP BY name1, deck ORDER BY weighed DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
 }
 else{
 	$sql = "SELECT * FROM downloads ORDER BY created DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
