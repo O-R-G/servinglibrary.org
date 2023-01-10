@@ -8,23 +8,35 @@
     $db = db_connect_download("guest");
 
     function renderRow($r, $filter = ''){
-    	$download_file = $title = strtoupper($r['name1']);
-		// $source_file = $r['notes'];
-		$author = $r['deck'];
-		$output = '<div class="time-row flex-container"><div class="download-info">' . $author . ': ' . $title;
-    	if(empty($filter))
+    	$output = '<div class="time-row flex-container"><div class="download-info">';
+    	if($filter == 'all')
     	{
-    		$timestamp = strtoupper(date("Y M d g:i A", strtotime($r['created'])));
-			$ip = $r['body'];
-			$output .= ' by '.$ip.' at '.$timestamp . '</div>';
+    		$output .= $r['count'] . ' TOTAL DOWNLOADS';
     	}
-    	else if($filter == 'totals')
+    	else
     	{
-    		$output .= '</div><div class="download-count">' . $r['count'] . ' DOWNLOADS</div>';
-    	}
-    	else if($filter == 'weighed')
-    	{
-    		$output .= '</div><div class="download-weighed">' . $r['weighed'] . ' DOWNLOADS/DAY</div>';
+    		$download_file = $title = strtoupper($r['name1']);
+			// $source_file = $r['notes'];
+			$author = $r['deck'];
+			$output .= $author . ': ' . $title;
+	    	if(empty($filter))
+	    	{
+	    		$timestamp = strtoupper(date("Y M d g:i A", strtotime($r['created'])));
+				$ip = $r['body'];
+				$output .= ' by '.$ip.' at '.$timestamp . '</div>';
+	    	}
+	    	else if($filter == 'totals')
+	    	{
+	    		$output .= '</div><div class="download-count">' . $r['count'] . ' DOWNLOADS</div>';
+	    	}
+	    	else if($filter == 'weighted')
+	    	{
+	    		$output .= '</div><div class="download-weighted">' . $r['weighted'] . ' DOWNLOADS/DAY</div>';
+	    	}
+	    	else if($filter == 'all')
+	    	{
+	    		$output .= $r['count'] . ' TOTAL DOWNLOADS';
+	    	}
     	}
     	$output .= '</div>';
     	return $output;
@@ -38,9 +50,13 @@ if(isset($_GET['totals'])){
 	$filter = 'totals';
 	$sql = "SELECT name1, deck, COUNT(*) as count FROM downloads GROUP BY name1, deck ORDER BY count DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
 }
-else if(isset($_GET['weighed'])){
-	$filter = 'weighed';
-	$sql = "SELECT name1, deck, (COUNT(*) / DATEDIFF(CURDATE(), MIN(created))) as weighed FROM downloads GROUP BY name1, deck ORDER BY weighed DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
+else if(isset($_GET['weighted'])){
+	$filter = 'weighted';
+	$sql = "SELECT name1, deck, (COUNT(*) / DATEDIFF(CURDATE(), MIN(created))) as weighted FROM downloads GROUP BY name1, deck ORDER BY weighted DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
+}
+else if(isset($_GET['all'])){
+	$filter = 'all';
+	$sql = "SELECT COUNT(*) as count FROM downloads";
 }
 else{
 	$sql = "SELECT * FROM downloads ORDER BY created DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;

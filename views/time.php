@@ -8,7 +8,9 @@
 	<div class="detail" id="served"><?
 	require_once("time-ajax.php");
 	?></div>
+	<? if(!isset($_GET['all'])){ ?>
 	<div id="ellipsis">
 		<span>.</span> <span>.</span> <span>.</span>
 	</div>
+	<? } ?>
 </div>
