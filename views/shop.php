@@ -1,6 +1,32 @@
 <?
 $isSandbox = isset($_GET['isSandbox']);
 ?>
+<!-- shop banner -->
+<style>
+        .banner {
+                display: block;
+                position: fixed;
+                bottom: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100px;
+                background-color: #FF0;
+                padding: 30px;
+                z-index: 60;
+        }
+
+        .mainContainer {
+                padding-bottom: 500px;
+        }
+</style>
+<div id='message' class='banner'>
+        <div class="banner-content">
+            <div class="banner-message">
+                Please note: orders placed in the U.S. currently ship April 19, as our lazy shopkeeper is traveling.
+            </div>
+        </div>
+</div>
+<!-- end shop banner -->
 <script>
     var isSandbox = <?= json_encode($isSandbox); ?>;
 </script>
