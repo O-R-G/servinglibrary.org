@@ -19,6 +19,7 @@ $isSandbox = isset($_GET['isSandbox']);
                 padding-bottom: 500px;
         }
 </style>
+<!--
 <div id='message' class='banner'>
         <div class="banner-content">
             <div class="banner-message">
@@ -26,6 +27,7 @@ $isSandbox = isset($_GET['isSandbox']);
             </div>
         </div>
 </div>
+-->
 <!-- end shop banner -->
 <script>
     var isSandbox = <?= json_encode($isSandbox); ?>;
