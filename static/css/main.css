@@ -515,6 +515,17 @@ a.green:link {
 	flex: 1;
 	margin-right: 10px;
 }
+
+.filter-item-wrapper {
+	display: inline-block;
+	/* float: left; */
+}
+.filter-item-wrapper{
+	margin-right: 10px;
+}
+.filter-item-wrapper:last-child {
+	margin-right: 0;
+}
 @media screen and (max-width: 700px)
 {
 	#served-container .flex-container

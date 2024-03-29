@@ -8,31 +8,29 @@
     $db = db_connect_download("guest");
 
     function renderRow($r, $filter = ''){
-    	$output = '<div class="time-row flex-container"><div class="download-info">';
-	if($filter == 'all')
-    	{
-    		$output .= 'TOTAL';
-		$output .= '</div><div class="download-all">' . $r['count'] . ' DOWNLOADS</div>';
-    	}
-    	else
-    	{
+		global $filter_items;
+    	$output = '<div class="time-row flex-container">';
+		if($filter == 'total') {
+    		$output .= '<div class="download-info">TOTAL</div>';
+			$output .= '<div class="download-all">' . $r['val'] . ' '.$filter_items[$filter]['unit'].'</div>';
+    	} else {
     		$download_file = $title = strtoupper($r['name1']);
 			// $source_file = $r['notes'];
-			$author = $r['deck'];
-			$output .= $author . ': ' . $title;
+			$author = strip_tags($r['deck']);
+			$output .= '<div class="download-info">' . $author . ': ' . $title;
 	    	if(empty($filter))
 	    	{
 	    		$timestamp = strtoupper(date("Y M d g:i A", strtotime($r['created'])));
-			$ip = $r['body'];
-			$output .= ' by '.$ip.' at '.$timestamp . '</div>';
+				$ip = $r['body'];
+				$output .= ' by '.$ip.' at '.$timestamp . '</div>';
 	    	}
-	    	else if($filter == 'totals')
+	    	else if($filter == 'by-item')
 	    	{
-	    		$output .= '</div><div class="download-count">' . $r['count'] . ' DOWNLOADS</div>';
+	    		$output .= '</div><div class="download-count">' . $r['val'] . ' '.$filter_items[$filter]['unit'].'</div>';
 	    	}
-	    	else if($filter == 'daily')
+	    	else if($filter == 'by-item-daily')
 	    	{
-	    		$output .= '</div><div class="download-daily">' . $r['daily'] . ' DOWNLOADS/DAY</div>';
+	    		$output .= '</div><div class="download-daily">' . $r['val'] . ' '.$filter_items[$filter]['unit'].'</div>';
 	    	}
     	}
     	$output .= '</div>';
@@ -41,22 +39,33 @@
 $page = isset($_GET['page']) ? $_GET['page'] : 0;
 $posts_per_page = 100;
 $offset = ($page != 0) ? $posts_per_page*$page : 0;
-$filter = '';
-if(isset($_GET['totals'])){
-	$filter = 'totals';
-	$sql = "SELECT name1, deck, COUNT(*) as count FROM downloads GROUP BY name1, deck ORDER BY count DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
-}
-else if(isset($_GET['daily'])){
-	$filter = 'daily';
-	$sql = "SELECT name1, deck, (COUNT(*) / DATEDIFF(CURDATE(), MIN(created))) as daily FROM downloads GROUP BY name1, deck ORDER BY daily DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
-}
-else if(isset($_GET['all'])){
-	$filter = 'all';
-	$sql = "SELECT COUNT(*) as count FROM downloads";
-}
-else {
+$filter = isset($_GET['filter']) ? $_GET['filter'] : '';
+if($filter) {
+	if($filter == 'total') {
+		$sql = "SELECT COUNT(*) as val FROM downloads";
+	} else if($filter == 'by-item') {
+		$sql = "SELECT name1, deck, COUNT(*) as val FROM downloads GROUP BY name1, deck ORDER BY val DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
+	} else if($filter == 'by-item-daily') {
+		$sql = "SELECT name1, deck, (COUNT(*) / DATEDIFF(CURDATE(), MIN(created))) as val FROM downloads GROUP BY name1, deck ORDER BY val DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
+	}
+}else {
 	$sql = "SELECT * FROM downloads ORDER BY created DESC LIMIT " . $posts_per_page . " OFFSET " . $offset;
 }
+// if(isset($_GET['totals'])){
+// 	$filter = 'totals';
+	
+// }
+// else if(isset($_GET['daily'])){
+// 	$filter = 'daily';
+	
+// }
+// else if(isset($_GET['all'])){
+// 	$filter = 'all';
+	
+// }
+// else {
+	
+// }
 $res = $db->query($sql);
 while($r = mysqli_fetch_assoc($res)) {
 	echo renderRow($r, $filter);

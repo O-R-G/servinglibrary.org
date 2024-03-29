@@ -60,7 +60,7 @@ function test()
 			}
 		}
 	}
-	const requestUrl = 
+	// const requestUrl = 
 
 	xmlhttp.open("GET", "views/time-ajax.php?page="+(page++) + '&' + fullQueryString, true);
 	xmlhttp.send();

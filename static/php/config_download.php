@@ -23,6 +23,27 @@ function db_connect_download() {
         echo "Failed to connect to MySQL: " . $db->connect_error;
     return $db;
 }
-
+$filter_items = array(
+    'default' => array(
+        'display' => 'Time',
+        'slug' => '',
+        'unit' => 'DOWNLOADS'
+    ),
+    'total' => array(
+        'display' => 'Total downloads',
+        'slug' => 'total',
+        'unit' => 'DOWNLOADS'
+    ),
+    'by-item' => array(
+        'display' => 'Downloads by item',
+        'slug' => 'by-item',
+        'unit' => 'DOWNLOADS'
+    ),
+    'by-item-daily' => array(
+        'display' => 'Daily downloads by item',
+        'slug' => 'by-item-daily',
+        'unit' => 'DOWNLOADS/DAY'
+    ),
+);
 
 ?>
