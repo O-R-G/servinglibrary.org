@@ -32,7 +32,7 @@ $isSandbox = isset($_GET['isSandbox']);
 <script>
     var isSandbox = <?= json_encode($isSandbox); ?>;
 </script>
-<script src="/static/js/shop.js"></script>
+<script src="/static/js/shop.js#20250225"></script>
 <script src="/static/js/cookie.js"></script><?
 
     /*currency
