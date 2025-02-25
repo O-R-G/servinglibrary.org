@@ -130,126 +130,136 @@ var shippingOptions_arr = {
 var shippingFeeByItem_arr = {
 	'USD': {
 		"SHIP_US": {
-			'issue': 10.00,
+			'issue': 7.00,
 			'annual': 10.00,
 			'archive': 10.00,
 			'edition': 10.00,
-			'subscription-2': 20.00,
-			'subscription-12': 120.00
+			'subscription-2': 14.00,
+			'subscription-12': 84.00
 		}
 	},
 	'EUR': {
 		"SHIP_EU": {
-			'issue': 10.00,
-			'annual': 8.00,
-			'archive': 8.00,
-			'edition': 8.00,
-			'subscription-2': 20.00,
-			'subscription-12': 120.00
+			'issue': 6.00,
+			'annual': 12.00,
+			'archive': 35.00,
+			'edition': 45.00,
+			'subscription-2': 12.00,
+			'subscription-12': 72.00
 		},
 		"SHIP_WORLD": {
-			'issue': 40.00,
-			'annual': 40.00,
-			'archive': 40.00,
-			'edition': 40.00
+			'issue': 12.00,
+			'annual': 25.00,
+			'archive': 55.00,
+			'edition': 65.00
 		}
 	},
 	'GBP': {
 		"SHIP_UK": {
-			'issue': 10.00,
-			'annual': 5.00,
-			'archive': 5.00,
-			'edition': 5.00,
-			'subscription-2': 20.00,
-			'subscription-12': 120.00
+			'issue': 5.00,
+			'annual': 12.00,
+			'archive': 30.00,
+			'edition': 40.00,
+			'subscription-2': 10.00,
+			'subscription-12': 60.00
 		},
 		"SHIP_WORLD": {
-			'issue': 30.00,
-			'annual': 30.00,
-			'archive': 30.00,
-			'edition': 30.00
+			'issue': 10.00,
+			'annual': 20.00,
+			'archive': 45.00,
+			'edition': 55.00
 		}
 	}
 };
-var shippingFeeByAmount_arr = {
-	'USD': {
-		'10.00': {
-			'1': '10.00',
-			'2': '9.00',
-			'3': '8.00',
-			'4': '7.00',
-			'5': '6.00'
-		},
-		'20.00': {
-			'1': '20.00',
-			'2': '18.00',
-			'3': '16.00',
-			'4': '14.00',
-			'5': '12.00'
-		},
-	},
-	'EUR': {
-		'8.00': {
-			'1': '8.00',
-			'2': '7.00',
-			'3': '6.00',
-			'4': '5.00',
-			'5': '4.00'
-		},
-		'10.00': {
-			'1': '10.00',
-			'2': '9.00',
-			'3': '8.00',
-			'4': '7.00',
-			'5': '6.00'
-		},
-		'20.00': {
-			'1': '20.00',
-			'2': '18.00',
-			'3': '16.00',
-			'4': '14.00',
-			'5': '12.00'
-		},
-		'40.00': {
-			'1': '40.00',
-			'2': '37.00',
-			'3': '34.00',
-			'4': '31.00',
-			'5': '29.00'
-		},
-	},
-	'GBP': {
-		'5.00': {
-			'1': '5.00',
-			'2': '4.50',
-			'3': '3.50'
-			// '4': '3.50',
-			// '5': '3.50'
-		},
-		'10.00': {
-			'1': '10.00',
-			'2': '9.00',
-			'3': '8.00',
-			'4': '7.00',
-			'5': '6.00'
-		},
-		'20.00': {
-			'1': '20.00',
-			'2': '18.00',
-			'3': '16.00',
-			'4': '14.00',
-			'5': '12.00'
-		},
-		'30.00': {
-			'1': '30.00',
-			'2': '28.00',
-			'3': '26.00',
-			'4': '24.00',
-			'5': '22.00'
-		},
-	}
-}
+// var shippingFeeByAmount_arr = {
+// 	'USD': {
+// 		'10.00': {
+// 			'1': '10.00',
+// 			'2': '9.00',
+// 			'3': '8.00',
+// 			'4': '7.00',
+// 			'5': '6.00'
+// 		},
+// 		'20.00': {
+// 			'1': '20.00',
+// 			'2': '18.00',
+// 			'3': '16.00',
+// 			'4': '14.00',
+// 			'5': '12.00'
+// 		},
+// 	},
+// 	'EUR': {
+// 		'8.00': {
+// 			'1': '8.00',
+// 			'2': '7.00',
+// 			'3': '6.00',
+// 			'4': '5.00',
+// 			'5': '4.00'
+// 		},
+// 		'10.00': {
+// 			'1': '10.00',
+// 			'2': '9.00',
+// 			'3': '8.00',
+// 			'4': '7.00',
+// 			'5': '6.00'
+// 		},
+// 		'20.00': {
+// 			'1': '20.00',
+// 			'2': '18.00',
+// 			'3': '16.00',
+// 			'4': '14.00',
+// 			'5': '12.00'
+// 		},
+// 		'40.00': {
+// 			'1': '40.00',
+// 			'2': '37.00',
+// 			'3': '34.00',
+// 			'4': '31.00',
+// 			'5': '29.00'
+// 		},
+// 	},
+// 	'GBP': {
+// 		'5.00': {
+// 			'1': '5.00',
+// 			'2': '4.50',
+// 			'3': '3.50'
 
+// 		},
+// 		'10.00': {
+// 			'1': '10.00',
+// 			'2': '9.00',
+// 			'3': '8.00',
+// 			'4': '7.00',
+// 			'5': '6.00'
+// 		},
+// 		'20.00': {
+// 			'1': '20.00',
+// 			'2': '18.00',
+// 			'3': '16.00',
+// 			'4': '14.00',
+// 			'5': '12.00'
+// 		},
+// 		'30.00': {
+// 			'1': '30.00',
+// 			'2': '28.00',
+// 			'3': '26.00',
+// 			'4': '24.00',
+// 			'5': '22.00'
+// 		},
+// 	}
+// }
+function getFeeByAmount(basic_fee, amount){
+	if(typeof basic_fee === 'string') basic_fee = parseFloat(basic_fee);
+	if(typeof amount === 'string') amount = parseInt(amount);
+	let output = 0;
+	let r = 1;
+	for(let i = 0; i < amount; i++) {
+		if(i === 1) r = 2;
+		else if(i === 2) r = 3;
+		output += basic_fee / r;
+	}
+	return output;
+}
 function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
@@ -389,7 +399,10 @@ function createButton(buttonContainerId, price, currency, itemName, type){
 */
 function getTotalShippingFee(elements, option, totalAmount, currency){
 	var output = 0;
+	const items_by_type = {};
+	
 	[].forEach.call(elements, function(el, i){
+		// console.log(el);
 		let thisItemQuantity = el.querySelector('.item-quantity').innerText;
 		let thisType = el.getAttribute('type');
 		if(thisType == '')
@@ -398,12 +411,26 @@ function getTotalShippingFee(elements, option, totalAmount, currency){
 		if(thisSubType != undefined)
 			thisType = thisType + '-' + thisSubType;
 		var thisBasicShippingFee = shippingFeeByItem_arr[currency][option.id][thisType].toFixed(2);
-		var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
+		// var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
+		// var thisFinalShippingFee = getFeeByAmount(thisBasicShippingFee, thisItemQuantity);
 		// if totalAmount is larger than the defined shipping fee array, use the last item in the array.
-		if(thisFinalShippingFee == undefined)
-			thisFinalShippingFee = Object.values(shippingFeeByAmount_arr[currency][thisBasicShippingFee]).pop();
-		output += thisFinalShippingFee * parseInt(thisItemQuantity);
+		// if(thisFinalShippingFee == undefined)
+		// 	thisFinalShippingFee = Object.values(shippingFeeByAmount_arr[currency][thisBasicShippingFee]).pop();
+		if(typeof items_by_type[thisType] === 'undefined') {
+			items_by_type[thisType] = {
+				'quantity': 0,
+				'basic_fee': thisBasicShippingFee
+			}
+		}
+		items_by_type[thisType]['quantity'] += parseInt(thisItemQuantity);
+		// output += thisFinalShippingFee * parseInt(thisItemQuantity);
 	});
+	for(const type in items_by_type) {
+		let this_data = items_by_type[type];
+		output += getFeeByAmount(this_data['basic_fee'], this_data['quantity']);
+	}
+	output = parseFloat(output.toFixed(2));
+	console.log('total', output);
 	return output;
 }
 
@@ -420,7 +447,7 @@ function createCartButton(){
 		var totalShippingFee = 0;
 		var totalItemQuantity = 0;
 		var hasSubscription = false;
-
+		// const items_by_type = {};
 		[].forEach.call(sItem_row, function(el, i){
 			let thisItemName = el.querySelector('.item-name').innerText;
 			let thisItemPrice = el.querySelector('.item-price').innerText;
@@ -437,6 +464,7 @@ function createCartButton(){
 				quantity: thisItemQuantity
 			};
 			items.push(thisItem);
+			
 			if(thisType == 'subscription')
 				hasSubscription = true;
 			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
@@ -450,6 +478,8 @@ function createCartButton(){
 		options.forEach(function(el, i){
 			el['amount']['value'] = getTotalShippingFee(sItem_row, el, totalItemQuantity, currencyUppercase);
 		});
+		// console.log(options);
+		// return;
 		let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
@@ -595,7 +625,7 @@ function printToCart(rowId, itemName, type, prices, quantity, subType = false){
 	thisPrice_symbol.innerHTML = acceptedCurrenciesSymbols[currency];
 	thisPrice_container.appendChild(thisPrice_symbol);
 	thisPrice_container.appendChild(thisPrice);
-
+	let thisAmount = document.createElement('SPAN');
 	for (const [key, value] of Object.entries(prices)) {
 		thisRow.setAttribute(key, value);
 	}
@@ -621,7 +651,7 @@ function printToCart(rowId, itemName, type, prices, quantity, subType = false){
 			updateRowToCookie();
 		}
 	}
-	thisQuantity = document.createElement('DIV');
+	let thisQuantity = document.createElement('DIV');
 	thisQuantity.className = 'item-quantity';
 	thisQuantity.innerText = quantity;
 	thisQuantity_container.appendChild(thisQuantity_minus);
@@ -629,7 +659,7 @@ function printToCart(rowId, itemName, type, prices, quantity, subType = false){
 	thisQuantity_container.appendChild(thisQuantity_plus);
 	let thisAmount_container = document.createElement('DIV');
 	thisAmount_container.className = 'item-column item-amount-container';
-	thisAmount = document.createElement('SPAN');
+	
 	thisAmount.className = 'item-amount';
 	thisAmount.innerText = quantity * prices[currency];
 	let thisAmount_symbol = document.createElement('SPAN');
