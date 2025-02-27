@@ -131,9 +131,9 @@ var shippingFeeByItem_arr = {
 	'USD': {
 		"SHIP_US": {
 			'issue': 7.00,
-			'annual': 10.00,
-			'archive': 10.00,
-			'edition': 10.00,
+			'annual': 12.00,
+			'archive': 35.00,
+			'edition': 45.00,
 			'subscription-2': 14.00,
 			'subscription-12': 84.00
 		}
