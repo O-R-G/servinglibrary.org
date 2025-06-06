@@ -32,16 +32,26 @@ function loadScript(url){
 var shippingOptions_arr = {
 	'default':{
 		USD: [
-	    {
-	    	id: "SHIP_US",
-	        label: "DOMESTIC",
-	        type: "SHIPPING",
-	        selected: true,
-	        amount: {
-	            value: 0,
-	            currency_code: "USD"
+			{
+				id: "SHIP_US",
+				label: "DOMESTIC",
+				type: "SHIPPING",
+				selected: true,
+				amount: {
+					value: 0,
+					currency_code: "USD"
+				}
+			},
+	        {
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
+	            type: "SHIPPING",
+	            selected: false,
+	            amount: {
+	                value: 0,
+	                currency_code: "USD"
+	            }
 	        }
-		}
 		], 
 	    EUR: [
 	        {
@@ -136,6 +146,12 @@ var shippingFeeByItem_arr = {
 			'edition': 45.00,
 			'subscription-2': 14.00,
 			'subscription-12': 84.00
+		},
+		"SHIP_WORLD": {
+			'issue': 15.00,
+			'annual': 30.00,
+			'archive': 60.00,
+			'edition': 70.00
 		}
 	},
 	'EUR': {
