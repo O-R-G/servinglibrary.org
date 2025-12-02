@@ -40,7 +40,7 @@ function downloadPDF($sourceFile = null, $downloadFile = null, $timeStamp = null
 		exit(0);
 	}
 
-	return $true;	
+	return true;	
 }
 
 
@@ -65,6 +65,6 @@ function downloadPDFfromStream($filestream = null, $filename = "download", $time
 		echo "I am sorry, there is no valid PDF stream available.";
 		exit(0);
 	}
-	return $true;	
+	return true;	
 }
 ?>

@@ -20,10 +20,17 @@ $where 	= array("object = '".$r['id']."'",
 $order 	= array("type");
 $limit 	= 3;
 $media_all = $oo->get_all($fields, $tables, $where, $order, $limit);
-$media_all = array_reverse($media_all);
-$cover_img = m_url($media_all[1]);
+if($media_all) {
+	$media_all = array_reverse($media_all);
+	$cover_img = m_url($media_all[1]);
+	$pdf = $media_all[0];
+} else {
+	$cover_img = '';
+	$pdf = '';
+}
 
-$pdf = $media_all[0];
+
+
 $source_name = m_pad($pdf['id']);
 
 if($pdf['caption'])
@@ -35,7 +42,7 @@ $display_name = htmlspecialchars($display_name, ENT_QUOTES);
 
 // video exception for issue 8
 $video = false;
-if(count($media_all) > 2)
+if($media_all && count($media_all) > 2)
 {
 	$video = $media_all[2];
 	$vid_caption = $video['caption'];
@@ -58,9 +65,9 @@ if(count($media_all) > 2)
 				</script>
 				<canvas datasrc='/static/pde/G-e-s-t-a-l-t.pde' width='400' height='570'></canvas><?
 				}
-				else
+				else if($cover_img)
 				{
-				?><img src="<? echo $cover_img; ?>"><?
+					?><img src="<? echo $cover_img; ?>"><?
 				}
 			?></div>	
 			<div class="captionContainer detail"><? echo $author.": ".$title; ?></div>

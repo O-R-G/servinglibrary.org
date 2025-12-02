@@ -14,7 +14,7 @@ function db_connect_download() {
     else
     {
         $host = "localhost";
-        $dbse = "servinglibrary_download_local";
+        $dbse = "servinglibrary_downloads_local";
         $user = 'root';
         $pass = 'f3f4p4ax';
     }
