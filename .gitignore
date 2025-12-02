@@ -6,16 +6,7 @@
 *~
 
 # media
-*.gif
-*.jpg
-*.jpeg
-*.png
-*.pdf
-*.svg
-*.tif
-*.tiff
-*.mp4
-*.mov
+media/*.*
 
 # macos
 .DS_Store
