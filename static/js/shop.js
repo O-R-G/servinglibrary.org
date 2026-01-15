@@ -34,7 +34,7 @@ var shippingOptions_arr = {
 		USD: [
 			{
 				id: "SHIP_US",
-				label: "DOMESTIC",
+				label: "UNITED STATES",
 				type: "SHIPPING",
 				selected: true,
 				amount: {
