@@ -42,16 +42,16 @@ var shippingOptions_arr = {
 					currency_code: "USD"
 				}
 			},
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: 0,
-	                currency_code: "USD"
-	            }
-	        }
+	        // {
+	        // 	id: "SHIP_WORLD",
+	        //     label: "REST OF THE WORLD",
+	        //     type: "SHIPPING",
+	        //     selected: false,
+	        //     amount: {
+	        //         value: 0,
+	        //         currency_code: "USD"
+	        //     }
+	        // }
 		], 
 	    EUR: [
 	        {
