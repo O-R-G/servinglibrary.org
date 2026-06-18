@@ -525,12 +525,7 @@ function createCartButton(){
 	            });
 	        },
 	        onShippingChange: function (data, actions) {
-				if(data.amount.currency_code == 'USD' && data.shipping_address.country_code != 'US'){
-					return actions.reject();
-				}
-				else
-				{
-					data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
+				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
 					data.amount.value = data.amount.value + '';
 					return actions.order.patch([{
 						op: "replace",
@@ -550,7 +545,6 @@ function createCartButton(){
 							}
 						}
 					}]);
-				}
 			},
 	        style: {
 	            color: 'black'
