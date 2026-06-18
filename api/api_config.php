@@ -19,7 +19,7 @@ function enforceHTTPS() {
 }
 
 function setCORSHeaders() {
-	$allowedOrigin = $_ENV['ALLOWED_ORIGIN'] ?? 'https://servinglibrary.local';
+	$allowedOrigin = $_ENV['PAYPAL_ALLOWED_ORIGIN'] ?? 'http://servinglibrary.local';
 	header('Access-Control-Allow-Origin: ' . $allowedOrigin);
 	header('Access-Control-Allow-Methods: POST, OPTIONS');
 	header('Access-Control-Allow-Headers: Content-Type');
