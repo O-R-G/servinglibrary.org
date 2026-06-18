@@ -76,9 +76,9 @@ var shippingOptions_arr = {
 	        }
 	    ],
 	    GBP: [
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
+			{
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
 	            type: "SHIPPING",
 	            selected: true,
 	            amount: {
@@ -87,15 +87,15 @@ var shippingOptions_arr = {
 	            }
 	        },
 	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
 	            type: "SHIPPING",
 	            selected: false,
 	            amount: {
 	                value: 0,
 	                currency_code: "GBP"
 	            }
-	        }
+	        },
 	    ]
 	},
 	'subscription': {
@@ -187,83 +187,6 @@ var shippingFeeByItem_arr = {
 		}
 	}
 };
-// var shippingFeeByAmount_arr = {
-// 	'USD': {
-// 		'10.00': {
-// 			'1': '10.00',
-// 			'2': '9.00',
-// 			'3': '8.00',
-// 			'4': '7.00',
-// 			'5': '6.00'
-// 		},
-// 		'20.00': {
-// 			'1': '20.00',
-// 			'2': '18.00',
-// 			'3': '16.00',
-// 			'4': '14.00',
-// 			'5': '12.00'
-// 		},
-// 	},
-// 	'EUR': {
-// 		'8.00': {
-// 			'1': '8.00',
-// 			'2': '7.00',
-// 			'3': '6.00',
-// 			'4': '5.00',
-// 			'5': '4.00'
-// 		},
-// 		'10.00': {
-// 			'1': '10.00',
-// 			'2': '9.00',
-// 			'3': '8.00',
-// 			'4': '7.00',
-// 			'5': '6.00'
-// 		},
-// 		'20.00': {
-// 			'1': '20.00',
-// 			'2': '18.00',
-// 			'3': '16.00',
-// 			'4': '14.00',
-// 			'5': '12.00'
-// 		},
-// 		'40.00': {
-// 			'1': '40.00',
-// 			'2': '37.00',
-// 			'3': '34.00',
-// 			'4': '31.00',
-// 			'5': '29.00'
-// 		},
-// 	},
-// 	'GBP': {
-// 		'5.00': {
-// 			'1': '5.00',
-// 			'2': '4.50',
-// 			'3': '3.50'
-
-// 		},
-// 		'10.00': {
-// 			'1': '10.00',
-// 			'2': '9.00',
-// 			'3': '8.00',
-// 			'4': '7.00',
-// 			'5': '6.00'
-// 		},
-// 		'20.00': {
-// 			'1': '20.00',
-// 			'2': '18.00',
-// 			'3': '16.00',
-// 			'4': '14.00',
-// 			'5': '12.00'
-// 		},
-// 		'30.00': {
-// 			'1': '30.00',
-// 			'2': '28.00',
-// 			'3': '26.00',
-// 			'4': '24.00',
-// 			'5': '22.00'
-// 		},
-// 	}
-// }
 function getFeeByAmount(basic_fee, amount){
 	if(typeof basic_fee === 'string') basic_fee = parseFloat(basic_fee);
 	if(typeof amount === 'string') amount = parseInt(amount);
@@ -277,142 +200,28 @@ function getFeeByAmount(basic_fee, amount){
 	return output;
 }
 function expandPaypal(buttonAreaId, currency, itemName, type = ''){
+	const sCart_container = document.getElementById('cart-container');
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
 		sButtonArea.classList.remove('viewing-paypal');
+		sCart_container.dataset.locked = "0";
+		removePaypalButtons();
 	} else {
 		let sViewing_paypal = document.querySelector('.button-area.viewing-paypal');
 		if(sViewing_paypal)
 			sViewing_paypal.classList.remove('viewing-paypal');
 		sButtonArea.classList.add('viewing-paypal');
+		sCart_container.dataset.locked = "1";
+		let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
+		if(!hasButton){
+			var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
+			var thisPrice = thisPaypalButtonContainer.getAttribute('price');
+			if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
+				createPaypalButton();
+		}
 	}
-	let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
-	if(!hasButton){
-		var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
-		var thisPrice = thisPaypalButtonContainer.getAttribute('price');
-		if(thisPaypalButtonContainer.id == 'paypal-button-container-cart')
-			createCartButton();
-	}
-}
-/*
-function createButton(buttonContainerId, price, currency, itemName, type){
-	var currencyUppercase = currency.toUpperCase();
-	var options = shippingOptions_arr[type];
-	if(options == undefined)
-		options = shippingOptions_arr['default'];
-	options = options[currencyUppercase];
-	for (const [key, value] of Object.entries(options)) {
-		options[key].amount.value = shippingFeeByItem_arr[currencyUppercase][value.id][type];
-	}
-	var shippingFee = shippingFeeByItem_arr[currencyUppercase][0][type];
-	var baseAmount = parseFloat(price, 10);
-	var totalValue = baseAmount + parseFloat(shippingFee, 10);
 	
-
-	let items = [];
-	let thisItem = {
-		name: itemName, 
-		unit_amount: {
-			currency_code: currencyUppercase,
-			value: price
-		},
-		quantity: 1
-	};
-	items.push(thisItem);
-	
-	paypal.Buttons({
-        createOrder: function(data, actions) {
-        	// console.log('createOrder . . .');
-            return actions.order.create({
-                purchase_units: [{
-                	amount: {
-                        currency_code: currencyUppercase,
-                        value: totalValue,
-                        breakdown: {
-							item_total: { 
-								currency_code: currencyUppercase,
-								value: baseAmount
-							},
-							shipping: {
-								currency_code: currencyUppercase,
-								value: options[currencyUppercase][0].amount.value
-							}
-						}
-                	},
-	              	shipping: {
-		              	options: options[currencyUppercase]
-		            },
-		            items: [{
-						name: itemName,
-						unit_amount: {
-							currency_code: currencyUppercase,
-							value: baseAmount
-						},
-						quantity: "1"
-					}]
-                }]
-                
-            });
-        },
-        onShippingChange: function (data, actions) {
-			// console.log("SELECTED_OPTION", data.selected_shipping_option); // data.selected_shipping_option contains the selected shipping option
-			console.log('onshippingchange');
-			console.log(data);
-			console.log(data.amount.currency_code, data.shipping_address.country_code);
-			if(data.amount.currency_code == 'USD' && data.shipping_address.country_code != 'US'){
-				return actions.reject();
-			}
-			else
-			{
-				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
-				data.amount.value = data.amount.value + '';
-				return actions.order.patch([{
-					op: "replace",
-					path: "/purchase_units/@reference_id=='default'/amount",
-					value: { 
-						value: data.amount.value, 
-						currency_code: data.amount.currency_code,
-						breakdown: {
-							item_total: { 
-								currency_code: currencyUppercase,
-								value: baseAmount
-							},
-							shipping: {
-								currency_code: currencyUppercase,
-								value: parseFloat(data.selected_shipping_option.amount.value, 10)
-							}
-						}
-					}
-				}]);
-			}
-		},
-        style: {
-            color: 'black'
-        },
-        onError: function (err) {
-			// For example, redirect to a specific error page
-			// window.location.href = "/your-error-page-here";
-			// window.location.href = "/shop/issues/error";
-			console.log(err);
-		},
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(orderData) {
-            	if(type == 'subscription')
-            		var return_url = location.protocol + '//' + location.host + "/shop/subscriptions/thank-you";
-            	else
-            		var return_url = location.protocol + '//' + location.host + "/shop/issues/thank-you";
-				let email = orderData.payer.email_address;
-				return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
-				[].forEach.call(items, function(el){
-					return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
-				});
-				actions.redirect(return_url);
-            });
-        }
-
-  	}).render('#' + buttonContainerId);
 }
-*/
 function getTotalShippingFee(elements, option, totalAmount, currency){
 	var output = 0;
 	const items_by_type = {};
@@ -446,11 +255,11 @@ function getTotalShippingFee(elements, option, totalAmount, currency){
 		output += getFeeByAmount(this_data['basic_fee'], this_data['quantity']);
 	}
 	output = parseFloat(output.toFixed(2));
-	console.log('total', output);
 	return output;
 }
 
-function createCartButton(){
+function createPaypalButton(){
+	console.log('createPaypalButton');
 	let sItem_row = document.getElementsByClassName('item-row');
 
 	if(sItem_row.length > 0)
@@ -468,20 +277,26 @@ function createCartButton(){
 			let thisItemName = el.querySelector('.item-name').innerText;
 			let thisItemPrice = el.querySelector('.item-price').innerText;
 			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+			console.log(el.querySelector('.item-quantity'));
+			console.log('thisItemQuantity', thisItemQuantity)
 			var thisType = el.getAttribute('type');
 			if(thisType == '')
 				thisType = 'issue';
+			let thisSubType = el.getAttribute('subtype');
+			if(thisSubType)
+				thisType = thisType + '-' + thisSubType;
 			let thisItem = {
-				name: thisItemName, 
+				name: thisItemName,
 				unit_amount: {
 					currency_code: currencyUppercase,
 					value: thisItemPrice
 				},
-				quantity: thisItemQuantity
+				quantity: thisItemQuantity,
+				type: thisType
 			};
 			items.push(thisItem);
-			
-			if(thisType == 'subscription')
+
+			if(el.getAttribute('type') == 'subscription')
 				hasSubscription = true;
 			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
 			totalItemQuantity += parseInt(thisItemQuantity);
@@ -494,57 +309,72 @@ function createCartButton(){
 		options.forEach(function(el, i){
 			el['amount']['value'] = getTotalShippingFee(sItem_row, el, totalItemQuantity, currencyUppercase);
 		});
-		// console.log(options);
-		// return;
 		let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
-	        	// console.log('createOrder . . .');
-	            return actions.order.create({
-	                purchase_units: [{
-	                	amount: {
-	                        currency_code: currencyUppercase,
-	                        value: totalValue,
-	                        breakdown: {
-								item_total: { 
-									currency_code: currencyUppercase,
-									value: baseAmount
-								},
-								shipping: {
-									currency_code: currencyUppercase,
-									value: options[0].amount.value
-								}
-							}
-	                	},
-		              	shipping: {
-			              	options: options
-			            },
-			            items: items
-	                }]
-	                
-	            });
+				// console.log('createOrder');
+				// console.log(items);
+	        	return fetch('/api/create_order.php', {
+	        		method: 'POST',
+	        		headers: {
+	        			'Content-Type': 'application/json'
+	        		},
+	        		body: JSON.stringify({
+	        			currency: currencyUppercase,
+	        			items: items,
+	        			shippingOptions: options,
+	        			hasSubscription: hasSubscription
+	        		})
+	        	})
+	        	.then(response => {
+	        		if (!response.ok) {
+	        			return response.json().then(err => {
+	        				throw new Error(err.error || 'Failed to create order');
+	        			});
+	        		}
+	        		return response.json();
+	        	})
+	        	.then(orderData => orderData.id)
+	        	.catch(error => {
+	        		console.error('Order creation error:', error);
+	        		throw error;
+	        	});
 	        },
-	        onShippingChange: function (data, actions) {
-				data.amount.value = parseFloat(baseAmount, 10) + parseFloat(data.selected_shipping_option.amount.value, 10);
-					data.amount.value = data.amount.value + '';
-					return actions.order.patch([{
-						op: "replace",
-						path: "/purchase_units/@reference_id=='default'/amount",
-						value: { 
-							value: data.amount.value, 
-							currency_code: data.amount.currency_code,
-							breakdown: {
-								item_total: { 
-									currency_code: currencyUppercase,
-									value: baseAmount
-								},
-								shipping: {
-									currency_code: currencyUppercase,
-									value: parseFloat(data.selected_shipping_option.amount.value, 10)
-								}
-							}
-						}
-					}]);
+			onShippingAddressChange: function (data, actions) {
+				// console.log('onShippingAddressChange');
+				// console.log(data.shipping_address.country_code)
+			},
+	        onShippingOptionsChange: function (data, actions) {
+				// console.log(data);
+				const rederence_id = '781012';
+				return fetch('/api/patch_order.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						orderId: data.orderID,
+						currency: currencyUppercase,
+						items: items,
+						shippingOptionId: data.selectedShippingOption.id,
+						shippingOptions: options,
+						baseAmount: baseAmount,
+						reference_id: rederence_id
+					})
+				})
+				.then(response => {
+					if (!response.ok) {
+						return response.json().then(err => {
+							throw new Error(err.error || 'Failed to update order');
+						});
+					}
+					return response.json();
+				})
+				.catch((error, details) => {
+					console.log(error);
+					// console.error('Shipping option change error:', error);
+					// throw error;
+				});
 			},
 	        style: {
 	            color: 'black'
@@ -574,7 +404,7 @@ function createCartButton(){
 function addToCartByClick(event, quantityToAdd = 1){
 	let thisElement = event.target;
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
-	let sCart_container = document.getElementById('cart-container');
+	
 	if (cart_symbol = document.getElementById('cart-symbol'))
         document.body.classList.add('viewing-cart-symbol');
 	let price_all = {
@@ -584,6 +414,7 @@ function addToCartByClick(event, quantityToAdd = 1){
 	};
 	// check if this item exists in the cart
 	let rowId = 'item-row-'+thisElement.getAttribute('slug');
+	const sCart_container = document.getElementById('cart-container');
 	let thisRow = sCart_container.querySelector('#'+rowId);
 	let thisQuantity, thisAmount;
 	let quantity = 0;
@@ -701,6 +532,15 @@ function printToCart(rowId, itemName, type, prices, quantity, subType = false){
 }
 
 function toggleCart(){
+	if(document.body.classList.contains('viewing-cart')) {
+		let sButtonArea = document.querySelector('.button-area.viewing-paypal');
+		if(sButtonArea)
+			sButtonArea.classList.remove('viewing-paypal');
+		let cart_container = document.getElementById('cart-container');
+		if(cart_container)
+			cart_container.dataset.locked = "0";
+		removePaypalButtons();
+	}
 	document.body.classList.toggle('viewing-cart');
 }
 
@@ -724,4 +564,12 @@ function updateRowToCookie(){
 		});
 	}
 	createCookie( 'serving-library-shop-cart', JSON.stringify(json), '' );
+}
+
+function removePaypalButtons(){
+	const buttons = document.querySelectorAll('.paypal-buttons');
+	console.log(buttons);
+	buttons.forEach(button => {
+		button.parentNode.removeChild(button);
+	});
 }

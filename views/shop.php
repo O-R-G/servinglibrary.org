@@ -1,4 +1,4 @@
-<?
+<?php
 $isSandbox = isset($_GET['isSandbox']);
 ?>
 <!-- shop banner -->
@@ -32,7 +32,7 @@ $isSandbox = isset($_GET['isSandbox']);
 <script>
     var isSandbox = <?= json_encode($isSandbox); ?>;
 </script>
-<script src="/static/js/shop.js?20260115"></script>
+<script src="/static/js/shop.js?20260618d"></script>
 <script src="/static/js/cookie.js"></script><?
 
     /*currency

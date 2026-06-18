@@ -67,11 +67,11 @@ if($uri[1] == 'shop')
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>
 		<script>
-			console.log(location.href);
-			console.log(location.host);
-			console.log(location.hostname);
-			console.log(location.protocol);
-			console.log(location.pathname);
+			// console.log(location.href);
+			// console.log(location.host);
+			// console.log(location.hostname);
+			// console.log(location.protocol);
+			// console.log(location.pathname);
 		</script>
 	</head>
 	<body class="<?= $bodyClass; ?>">
