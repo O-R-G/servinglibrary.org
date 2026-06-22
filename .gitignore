@@ -21,3 +21,6 @@ backup-subscriptions
 static/php/vendor
 
 .env
+
+# API cache (tokens)
+.cache/

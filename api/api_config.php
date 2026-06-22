@@ -73,10 +73,100 @@ function logAPICall($action, $details = []) {
 	error_log(json_encode($logEntry));
 }
 
-function getPayPalAccessToken($currency = 'USD') {
+function getPayPalClientId($currency = 'USD') {
 	$currencyUppercase = strtoupper($currency);
 	$accountKey = ($currencyUppercase === 'USD') ? 'US' : 'EU';
-	return $_ENV['PAYPAL_ACCESS_TOKEN_LIVE_' . $accountKey] ?? false;
+	return $_ENV['PAYPAL_CLIENT_ID_LIVE_' . $accountKey] ?? false;
+}
+
+function getPayPalClientSecret($currency = 'USD') {
+	$currencyUppercase = strtoupper($currency);
+	$accountKey = ($currencyUppercase === 'USD') ? 'US' : 'EU';
+	return $_ENV['PAYPAL_CLIENT_SECRET_LIVE_' . $accountKey] ?? false;
+}
+
+function getTokenCacheDir() {
+	$cacheDir = __DIR__ . '/../.cache/paypal-tokens';
+	if (!is_dir($cacheDir)) {
+		@mkdir($cacheDir, 0700, true);
+		@chmod($cacheDir, 0700);
+	}
+	return $cacheDir;
+}
+
+function getTokenCachePath($currency = 'USD') {
+	$currencyUppercase = strtoupper($currency);
+	$accountKey = ($currencyUppercase === 'USD') ? 'US' : 'EU';
+	return getTokenCacheDir() . '/' . $accountKey . '_token.cache';
+}
+
+function requestNewPayPalAccessToken($currency = 'USD') {
+	$clientId = getPayPalClientId($currency);
+	$clientSecret = getPayPalClientSecret($currency);
+
+	if (!$clientId || !$clientSecret) {
+		logAPICall('token_request_failed', ['reason' => 'Missing credentials', 'currency' => $currency]);
+		return false;
+	}
+
+	$ch = curl_init('https://api-m.paypal.com/v1/oauth2/token');
+	curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	curl_setopt($ch, CURLOPT_USERPWD, $clientId . ':' . $clientSecret);
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, 'grant_type=client_credentials');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+	$response = curl_exec($ch);
+	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+
+	if ($httpCode !== 200) {
+		logAPICall('token_request_failed', ['http_code' => $httpCode, 'currency' => $currency]);
+		return false;
+	}
+
+	$tokenData = json_decode($response, true);
+
+	if (!isset($tokenData['access_token']) || !isset($tokenData['expires_in'])) {
+		logAPICall('token_request_invalid_response', ['currency' => $currency]);
+		return false;
+	}
+
+	$cacheData = [
+		'access_token' => $tokenData['access_token'],
+		'expires_at' => time() + $tokenData['expires_in'] - 60
+	];
+
+	$cachePath = getTokenCachePath($currency);
+	@file_put_contents($cachePath, json_encode($cacheData));
+	@chmod($cachePath, 0600);
+
+	logAPICall('token_refreshed', ['currency' => $currency, 'expires_in' => $tokenData['expires_in']]);
+
+	return $tokenData['access_token'];
+}
+
+function getPayPalAccessToken($currency = 'USD') {
+	$cachePath = getTokenCachePath($currency);
+	$cachedData = @file_get_contents($cachePath);
+
+	if ($cachedData) {
+		$tokenData = json_decode($cachedData, true);
+
+		if (isset($tokenData['access_token']) && isset($tokenData['expires_at'])) {
+			if (time() < $tokenData['expires_at']) {
+				return $tokenData['access_token'];
+			}
+		}
+	}
+
+	return requestNewPayPalAccessToken($currency);
+}
+
+function getCachedPayPalAccessToken($currency = 'USD') {
+	return getPayPalAccessToken($currency);
 }
 
 $shippingFeeByItem_arr = [

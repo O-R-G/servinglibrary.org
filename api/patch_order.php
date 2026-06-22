@@ -139,7 +139,7 @@ $patchPayload = [
 		'value' => $shippingOptions
 	]
 ];
-$access_token = getPayPalAccessToken($currency);
+$access_token = getCachedPayPalAccessToken($currency);
 
 if (!$access_token) {
 	http_response_code(500);
