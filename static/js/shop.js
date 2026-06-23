@@ -76,9 +76,9 @@ var shippingOptions_arr = {
 	        }
 	    ],
 	    GBP: [
-			{
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
+	        {
+	        	id: "SHIP_UK",
+	            label: "WITHIN UK",
 	            type: "SHIPPING",
 	            selected: true,
 	            amount: {
@@ -86,16 +86,16 @@ var shippingOptions_arr = {
 	                currency_code: "GBP"
 	            }
 	        },
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
+			{
+	        	id: "SHIP_WORLD",
+	            label: "REST OF THE WORLD",
 	            type: "SHIPPING",
 	            selected: false,
 	            amount: {
 	                value: 0,
 	                currency_code: "GBP"
 	            }
-	        },
+	        }
 	    ]
 	},
 	'subscription': {
