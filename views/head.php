@@ -54,9 +54,9 @@ if($uri[1] == 'shop')
 
 $acceptedCurrencies = array('usd','gbp','eur');
 $cookie_name = 'serving-library-shop-currency';
-if(isset($_GET['currency']) && in_array($_GET['currency'], $acceptedCurrencies))
+if(isset($_GET['currency']) && in_array(strtolower($_GET['currency']), $acceptedCurrencies))
 {
-	$currency = $_GET['currency'];
+	$currency = strtolower($_GET['currency']);
 	setcookie($cookie_name, $currency);
 }
 else if(isset($_COOKIE[$cookie_name]))
