@@ -1,6 +1,6 @@
 <?
-$body = isset($item) ? trim($item['body']) : '';
-$deck = isset($item) ? trim($item['deck']) : '';
+$body = isset($item) && $item['body'] ? trim($item['body']) : '';
+$deck = isset($item) && $item['deck'] ? trim($item['deck']) : '';
 $media = isset($item) ? $oo->media($item['id']) : array();
 if(count($media) > 0) {
 	$cover = $media[0];

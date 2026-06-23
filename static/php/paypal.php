@@ -4,20 +4,8 @@
         reqd for views/buy views/shop views/donate views/subscribe
     */ 
 
-    $acceptedCurrencies = array('usd','gbp','eur');
-    if(isset($_GET['currency']))
-    {
-        $currency = $_GET['currency'];
-        setcookie('serving-library-shop-currency', $currency);
-    }
-    else if(isset($_COOKIE['serving-library-shop-currency']))
-    {
-        $currency = $_COOKIE['serving-library-shop-currency'];
-    }
-    else
-        $currency = 'usd';
-    isset($_GET['currency']) ? $_GET['currency'] : 'usd';
-    if(!in_array($currency, $acceptedCurrencies)) $currency = 'usd';
+    // isset($_GET['currency']) ? $_GET['currency'] : 'usd';
+
     $acceptedCurrenciesSymbols = array(
     	'usd' => '$',
     	'gbp' => '£',
