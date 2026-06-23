@@ -24,3 +24,5 @@ static/php/vendor
 
 # API cache (tokens)
 .cache/
+views/temp.php
+views/temp-*.php
