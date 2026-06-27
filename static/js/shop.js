@@ -150,7 +150,7 @@ var shippingFeeByItem_arr = {
 		"SHIP_WORLD": {
 			'issue': 15.00,
 			'annual': 30.00,
-			'archive': 60.00,
+			'archive': 0.00,
 			'edition': 70.00
 		}
 	},

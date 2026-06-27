@@ -1,18 +1,25 @@
-# SERVINGLIBRARY.ORG
+# Serving Library
 
-## INSTALLATION
+A digital platform for managing collections and enabling online commerce.
 
-### php composer
-1. move to `static/php/`
-2. run `composer update`
+## Installation
 
-### .env
-1. create .env at the root directory
-2. set its permission to 700 and the owner:group to the web user. e.g., www-data for nginx
-3. add the following variables and their values to the file
-- `PAYPAL_ALLOWED_ORIGIN`  
-the url of the website. e.g., `https://servinglibrary.org`
-- `PAYPAL_CLIENT_ID_LIVE_US`, `PAYPAL_CLIENT_SECRET_LIVE_US`, `PAYPAL_CLIENT_ID_LIVE_EU`, `PAYPAL_CLIENT_SECRET_LIVE_EU`  
-the paypal credentials. they can be retrieved in "apps & credentials" of the developer dashboards. for imformation: https://developer.paypal.com/api/rest/
+### PHP Dependencies
+
+1. Navigate to `static/php/`
+2. Run `composer update`
+
+### Environment Configuration
+
+1. Create a `.env` file at the root directory
+2. Set permissions to `700` and owner/group to your web user (e.g., `www-data:www-data` for nginx)
+3. Add the following environment variables:
+   - `PAYPAL_ALLOWED_ORIGIN`: The website URL (e.g., `https://servinglibrary.org`)
+   - `PAYPAL_CLIENT_ID_LIVE_US`, `PAYPAL_CLIENT_SECRET_LIVE_US`, `PAYPAL_CLIENT_ID_LIVE_EU`, `PAYPAL_CLIENT_SECRET_LIVE_EU`: PayPal credentials from your developer dashboard. See [PayPal API Documentation](https://developer.paypal.com/api/rest/)
+
+### Cache Directory
+
+1. Create a `.cache` folder at the root directory
+2. Set permissions to `700` and owner/group to your web user (e.g., `www-data:www-data` for nginx)
 
 
