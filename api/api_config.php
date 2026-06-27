@@ -174,7 +174,7 @@ $shippingFeeByItem_arr = [
 		'SHIP_US' => [
 			'issue' => 7.00,
 			'annual' => 12.00,
-			'archive' => 35.00,
+			'archive' => 0,
 			'edition' => 45.00,
 			'subscription-2' => 14.00,
 			'subscription-12' => 84.00
@@ -182,7 +182,7 @@ $shippingFeeByItem_arr = [
 		'SHIP_WORLD' => [
 			'issue' => 15.00,
 			'annual' => 30.00,
-			'archive' => 60.00,
+			'archive' => 0,
 			'edition' => 70.00
 		]
 	],
@@ -190,7 +190,7 @@ $shippingFeeByItem_arr = [
 		'SHIP_EU' => [
 			'issue' => 6.00,
 			'annual' => 12.00,
-			'archive' => 35.00,
+			'archive' => 0,
 			'edition' => 45.00,
 			'subscription-2' => 12.00,
 			'subscription-12' => 72.00
@@ -198,7 +198,7 @@ $shippingFeeByItem_arr = [
 		'SHIP_WORLD' => [
 			'issue' => 12.00,
 			'annual' => 25.00,
-			'archive' => 55.00,
+			'archive' => 0,
 			'edition' => 65.00
 		]
 	],
@@ -206,7 +206,7 @@ $shippingFeeByItem_arr = [
 		'SHIP_UK' => [
 			'issue' => 5.00,
 			'annual' => 12.00,
-			'archive' => 30.00,
+			'archive' => 0,
 			'edition' => 40.00,
 			'subscription-2' => 10.00,
 			'subscription-12' => 60.00
@@ -214,7 +214,7 @@ $shippingFeeByItem_arr = [
 		'SHIP_WORLD' => [
 			'issue' => 10.00,
 			'annual' => 20.00,
-			'archive' => 45.00,
+			'archive' => 0,
 			'edition' => 55.00
 		]
 	]
