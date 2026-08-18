@@ -219,7 +219,75 @@ $shippingFeeByItem_arr = [
 		]
 	]
 ];
-
+$shipping_config = [
+	'USD' => [
+		'currency' => 'USD',
+		'countryCodes' => ['US'],
+		'fees' => [
+			'domestic' => [
+				'issue' => 7.00,
+				'annual' => 12.00,
+				'archive' => 0,
+				'edition' => 45.00,
+				'subscription-2' => 14.00,
+				'subscription-12' => 84.00
+			],
+			'world' => [
+				'issue' => 15.00,
+				'annual' => 30.00,
+				'archive' => 0,
+				'edition' => 70.00
+			]
+		]
+	],
+	'EUR' => [
+		'currency' => 'EUR',
+		// EU-27 member states (ISO 3166-1 alpha-2). Pending confirmation from
+		// the EU manager — see country-code-list for the full-name version sent
+		// for review.
+		'countryCodes' => [
+			'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+			'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
+			'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'
+		],
+		'fees' => [
+			'domestic' => [
+				'issue' => 6.00,
+				'annual' => 12.00,
+				'archive' => 0,
+				'edition' => 45.00,
+				'subscription-2' => 12.00,
+				'subscription-12' => 72.00
+			],
+			'world' => [
+				'issue' => 12.00,
+				'annual' => 25.00,
+				'archive' => 0,
+				'edition' => 65.00
+			]
+		]
+	],
+	'GBP' => [
+		'currency' => 'GBP',
+		'countryCodes' => ['GB'],
+		'fees' => [
+			'domestic' => [
+				'issue' => 5.00,
+				'annual' => 12.00,
+				'archive' => 0,
+				'edition' => 40.00,
+				'subscription-2' => 10.00,
+				'subscription-12' => 60.00
+			],
+			'world' => [
+				'issue' => 10.00,
+				'annual' => 20.00,
+				'archive' => 0,
+				'edition' => 55.00
+			]
+		]
+	]
+];
 function getFeeByAmount($basicFee, $amount) {
 	if (is_string($basicFee)) $basicFee = floatval($basicFee);
 	if (is_string($amount)) $amount = intval($amount);
@@ -232,6 +300,79 @@ function getFeeByAmount($basicFee, $amount) {
 		$output += $basicFee / $r;
 	}
 	return $output;
+}
+
+// Derives 'domestic' vs 'world' from the buyer's address, using $shipping_config
+// as the source of truth. This is the authoritative check used by patch_order.php —
+// it must not be overridable by anything the client sends.
+function getShippingMethodByCountry($currency, $countryCode) {
+	global $shipping_config;
+
+	$currencyUppercase = strtoupper($currency);
+	$countryCodeUppercase = strtoupper($countryCode);
+
+	if (!isset($shipping_config[$currencyUppercase])) {
+		return false;
+	}
+
+	$countryCodes = $shipping_config[$currencyUppercase]['countryCodes'];
+	return in_array($countryCodeUppercase, $countryCodes, true) ? 'domestic' : 'world';
+}
+
+// Human-facing id/label for the shipping option PayPal displays, given a currency
+// and a 'domestic'/'world' method.
+function getShippingOptionMeta($currency, $shippingMethod) {
+	$currencyUppercase = strtoupper($currency);
+
+	if ($shippingMethod === 'world') {
+		return ['id' => 'SHIP_WORLD', 'label' => 'REST OF THE WORLD'];
+	}
+
+	$domesticMeta = [
+		'USD' => ['id' => 'SHIP_US', 'label' => 'UNITED STATES'],
+		'EUR' => ['id' => 'SHIP_EU', 'label' => 'WITHIN EU'],
+		'GBP' => ['id' => 'SHIP_UK', 'label' => 'WITHIN UK']
+	];
+
+	return $domesticMeta[$currencyUppercase] ?? ['id' => 'SHIP_DOMESTIC', 'label' => 'DOMESTIC'];
+}
+
+// Computes the total shipping fee from $shipping_config for a given currency and
+// shipping method ('domestic' or 'world'). If a product isn't sold for that
+// shipping method (e.g. subscription-2/-12 aren't in USD's 'world' fees), returns
+// an 'error' key instead of silently charging 0 for it.
+function getTotalShippingFeeByConfig($items, $currency, $shippingMethod) {
+	global $shipping_config;
+
+	$currencyUppercase = strtoupper($currency);
+	if (!isset($shipping_config[$currencyUppercase]['fees'][$shippingMethod])) {
+		return ['error' => 'Invalid shipping configuration'];
+	}
+
+	$fees = $shipping_config[$currencyUppercase]['fees'][$shippingMethod];
+	$itemsByType = [];
+
+	foreach ($items as $item) {
+		$itemQuantity = intval($item['quantity']);
+		$itemType = $item['type'] ?? 'issue';
+
+		if (!isset($fees[$itemType])) {
+			return [
+				'error' => 'One or more items in your cart are not available for ' .
+					($shippingMethod === 'world' ? 'international' : 'domestic') . ' shipping',
+				'unavailableType' => $itemType
+			];
+		}
+
+		$itemsByType[$itemType] = ($itemsByType[$itemType] ?? 0) + $itemQuantity;
+	}
+
+	$output = 0;
+	foreach ($itemsByType as $type => $quantity) {
+		$output += getFeeByAmount($fees[$type], $quantity);
+	}
+
+	return ['shippingAmount' => round($output, 2)];
 }
 
 function getTotalShippingFee($items, $shippingOptionId, $currency) {

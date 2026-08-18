@@ -26,8 +26,11 @@ if (!$data || !is_array($data)) {
 $orderId = $data['orderId'] ?? null;
 $currency = $data['currency'] ?? 'USD';
 $items = $data['items'] ?? [];
+$countryCode = $data['countryCode'] ?? null;
+// Legacy fallback only: honored solely when the address isn't known yet
+// (no countryCode). Never trusted to pick the shipping method once we have
+// an address — the fee is always recomputed from $shipping_config below.
 $shippingOptionId = $data['shippingOptionId'] ?? null;
-$shippingOptions = $data['shippingOptions'] ?? [];
 $baseAmount = $data['baseAmount'] ?? 0;
 $reference_id = $data['reference_id'] ?? 'default';
 
@@ -38,10 +41,16 @@ if (!$orderId || !is_string($orderId)) {
 	exit;
 }
 
-// Validate shipping option ID
-if (!$shippingOptionId || !is_string($shippingOptionId)) {
+// Require either an address (preferred) or, as a fallback, an explicit shipping option
+if ($countryCode !== null) {
+	if (!is_string($countryCode) || !preg_match('/^[A-Za-z]{2}$/', $countryCode)) {
+		http_response_code(400);
+		echo json_encode(['error' => 'Invalid country code']);
+		exit;
+	}
+} elseif (!$shippingOptionId || !is_string($shippingOptionId)) {
 	http_response_code(400);
-	echo json_encode(['error' => 'Shipping option ID required']);
+	echo json_encode(['error' => 'Country code or shipping option ID required']);
 	exit;
 }
 
@@ -84,13 +93,6 @@ foreach ($items as $item) {
 	}
 }
 
-// Validate shipping options
-if (!is_array($shippingOptions)) {
-	http_response_code(400);
-	echo json_encode(['error' => 'Invalid shipping options format']);
-	exit;
-}
-
 $currencyUppercase = strtoupper($currency);
 $baseAmount = floatval($baseAmount);
 
@@ -103,16 +105,46 @@ foreach ($items as $item) {
 	];
 }
 
-// Calculate new shipping fee
-$shippingAmount = getTotalShippingFee($cartItems, $shippingOptionId, $currency);
+// Determine domestic vs. world shipping. The address (countryCode) is always
+// authoritative when present — a buyer can't get domestic rates by claiming a
+// shipping option that doesn't match their actual address. shippingOptionId is
+// only consulted as a fallback for callers that haven't sent an address yet.
+if ($countryCode !== null) {
+	$shippingMethod = getShippingMethodByCountry($currencyUppercase, $countryCode);
+	if (!$shippingMethod) {
+		http_response_code(400);
+		echo json_encode(['error' => 'Shipping is not configured for this currency']);
+		exit;
+	}
+} else {
+	$shippingMethod = ($shippingOptionId === 'SHIP_WORLD') ? 'world' : 'domestic';
+}
+
+// Calculate new shipping fee from $shipping_config
+$shippingResult = getTotalShippingFeeByConfig($cartItems, $currencyUppercase, $shippingMethod);
+if (isset($shippingResult['error'])) {
+	http_response_code(400);
+	echo json_encode(['error' => $shippingResult['error']]);
+	exit;
+}
+$shippingAmount = $shippingResult['shippingAmount'];
 $totalAmount = $baseAmount + $shippingAmount;
 
-// Update shipping options with correct selection and amounts
-foreach ($shippingOptions as &$option) {
-	$optionFee = getTotalShippingFee($cartItems, $option['id'], $currency);
-	$option['amount']['value'] = number_format($optionFee, 2, '.', '');
-	$option['selected'] = ($option['id'] === $shippingOptionId);
-}
+// Build the single shipping option that matches the resolved method — PayPal
+// shows the buyer what they're being charged for shipping, it's not a menu
+// they pick a rate from.
+$optionMeta = getShippingOptionMeta($currencyUppercase, $shippingMethod);
+$shippingOptions = [[
+	'id' => $optionMeta['id'],
+	'label' => $optionMeta['label'],
+	'type' => 'SHIPPING',
+	'selected' => true,
+	'amount' => [
+		'currency_code' => $currencyUppercase,
+		'value' => number_format($shippingAmount, 2, '.', '')
+	]
+]];
+
 // Build patch payload for PayPal API
 $patchPayload = [
 	[
@@ -174,7 +206,9 @@ if ($httpCode !== 204) {
 logAPICall('patch_order', [
 	'order_id' => $orderId,
 	'currency' => $currency,
-	'shipping_option' => $shippingOptionId,
+	'shipping_method' => $shippingMethod,
+	'shipping_option' => $optionMeta['id'],
+	'country_code' => $countryCode,
 	'amount' => $totalAmount,
 	'shipping' => $shippingAmount
 ]);

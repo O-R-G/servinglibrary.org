@@ -272,6 +272,7 @@ function createPaypalButton(){
 		var totalShippingFee = 0;
 		var totalItemQuantity = 0;
 		var hasSubscription = false;
+		const rederence_id = '781012';
 		// const items_by_type = {};
 		[].forEach.call(sItem_row, function(el, i){
 			let thisItemName = el.querySelector('.item-name').innerText;
@@ -341,12 +342,41 @@ function createPaypalButton(){
 	        	});
 	        },
 			onShippingAddressChange: function (data, actions) {
-				// console.log('onShippingAddressChange');
-				// console.log(data.shipping_address.country_code)
+				console.log('onShippingAddressChange');
+				console.log(data.shippingAddress.countryCode);
+				const contryCodeUppercase = data.shippingAddress.countryCode.toUpperCase();
+				return fetch('/api/patch_order.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						orderId: data.orderID,
+						currency: currencyUppercase,
+						items: items,
+						// shippingOptionId: data.selectedShippingOption.id,
+						// shippingOptions: options,
+						countryCode: contryCodeUppercase,
+						baseAmount: baseAmount,
+						reference_id: rederence_id
+					})
+				})
+				.then(response => {
+					if (!response.ok) {
+						return response.json().then(err => {
+							throw new Error(err.error || 'Failed to update order');
+						});
+					}
+					return response.json();
+				})
+				.catch((error, details) => {
+					console.log(error);
+					// console.error('Shipping option change error:', error);
+					// throw error;
+				});
 			},
 	        onShippingOptionsChange: function (data, actions) {
 				// console.log(data);
-				const rederence_id = '781012';
 				return fetch('/api/patch_order.php', {
 					method: 'POST',
 					headers: {
