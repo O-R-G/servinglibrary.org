@@ -431,7 +431,8 @@ function createPaypalButton(){
 	} else console.log('cart is empty');
 }
 
-function addToCartByClick(event, quantityToAdd = 1){
+function addToCartByClick(event, currency, quantityToAdd = 1){
+	console.log('addToCartByClick', currency);
 	let thisElement = event.target;
     thisElement.parentNode.parentNode.classList.remove('viewing-paypal');
 	
@@ -458,7 +459,7 @@ function addToCartByClick(event, quantityToAdd = 1){
 			else if(thisElement.getAttribute('slug') == 'subscription-2-years')
 				subType = '2';
 		}
-		printToCart(rowId, itemName, type, price_all, 0, subType);
+		printToCart(rowId, itemName, type, price_all, 0, currency, subType);
 		thisRow = sCart_container.querySelector('#'+rowId);
 	}
 	thisQuantity = thisRow.querySelector('.item-quantity');
@@ -472,11 +473,12 @@ function addToCartByClick(event, quantityToAdd = 1){
 	updateRowToCookie();
 }
 
-function addToCartFromJson(obj){
-	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity, obj.subType);
+function addToCartFromJson(obj, currency){
+	printToCart(obj.id, obj.itemName, obj.type, obj.prices, obj.quantity, currency, obj.subType);
 }
 
-function printToCart(rowId, itemName, type, prices, quantity, subType = false){
+function printToCart(rowId, itemName, type, prices, quantity, currency, subType = false){
+	console.log('printToCart', currency);
 	thisRow = document.createElement('DIV');
 	thisRow.id = rowId;
 	thisRow.className = 'item-row';

@@ -131,7 +131,7 @@ $isSandbox = isset($_GET['isSandbox']);
     </section>
 </div>
 <script>
-    var currency = '<?= $currency; ?>';
+    const currency = '<?= $currency; ?>';
     var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
     var acceptedCurrencies = <?= json_encode($acceptedCurrencies, true); ?>;
     if(currency.toUpperCase() == 'USD')
@@ -146,7 +146,7 @@ $isSandbox = isset($_GET['isSandbox']);
        let temp = 0;
         cart_cookie = JSON.parse(cart_cookie);
         cart_cookie.forEach(function(el, i){
-            addToCartFromJson(el);
+            addToCartFromJson(el, currency);
             temp += parseInt(el.quantity);
         });
         if (temp > 0)

@@ -52,19 +52,7 @@ $bodyClass = '';
 if($uri[1] == 'shop')
 	$bodyClass .= 'shop testCart ';
 
-$acceptedCurrencies = array('usd','gbp','eur');
-$cookie_name = 'serving-library-shop-currency';
-if(isset($_GET['currency']) && in_array(strtolower($_GET['currency']), $acceptedCurrencies))
-{
-	$currency = strtolower($_GET['currency']);
-	setcookie($cookie_name, $currency);
-}
-else if(isset($_COOKIE[$cookie_name]))
-{
-	$currency = $_COOKIE[$cookie_name];
-}
-else
-	$currency = 'usd';
+
 
 ?><!DOCTYPE html>
 <html>
