@@ -60,13 +60,16 @@
             $eur = $productInfo['eur'];
             $gbp = $productInfo['gbp'];
             $type = $productInfo['type'];
+
+            $prefix = $key . '-' . $currencyLowercase;
+            $id = 'button-area_' . $prefix;
             
             if( is_numeric($price) ) {
                 $output .= '<section id="buy' . $key . '" class="buy-section">';
-                $output .= '<div id="button-area' . $key . '-' . $currencyLowercase . '" class="button-area button-area-' . $currencyLowercase . '">';
-                $output .= '<div id="paypal-cart-button-container-' . $key . '-' . $currencyLowercase . '" price="'. $price . '" usd="'. $usd . '" eur="'. $eur . '" gbp="'. $gbp . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button-' . $key . '-' . $currencyLowercase . '" class="button paypal-cart-button" price="'. $price . '" usd="'. $usd . '" eur="'. $eur . '" gbp="'. $gbp . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event, \''.$currencyLowercase.'\')">ADD TO CART</button></div>';
-                $output .= '<div id="buy-button-container' . $key . '-' . $currencyLowercase . '" class="buy-button-container">';
-                $output .= '<button id="cost' . $key . '-' . $currencyLowercase . '" class="button" onclick="expandPaypal(\'button-area' . $key . '-' . $currencyLowercase . '\', \'' . $currencyLowercase . '\', \''.$itemName.'\', \''.$type.'\')">' . $acceptedCurrenciesSymbols[$currencyLowercase] . $price . '</button>';
+                $output .= '<div id="' . $id . '" class="button-area button-area-' . $currencyLowercase . '">';
+                $output .= '<div id="paypal-cart-button-container-' . $prefix . '" price="'. $price . '" usd="'. $usd . '" eur="'. $eur . '" gbp="'. $gbp . '" class="payment-option paypal-button-container paypal-cart-button-container"><button id="paypal-cart-button-' . $prefix . '" class="button paypal-cart-button" price="'. $price . '" usd="'. $usd . '" eur="'. $eur . '" gbp="'. $gbp . '" itemName="'.$itemName.'" slug="'.$key.'" type="'.$type.'" onclick="addToCartByClick(event, \''.$currencyLowercase.'\')">ADD TO CART</button></div>';
+                $output .= '<div id="buy-button-container' . $prefix . '" class="buy-button-container">';
+                $output .= '<button id="cost' . $prefix . '" class="button" onclick="togglePaypalButton(\''.$id.'\')">' . $acceptedCurrenciesSymbols[$currencyLowercase] . $price . '</button>';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</section>';
@@ -74,7 +77,7 @@
                 $output .= '<div id="donate-buy-section" class="buy-section"><div id="paypal-donate-button-container"></div><button id="donate-btn" class="button">DONATE</button></div>';
             } else if($price == 'sold out') {
                 $output .= '<section id="buy' . $key . '" class="buy-section">';
-                $output .= '<div id="button-area' . $key . '-' . $currencyLowercase . '" class="button-area"><div class="pseudo-button sold-out">SOLD OUT</div></div>';
+                $output .= '<div id="' . $id . '" class="button-area"><div class="pseudo-button sold-out">SOLD OUT</div></div>';
                 $output .= '</section>';
             }
         }        

@@ -112,7 +112,7 @@ form[name="Donate"]:after {
 
 /* classes */
 
-.thumbsContainer.shop {
+.thumbsContainer.shop-item {
 	width: 250px;
 	position: relative;
 	padding: 20px;
@@ -169,10 +169,6 @@ form[name="Donate"]:after {
 
 .issue-img {
 	display: block;
-}
-
-.viewing-paypal .button-area {
-    background-color: #FFF;
 }
 
 .viewing-usd .button-area-eur,
@@ -290,7 +286,7 @@ a.currencyOption:hover,
 
 .pseudo-button.sold-out {
     color: #FFF;
-    background-color: none;
+    background-color: transparent;
     border: 1px solid #FFF;    
 }
 
@@ -308,7 +304,8 @@ a.currencyOption:hover,
 	display: none;
 }
 
-.viewing-paypal .paypal-cart-button-container {
+.viewing-paypal .paypal-cart-button-container,
+.button-area[data-expanded="1"] .paypal-cart-button-container{
 	display: block;
 }
 
@@ -396,11 +393,18 @@ a.currencyOption:hover,
 /* mobile */
 
 @media screen and (max-width: 568px) {
-    .thumbsContainer.shop {
+    .thumbsContainer.shop-item {
 	    width: 100%;
     }
 
     #btn-close-cart {
         width: 60px;
+    }
+}
+@media (hover:hover) {
+    .item-quantity-minus:hover, 
+    .item-quantity-plus:hover,
+    .item-remove:hover {
+        color: #aaa;
     }
 }

@@ -199,7 +199,22 @@ function getFeeByAmount(basic_fee, amount){
 	}
 	return output;
 }
-function expandPaypal(buttonAreaId, currency, itemName, type = ''){
+function togglePaypalButton(buttonAreaId, currency, itemName, type = ''){
+	let sButtonArea = document.getElementById(buttonAreaId);
+	if(!sButtonArea) {
+		console.log('wrong button area id: ' + buttonAreaId);
+		return;
+	}
+	const expanded = sButtonArea.dataset.expanded == '1';
+	if( expanded ){
+		sButtonArea.dataset.expanded = '0';
+		// removePaypalButtons();
+	} else {
+		sButtonArea.dataset.expanded = '1';
+	}
+	
+}
+function toggleCheckoutButton(buttonAreaId, currency, itemName, type = ''){
 	const sCart_container = document.getElementById('cart-container');
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
@@ -220,7 +235,6 @@ function expandPaypal(buttonAreaId, currency, itemName, type = ''){
 				createPaypalButton();
 		}
 	}
-	
 }
 function getTotalShippingFee(elements, option, totalAmount, currency){
 	var output = 0;
@@ -273,13 +287,10 @@ function createPaypalButton(){
 		var totalItemQuantity = 0;
 		var hasSubscription = false;
 		const rederence_id = '781012';
-		// const items_by_type = {};
 		[].forEach.call(sItem_row, function(el, i){
 			let thisItemName = el.querySelector('.item-name').innerText;
 			let thisItemPrice = el.querySelector('.item-price').innerText;
 			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
-			console.log(el.querySelector('.item-quantity'));
-			console.log('thisItemQuantity', thisItemQuantity)
 			var thisType = el.getAttribute('type');
 			if(thisType == '')
 				thisType = 'issue';
@@ -310,7 +321,7 @@ function createPaypalButton(){
 		options.forEach(function(el, i){
 			el['amount']['value'] = getTotalShippingFee(sItem_row, el, totalItemQuantity, currencyUppercase);
 		});
-		let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
+		// let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
 				// console.log('createOrder');
@@ -342,8 +353,8 @@ function createPaypalButton(){
 	        	});
 	        },
 			onShippingAddressChange: function (data, actions) {
-				console.log('onShippingAddressChange');
-				console.log(data.shippingAddress.countryCode);
+				// console.log('onShippingAddressChange');
+				// console.log(data.shippingAddress.countryCode);
 				const contryCodeUppercase = data.shippingAddress.countryCode.toUpperCase();
 				return fetch('/api/patch_order.php', {
 					method: 'POST',
@@ -600,7 +611,7 @@ function updateRowToCookie(){
 
 function removePaypalButtons(){
 	const buttons = document.querySelectorAll('.paypal-buttons');
-	console.log(buttons);
+	// console.log(buttons);
 	buttons.forEach(button => {
 		button.parentNode.removeChild(button);
 	});

@@ -66,7 +66,7 @@ $isSandbox = isset($_GET['isSandbox']);
                             $query_string = '?' . implode('&', $query);
                             $url .=  $query_string;
                         }
-        				?><div class="thumbsContainer shop"><?
+        				?><div class="thumbsContainer shop-item"><?
         					if(isset($cover)){
         						?><a class="shopItemLink" href="<?= $url; ?>">
         							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
@@ -126,7 +126,7 @@ $isSandbox = isset($_GET['isSandbox']);
     <section id="buy-section-cart" class="buy-section">
         <div id="button-area-cart" class="button-area">
             <div id="paypal-button-container-cart" class="payment-option paypal-button-container"></div>
-            <button id="btn-checkout-cart" class="button" onclick="expandPaypal('button-area-cart', '', '', '')">Checkout</button>
+            <button id="btn-checkout-cart" class="button" onclick="toggleCheckoutButton('button-area-cart', '', '', '')">Checkout</button>
         </div>
     </section>
 </div>
