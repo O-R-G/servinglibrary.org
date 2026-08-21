@@ -29,176 +29,6 @@ function loadScript(url){
 	return script;
 }
 
-var shippingOptions_arr = {
-	'default':{
-		USD: [
-			{
-				id: "SHIP_US",
-				label: "UNITED STATES",
-				type: "SHIPPING",
-				selected: true,
-				amount: {
-					value: 0,
-					currency_code: "USD"
-				}
-			},
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: 0,
-	                currency_code: "USD"
-	            }
-	        }
-		], 
-	    EUR: [
-	        {
-	        	id: "SHIP_EU",
-	            label: "WITHIN EU",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: 0,
-	                currency_code: "EUR"
-	            }
-	        },
-	        {
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: 0,
-	                currency_code: "EUR"
-	            }
-	        }
-	    ],
-	    GBP: [
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: 0,
-	                currency_code: "GBP"
-	            }
-	        },
-			{
-	        	id: "SHIP_WORLD",
-	            label: "REST OF THE WORLD",
-	            type: "SHIPPING",
-	            selected: false,
-	            amount: {
-	                value: 0,
-	                currency_code: "GBP"
-	            }
-	        }
-	    ]
-	},
-	'subscription': {
-		USD: [
-		    {
-		    	id: "SHIP_US",
-		        label: "DOMESTIC",
-		        type: "SHIPPING",
-		        selected: true,
-		        amount: {
-		            value: 0,
-		            currency_code: "USD"
-		        }
-			}
-		], 
-	    EUR: [
-	        {
-	        	id: "SHIP_EU",
-	            label: "WITHIN EU",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: 0,
-	                currency_code: "EUR"
-	            }
-	        }
-	    ],
-	    GBP: [
-	        {
-	        	id: "SHIP_UK",
-	            label: "WITHIN UK",
-	            type: "SHIPPING",
-	            selected: true,
-	            amount: {
-	                value: 0,
-	                currency_code: "GBP"
-	            }
-	        }
-	    ]
-	}
-};
-var shippingFeeByItem_arr = {
-	'USD': {
-		"SHIP_US": {
-			'issue': 7.00,
-			'annual': 12.00,
-			'archive': 0,
-			'edition': 45.00,
-			'subscription-2': 14.00,
-			'subscription-12': 84.00
-		},
-		"SHIP_WORLD": {
-			'issue': 15.00,
-			'annual': 30.00,
-			'archive': 0.00,
-			'edition': 70.00
-		}
-	},
-	'EUR': {
-		"SHIP_EU": {
-			'issue': 6.00,
-			'annual': 12.00,
-			'archive': 0,
-			'edition': 45.00,
-			'subscription-2': 12.00,
-			'subscription-12': 72.00
-		},
-		"SHIP_WORLD": {
-			'issue': 12.00,
-			'annual': 25.00,
-			'archive': 0,
-			'edition': 65.00
-		}
-	},
-	'GBP': {
-		"SHIP_UK": {
-			'issue': 5.00,
-			'annual': 12.00,
-			'archive': 0,
-			'edition': 40.00,
-			'subscription-2': 10.00,
-			'subscription-12': 60.00
-		},
-		"SHIP_WORLD": {
-			'issue': 10.00,
-			'annual': 20.00,
-			'archive': 0,
-			'edition': 55.00
-		}
-	}
-};
-function getFeeByAmount(basic_fee, amount){
-	if(typeof basic_fee === 'string') basic_fee = parseFloat(basic_fee);
-	if(typeof amount === 'string') amount = parseInt(amount);
-	let output = 0;
-	let r = 1;
-	for(let i = 0; i < amount; i++) {
-		if(i === 1) r = 2;
-		else if(i === 2) r = 3;
-		output += basic_fee / r;
-	}
-	return output;
-}
 function togglePaypalButton(buttonAreaId, currency, itemName, type = ''){
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if(!sButtonArea) {
@@ -236,42 +66,6 @@ function toggleCheckoutButton(buttonAreaId, currency, itemName, type = ''){
 		}
 	}
 }
-function getTotalShippingFee(elements, option, totalAmount, currency){
-	var output = 0;
-	const items_by_type = {};
-	
-	[].forEach.call(elements, function(el, i){
-		// console.log(el);
-		let thisItemQuantity = el.querySelector('.item-quantity').innerText;
-		let thisType = el.getAttribute('type');
-		if(thisType == '')
-			thisType = 'issue';
-		let thisSubType = el.getAttribute('subtype');
-		if(thisSubType != undefined)
-			thisType = thisType + '-' + thisSubType;
-		var thisBasicShippingFee = shippingFeeByItem_arr[currency][option.id][thisType].toFixed(2);
-		// var thisFinalShippingFee = shippingFeeByAmount_arr[currency][thisBasicShippingFee][totalAmount];
-		// var thisFinalShippingFee = getFeeByAmount(thisBasicShippingFee, thisItemQuantity);
-		// if totalAmount is larger than the defined shipping fee array, use the last item in the array.
-		// if(thisFinalShippingFee == undefined)
-		// 	thisFinalShippingFee = Object.values(shippingFeeByAmount_arr[currency][thisBasicShippingFee]).pop();
-		if(typeof items_by_type[thisType] === 'undefined') {
-			items_by_type[thisType] = {
-				'quantity': 0,
-				'basic_fee': thisBasicShippingFee
-			}
-		}
-		items_by_type[thisType]['quantity'] += parseInt(thisItemQuantity);
-		// output += thisFinalShippingFee * parseInt(thisItemQuantity);
-	});
-	for(const type in items_by_type) {
-		let this_data = items_by_type[type];
-		output += getFeeByAmount(this_data['basic_fee'], this_data['quantity']);
-	}
-	output = parseFloat(output.toFixed(2));
-	return output;
-}
-
 function createPaypalButton(){
 	console.log('createPaypalButton');
 	let sItem_row = document.getElementsByClassName('item-row');
@@ -284,7 +78,6 @@ function createPaypalButton(){
 		let type = '';
 		let baseAmount = 0.0;
 		var totalShippingFee = 0;
-		var totalItemQuantity = 0;
 		var hasSubscription = false;
 		const rederence_id = '781012';
 		[].forEach.call(sItem_row, function(el, i){
@@ -311,17 +104,10 @@ function createPaypalButton(){
 			if(el.getAttribute('type') == 'subscription')
 				hasSubscription = true;
 			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
-			totalItemQuantity += parseInt(thisItemQuantity);
 		});
-		if(hasSubscription)
-			var options = shippingOptions_arr['subscription'];
-		else
-			var options = shippingOptions_arr['default'];
-		options = options[currencyUppercase];
-		options.forEach(function(el, i){
-			el['amount']['value'] = getTotalShippingFee(sItem_row, el, totalItemQuantity, currencyUppercase);
-		});
-		// let totalValue = baseAmount + parseFloat(options[0].amount.value, 10);
+		// Shipping fees/options are never computed here — create_order.php and
+		// patch_order.php both derive them server-side from $shipping_config
+		// (see api/api_config.php), so the browser only ever sends the cart.
 		paypal.Buttons({
 	        createOrder: function(data, actions) {
 				// console.log('createOrder');
@@ -334,7 +120,6 @@ function createPaypalButton(){
 	        		body: JSON.stringify({
 	        			currency: currencyUppercase,
 	        			items: items,
-	        			shippingOptions: options,
 	        			hasSubscription: hasSubscription
 	        		})
 	        	})
@@ -365,8 +150,6 @@ function createPaypalButton(){
 						orderId: data.orderID,
 						currency: currencyUppercase,
 						items: items,
-						// shippingOptionId: data.selectedShippingOption.id,
-						// shippingOptions: options,
 						countryCode: contryCodeUppercase,
 						baseAmount: baseAmount,
 						reference_id: rederence_id
@@ -398,7 +181,6 @@ function createPaypalButton(){
 						currency: currencyUppercase,
 						items: items,
 						shippingOptionId: data.selectedShippingOption.id,
-						shippingOptions: options,
 						baseAmount: baseAmount,
 						reference_id: rederence_id
 					})

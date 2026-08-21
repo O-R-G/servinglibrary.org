@@ -117,7 +117,7 @@ if ($countryCode !== null) {
 		exit;
 	}
 } else {
-	$shippingMethod = ($shippingOptionId === 'SHIP_WORLD') ? 'world' : 'domestic';
+	$shippingMethod = getShippingMethodFromOptionId($shippingOptionId);
 }
 
 // Calculate new shipping fee from $shipping_config

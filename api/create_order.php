@@ -26,8 +26,7 @@ if (!$data || !is_array($data)) {
 // Input validation
 $currency = $data['currency'] ?? 'USD';
 $items = $data['items'] ?? [];
-$shippingOptions = $data['shippingOptions'] ?? [];
-$hasSubscription = $data['hasSubscription'] ?? false;
+$hasSubscription = !empty($data['hasSubscription']);
 
 if (empty($items) || !is_array($items)) {
 	http_response_code(400);
@@ -61,12 +60,6 @@ foreach ($items as $item) {
 	}
 }
 
-if (!is_array($shippingOptions)) {
-	http_response_code(400);
-	echo json_encode(['error' => 'Invalid shipping options format']);
-	exit;
-}
-
 $currencyUppercase = strtoupper($currency);
 
 // Calculate totals
@@ -95,11 +88,17 @@ foreach ($items as $item) {
 	];
 }
 
-// Calculate shipping fees for each option
-foreach ($shippingOptions as &$option) {
-	$shippingFee = getTotalShippingFee($cartItems, $option['id'], $currency);
-	$option['amount']['value'] = number_format($shippingFee, 2, '.', '');
+// Shipping options (id, label, amount) are computed entirely server-side from
+// $shipping_config — the same function patch_order.php's amounts derive from.
+// The client only tells us the cart and whether it's a subscription order;
+// it never supplies a fee or an option shape.
+$shippingResult = getAllShippingOptions($currencyUppercase, $cartItems, $hasSubscription);
+if (isset($shippingResult['error'])) {
+	http_response_code(400);
+	echo json_encode($shippingResult);
+	exit;
 }
+$shippingOptions = $shippingResult['options'];
 
 // Get first shipping option amount (default selection)
 $shippingAmount = !empty($shippingOptions) ? (float)$shippingOptions[0]['amount']['value'] : 0;

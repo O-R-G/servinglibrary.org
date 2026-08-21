@@ -168,126 +168,6 @@ function getPayPalAccessToken($currency = 'USD') {
 function getCachedPayPalAccessToken($currency = 'USD') {
 	return getPayPalAccessToken($currency);
 }
-
-$shippingFeeByItem_arr = [
-	'USD' => [
-		'SHIP_US' => [
-			'issue' => 7.00,
-			'annual' => 12.00,
-			'archive' => 0,
-			'edition' => 45.00,
-			'subscription-2' => 14.00,
-			'subscription-12' => 84.00
-		],
-		'SHIP_WORLD' => [
-			'issue' => 15.00,
-			'annual' => 30.00,
-			'archive' => 0,
-			'edition' => 70.00
-		]
-	],
-	'EUR' => [
-		'SHIP_EU' => [
-			'issue' => 6.00,
-			'annual' => 12.00,
-			'archive' => 0,
-			'edition' => 45.00,
-			'subscription-2' => 12.00,
-			'subscription-12' => 72.00
-		],
-		'SHIP_WORLD' => [
-			'issue' => 12.00,
-			'annual' => 25.00,
-			'archive' => 0,
-			'edition' => 65.00
-		]
-	],
-	'GBP' => [
-		'SHIP_UK' => [
-			'issue' => 5.00,
-			'annual' => 12.00,
-			'archive' => 0,
-			'edition' => 40.00,
-			'subscription-2' => 10.00,
-			'subscription-12' => 60.00
-		],
-		'SHIP_WORLD' => [
-			'issue' => 10.00,
-			'annual' => 20.00,
-			'archive' => 0,
-			'edition' => 55.00
-		]
-	]
-];
-$shipping_config = [
-	'USD' => [
-		'currency' => 'USD',
-		'countryCodes' => ['US'],
-		'fees' => [
-			'domestic' => [
-				'issue' => 7.00,
-				'annual' => 12.00,
-				'archive' => 0,
-				'edition' => 45.00,
-				'subscription-2' => 14.00,
-				'subscription-12' => 84.00
-			],
-			'world' => [
-				'issue' => 15.00,
-				'annual' => 30.00,
-				'archive' => 0,
-				'edition' => 70.00
-			]
-		]
-	],
-	'EUR' => [
-		'currency' => 'EUR',
-		// EU-27 member states (ISO 3166-1 alpha-2). Pending confirmation from
-		// the EU manager — see country-code-list for the full-name version sent
-		// for review.
-		'countryCodes' => [
-			'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
-			'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
-			'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'
-		],
-		'fees' => [
-			'domestic' => [
-				'issue' => 6.00,
-				'annual' => 12.00,
-				'archive' => 0,
-				'edition' => 45.00,
-				'subscription-2' => 12.00,
-				'subscription-12' => 72.00
-			],
-			'world' => [
-				'issue' => 12.00,
-				'annual' => 25.00,
-				'archive' => 0,
-				'edition' => 65.00
-			]
-		]
-	],
-	'GBP' => [
-		'currency' => 'GBP',
-		'countryCodes' => ['GB'],
-		'fees' => [
-			'domestic' => [
-				'issue' => 5.00,
-				'annual' => 12.00,
-				'archive' => 0,
-				'edition' => 40.00,
-				'subscription-2' => 10.00,
-				'subscription-12' => 60.00
-			],
-			'world' => [
-				'issue' => 10.00,
-				'annual' => 20.00,
-				'archive' => 0,
-				'edition' => 55.00
-			]
-		]
-	]
-];
 function getFeeByAmount($basicFee, $amount) {
 	if (is_string($basicFee)) $basicFee = floatval($basicFee);
 	if (is_string($amount)) $amount = intval($amount);
@@ -375,33 +255,116 @@ function getTotalShippingFeeByConfig($items, $currency, $shippingMethod) {
 	return ['shippingAmount' => round($output, 2)];
 }
 
-function getTotalShippingFee($items, $shippingOptionId, $currency) {
-	global $shippingFeeByItem_arr;
-
-	$output = 0;
-	$itemsByType = [];
-
-	foreach ($items as $item) {
-		$itemQuantity = intval($item['quantity']);
-		$itemType = $item['type'] ?? 'issue';
-
-		if (!isset($itemsByType[$itemType])) {
-			$itemsByType[$itemType] = [
-				'quantity' => 0,
-				'basic_fee' => 0
-			];
-		}
-		$itemsByType[$itemType]['quantity'] += $itemQuantity;
-	}
-
-	$currencyUppercase = strtoupper($currency);
-
-	foreach ($itemsByType as $type => $data) {
-		if (isset($shippingFeeByItem_arr[$currencyUppercase][$shippingOptionId][$type])) {
-			$basicFee = $shippingFeeByItem_arr[$currencyUppercase][$shippingOptionId][$type];
-			$output += getFeeByAmount($basicFee, $data['quantity']);
-		}
-	}
-
-	return round($output, 2);
+// Maps a PayPal shipping option id back to the 'domestic'/'world' method
+// getTotalShippingFeeByConfig() expects. Used both as the fallback in
+// patch_order.php (no address yet) and to re-derive the method server-side
+// in create_order.php, so the mapping only lives in one place.
+function getShippingMethodFromOptionId($shippingOptionId) {
+	return ($shippingOptionId === 'SHIP_WORLD') ? 'world' : 'domestic';
 }
+
+// Computes every shipping option (id, label, amount) for a currency/cart,
+// using $shipping_config as the sole source of the fee numbers. Subscription
+// items aren't offered international shipping, so 'world' is omitted when
+// $hasSubscription is true. Used by create_order.php so the browser never
+// has to know a fee number, or even the option id/label shape, itself.
+function getAllShippingOptions($currency, $cartItems, $hasSubscription = false) {
+	$currencyUppercase = strtoupper($currency);
+	$methods = $hasSubscription ? ['domestic'] : ['domestic', 'world'];
+
+	$options = [];
+	foreach ($methods as $i => $method) {
+		$shippingResult = getTotalShippingFeeByConfig($cartItems, $currencyUppercase, $method);
+		if (isset($shippingResult['error'])) {
+			return $shippingResult;
+		}
+
+		$meta = getShippingOptionMeta($currencyUppercase, $method);
+		$options[] = [
+			'id' => $meta['id'],
+			'label' => $meta['label'],
+			'type' => 'SHIPPING',
+			'selected' => $i === 0,
+			'amount' => [
+				'currency_code' => $currencyUppercase,
+				'value' => number_format($shippingResult['shippingAmount'], 2, '.', '')
+			]
+		];
+	}
+
+	return ['options' => $options];
+}
+
+// Single source of truth for shipping fees. Both create_order.php and
+// patch_order.php read from this config through the functions below —
+// the browser never computes or is told a fee number. Do not duplicate
+// these numbers anywhere else.
+$shipping_config = [
+	'USD' => [
+		'currency' => 'USD',
+		'countryCodes' => ['US'],
+		'fees' => [
+			'domestic' => [
+				'issue' => 7.00,
+				'annual' => 12.00,
+				'archive' => 0,
+				'edition' => 45.00,
+				'subscription-2' => 14.00,
+				'subscription-12' => 84.00
+			],
+			'world' => [
+				'issue' => 15.00,
+				'annual' => 30.00,
+				'archive' => 0,
+				'edition' => 70.00
+			]
+		]
+	],
+	'EUR' => [
+		'currency' => 'EUR',
+		// EU-27 member states (ISO 3166-1 alpha-2). Pending confirmation from
+		// the EU manager — see country-code-list for the full-name version sent
+		// for review.
+		'countryCodes' => [
+			'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+			'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
+			'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'
+		],
+		'fees' => [
+			'domestic' => [
+				'issue' => 6.00,
+				'annual' => 12.00,
+				'archive' => 0,
+				'edition' => 45.00,
+				'subscription-2' => 12.00,
+				'subscription-12' => 72.00
+			],
+			'world' => [
+				'issue' => 12.00,
+				'annual' => 25.00,
+				'archive' => 0,
+				'edition' => 65.00
+			]
+		]
+	],
+	'GBP' => [
+		'currency' => 'GBP',
+		'countryCodes' => ['GB'],
+		'fees' => [
+			'domestic' => [
+				'issue' => 5.00,
+				'annual' => 12.00,
+				'archive' => 0,
+				'edition' => 40.00,
+				'subscription-2' => 10.00,
+				'subscription-12' => 60.00
+			],
+			'world' => [
+				'issue' => 10.00,
+				'annual' => 20.00,
+				'archive' => 0,
+				'edition' => 55.00
+			]
+		]
+	]
+];

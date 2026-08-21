@@ -1,5 +1,34 @@
 <?php
 $isSandbox = isset($_GET['isSandbox']);
+function getShopChildren(){
+    global $db;
+    $sql = "SELECT 
+        o.*,
+        media.id AS `thumbnail_id`,
+        media.type AS `thumbnail_type`
+    FROM objects o
+    JOIN wires w 
+        ON w.toid = o.id 
+        AND w.active = 1 
+    JOIN objects o_shop
+        ON o_shop.id = w.fromid
+        AND o_shop.active = 1
+        AND o_shop.url = 'shop'
+        AND o_shop.name1 NOT LIKE '.%'
+    JOIN wires w_root
+        ON w_root.toid = o_shop.id
+        AND w_root.fromid = 0
+        AND w_root.active = 1
+    LEFT JOIN media ON media.id = ( 
+        SELECT id FROM media 
+        WHERE media.object = o.id AND media.active = 1 -- Keep LEFT JOIN so objects 
+        ORDER BY `rank`, `modified`, `created`, `id` ASC LIMIT 1
+    )
+    WHERE o.active = 1 AND o.name1 NOT LIKE '.%'
+    ORDER BY o.rank, o.name1";
+    $result = $db->query($sql);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
 ?>
 <!-- shop banner -->
 <style>
@@ -32,7 +61,7 @@ $isSandbox = isset($_GET['isSandbox']);
 <script>
     var isSandbox = <?= json_encode($isSandbox); ?>;
 </script>
-<script src="/static/js/shop.js?20260627"></script>
+<script src="/static/js/shop.js?20260821"></script>
 <script src="/static/js/cookie.js"></script><?
 
     /*currency
@@ -43,15 +72,15 @@ $isSandbox = isset($_GET['isSandbox']);
     $shop = ($uri[1] == 'shop' && count($uri) == 2);
     if ($shop) {
         $temp = $oo->urls_to_ids(array('shop'));
-        $shop_children = $oo->children(end($temp));
+        // $shop_children = $oo->children(end($temp));
+
+        $shop_children = getShopChildren($item['id']);
         $base_url = '/journal/';
     	?><div class="mainContainer body">
         	<div id="shopContainer" class="floatContainer"><? 
                 foreach($shop_children as $key => $child){
         			if( substr($child['name1'], 0, 1) != '.') {
-        				$media = $oo->media($child['id']);
-        				if(count($media) > 0)
-        					$cover = m_url($media[0]);
+        				$cover = $child['thumbnail_id'] ? m_url(['id' => $child['thumbnail_id'], 'type' => $child['thumbnail_type']]) : null;
         				$isDonation = strpos(trim($child['notes']), '[donation]') !== false;
         				$paypal_products = getProductInfo($currency, $child);
                         if(is_numeric($child['url']))
@@ -67,9 +96,9 @@ $isSandbox = isset($_GET['isSandbox']);
                             $url .=  $query_string;
                         }
         				?><div class="thumbsContainer shop-item"><?
-        					if(isset($cover)){
+        					if($cover !== null){
         						?><a class="shopItemLink" href="<?= $url; ?>">
-        							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>"></div>
+        							<div class="issue-img-container"><img class="issue-img" src="<?= $cover; ?>" loading="lazy"></div>
         						</a><?
         					}
                             echo printPayPalButtons($currency, $paypal_products);
