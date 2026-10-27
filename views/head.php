@@ -43,17 +43,13 @@ else if( $uri[1] == 'join' && count($uri) == 2 )
 	}
 }
 $title = "The Serving Library";
-$is_mobile = false;
-
-// $isShop = ($uri[1] == 'shop' && count($uri) == 2);
-// $isSubscriptions = ($uri[1] == 'shop' && count($uri) == 3 && $uri[2] == 'subscriptions');
+// $is_mobile = false;
 
 $bodyClass = '';
-if($uri[1] == 'shop')
+if($uri[1] == 'shop') {
 	$bodyClass .= 'shop testCart ';
-
-
-
+	require_once(__DIR__ . '/../static/php/paypal.php');
+}
 ?><!DOCTYPE html>
 <html>
 	<head>

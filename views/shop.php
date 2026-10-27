@@ -196,12 +196,12 @@ function renderCurrencyOptions($options, $current='usd'){
         document.getElementById('item-count').innerText = temp;
     }
 
-    const currencyOptions = document.querySelectorAll('.currencyOption');
-    for(const option of currencyOptions) {
-        if(option.classList.contains('disabled') || option.classList.contains('active')) continue;
-        option.addEvenListener('click', ()=>{
-            const currency = option.dataset.currency;
-            window.location.href = '?currency=' + currency;
-        })
-    }
+    // const currencyOptions = document.querySelectorAll('.currencyOption');
+    // for(const option of currencyOptions) {
+    //     if(option.classList.contains('disabled') || option.classList.contains('active')) continue;
+    //     option.addEvenListener('click', ()=>{
+    //         const currency = option.dataset.currency;
+    //         window.location.href = '?currency=' + currency;
+    //     })
+    // }
 </script>

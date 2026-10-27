@@ -58,7 +58,7 @@ foreach($bulletins as $b)
 		<a href="<? echo $b_url; ?>">
 			<div class="coverContainer"><?
 				// G-e-s-t-a-l-t exception
-				if($b['id'] == $gestalt_id and !$is_mobile)
+				if($b['id'] == $gestalt_id)
 				{
 				?><script src="/static/pde/processing-1.4.1.min.js"></script>
 				 <canvas datasrc='static/pde/G-e-s-t-a-l-t.pde' width='220' height='313'></canvas><?

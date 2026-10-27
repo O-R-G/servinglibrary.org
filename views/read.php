@@ -57,7 +57,7 @@ if($media_all && count($media_all) > 2)
 			?></div><?
 			}
 			?><div id="cover-container"><?
-				if($r['id'] == $gestalt_id && !$is_mobile)
+				if($r['id'] == $gestalt_id)
 				{
 				?><script>
 					var thisW = 400; 

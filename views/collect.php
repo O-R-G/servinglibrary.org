@@ -68,7 +68,7 @@ foreach($issues as $issue)
 			<a href="<? echo $b_url; ?>">
 				<div class="coverContainer"><?
 					// G-e-s-t-a-l-t exception
-					if($b['id'] == $gestalt_id and !$is_mobile)
+					if($b['id'] == $gestalt_id)
 					{
 					?><script>
 						var thisW = 220; 

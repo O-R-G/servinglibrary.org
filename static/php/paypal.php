@@ -1,4 +1,4 @@
-<?
+<?php
     /*
         paypal lookup product and print buttons
         reqd for views/buy views/shop views/donate views/subscribe
@@ -8,7 +8,7 @@
     function getProductInfo($currency, $child){
         global $acceptedCurrenciesSymbols;
 
-        $priceField = trim($child['notes']);
+        $priceField = !fieldIsEmpty($child['notes']) ? trim($child['notes']) : '';
         $output = array();
         $paypal_item_pattern = '/\[paypal\-item\]\(((?:\[.*?\]\(.*?\))*)\)/';
         $currencyLowercase = strtolower($currency);
@@ -97,13 +97,9 @@
     if(isset($_GET['currency']) && in_array(strtolower($_GET['currency']), $acceptedCurrencies))
     {
         $currency = strtolower($_GET['currency']);
-        // setcookie($cookie_name, $currency);
-    }
-    else
+        setcookie($cookie_name, $currency);
+    } else if(isset($_COOKIE[$cookie_name]) && in_array(strtolower($_COOKIE[$cookie_name]), $acceptedCurrencies) ) {
+        $currency = strtolower($_COOKIE[$cookie_name]);
+    } else
         $currency = 'usd';
-
-    if($disable_eu) {
-        // setcookie($cookie_name, 'usd');
-        $currency = 'usd';
-    }
 ?>
