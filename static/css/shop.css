@@ -44,6 +44,8 @@ form[name="Donate"]:after {
 	bottom: 20px;
 	right: 20px;
 	z-index: 90;
+    display: flex;
+    gap: 4px;
 }
 
 #cart-container {
@@ -254,22 +256,24 @@ body.loading .viewing-paypal:before {
     color: #000;
 }
 
-.currencyOption {
-	display: inline-block;
-    	width: 40px;
+.currencyOption,
+a.currencyOption {
+	/* display: inline-block; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40px;
 	padding: 2px 5px;
-	margin-left: 4px;
-	cursor: pointer;
-	/* border-radius: 4px; */
-    	text-align: center;
+    font-family: Arial, sans-serif;
 }
-
 a.currencyOption.active,
-a.currencyOption:hover,
-.currencyOption.active,
-.currencyOption:hover {
+.currencyOption.active {
 	background-color: #0C0;
 	color: #fff;
+}
+.currencyOption.disabled {
+    color: #888;
+    border-color: #888;
 }
 
 .pseudo-button {
@@ -406,5 +410,14 @@ a.currencyOption:hover,
     .item-quantity-plus:hover,
     .item-remove:hover {
         color: #aaa;
+    }
+    a.currencyOption:hover,
+    .currencyOption:hover {
+        background-color: #0C0;
+	    color: #fff;
+    }
+    .currencyOption.disabled:hover {
+        background-color: transparent;
+        color: #888;
     }
 }

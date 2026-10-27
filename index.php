@@ -47,5 +47,6 @@ if($uri[1] && $uri[1] == "time")
 	require_once("views/clock.php");
 else
 	require_once("views/badge.php");
+require_once("views/announcement.php");
 require_once("views/foot.php");
 ?>

@@ -29,6 +29,28 @@ function getShopChildren(){
     $result = $db->query($sql);
     return $result->fetch_all(MYSQLI_ASSOC);
 }
+function renderCurrencyOptions($options, $current='usd'){
+    global $disable_eu;
+    global $acceptedCurrenciesSymbols;
+    $output = '';
+    foreach($options as $option){ 
+        $cls = ['button', 'currencyOption'];
+        $disabled = $disable_eu && ($option === 'gbp' || $option === 'eur');
+        if($disabled) 
+            $cls[] = 'disabled';
+        if($option == $current) {
+            $cls[] = 'active';
+            
+        } 
+        if(in_array('disabled', $cls) || in_array('active', $cls)) {
+            $output .= '<div id="currencyOption-' . $option . '" class="' . implode(' ', $cls) . '">' . $acceptedCurrenciesSymbols[$option] . '</div>';
+        }
+        else {
+            $output .= '<a id="currencyOption-' . $option . '" class="' . implode(' ', $cls) . '" href="?currency='.$option.'">' . $acceptedCurrenciesSymbols[$option] . '</a>';
+        }            
+    }
+    return $output;
+}
 ?>
 <!-- shop banner -->
 <style>
@@ -69,6 +91,7 @@ function getShopChildren(){
     */    
 
     require_once('static/php/paypal.php');
+    
     $shop = ($uri[1] == 'shop' && count($uri) == 2);
     if ($shop) {
         $temp = $oo->urls_to_ids(array('shop'));
@@ -108,13 +131,7 @@ function getShopChildren(){
         	?></div>
         </div>
     	<div id="currencySwitchWrapper" class="currency"><? 
-    		foreach($acceptedCurrencies as $option){ 
-    			if($option == $currency) { ?>
-    				<button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><? 
-                } else {
-    				?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $isSandbox ? $option . '&isSandbox' : $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
-    			}
-    		}
+        echo renderCurrencyOptions($acceptedCurrencies, $currency);
     	?></div><?
     } else {
         $paypal_products = getProductInfo($currency, $item);
@@ -125,13 +142,7 @@ function getShopChildren(){
             // }
             echo printPayPalButtons($currency, $paypal_products);
             ?><div id="currencySwitchWrapper" class="currency"><? 
-                foreach($acceptedCurrencies as $option){ 
-                    if($option == $currency) { ?>
-                        <button id="currencyOption-<?= $option; ?>" class="button currencyOption active"><?= $acceptedCurrenciesSymbols[$option]; ?></button><? 
-                    } else {
-                        ?><button id="currencyOption-<?= $option; ?>" class="button currencyOption" onclick="location.href='?currency=<?= $option; ?>'"><?= $acceptedCurrenciesSymbols[$option]; ?></button><?
-                    }
-                }
+                echo renderCurrencyOptions($acceptedCurrencies, $currency);
             ?></div><?
         }
     }
@@ -160,6 +171,7 @@ function getShopChildren(){
     </section>
 </div>
 <script>
+    
     const currency = '<?= $currency; ?>';
     var acceptedCurrenciesSymbols = <?= json_encode($acceptedCurrenciesSymbols, true); ?>;
     var acceptedCurrencies = <?= json_encode($acceptedCurrencies, true); ?>;
@@ -182,5 +194,14 @@ function getShopChildren(){
             if (cart_symbol = document.getElementById('cart-symbol'))
                 document.body.classList.add('viewing-cart-symbol');
         document.getElementById('item-count').innerText = temp;
+    }
+
+    const currencyOptions = document.querySelectorAll('.currencyOption');
+    for(const option of currencyOptions) {
+        if(option.classList.contains('disabled') || option.classList.contains('active')) continue;
+        option.addEvenListener('click', ()=>{
+            const currency = option.dataset.currency;
+            window.location.href = '?currency=' + currency;
+        })
     }
 </script>

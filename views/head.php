@@ -5,7 +5,7 @@
 // require_once($config);
 require_once('open-records-generator/config/config.php');
 require_once('open-records-generator/config/url.php');
-
+require_once(__DIR__ . '/../static/php/functions.php');
 // specific to this 'app'
 # $config_dir = $root."/config/";
 // require_once($config_dir."url.php");
@@ -64,6 +64,7 @@ if($uri[1] == 'shop')
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/main.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/mtdbt2f.css">
 		<link rel="stylesheet" type="text/css" media="all" href="/static/css/shop.css">
+		<link rel="stylesheet" type="text/css" media="all" href="/static/css/announcement.css">
 		<link rel="apple-touch-icon" href="/media/png/icon.png" />
 		<script type="text/javascript" src="/static/js/global.js"></script>
 		<script src="/static/js/analytics.js"></script>

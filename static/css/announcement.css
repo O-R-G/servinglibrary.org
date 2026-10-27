@@ -1,0 +1,60 @@
+#announcement {
+    --transition-duration: 300ms;
+    position: fixed;
+    /* bottom: 0px; */
+    /* left: 0px; */
+    /* width: 100vw; */
+    /* max-width: 100%; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 300px;
+    padding: 2em;
+    padding-right: 2.5em;
+    background-color: #ff0;
+    /* background-color: #fff; */
+    color: #000;
+    z-index: 1200; 
+    /* display: flex; */
+    box-sizing: border-box;
+    transition: opacity var(--transition-duration);
+}
+#announcement-content {
+    flex: 1;
+}
+#announcement-close-btn {
+    color: #000;
+    border-width: 0px;
+    width: 30px;
+    height: 30px;
+    background-image: url(../../media/svg/x-3-k.svg);
+    background-size: cover;
+    background-color: transparent;
+    display: block;
+    cursor:pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+#announcement[data-announcement-color="red"] #announcement-close-btn,
+#announcement[data-announcement-color="blue"] #announcement-close-btn {
+    background-image: url(../../media/svg/x-3-w.svg);
+}
+#announcement.hidden,
+#announcement.hidden + #announcement-background {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity var(--transition-duration), visibility 0s var(--transition-duration);
+    
+}
+@media screen and (max-width: 768px) {
+    
+}
+@media screen and (max-width: 500px) {
+    
+}
+@media (hover:hover) {
+    
+}

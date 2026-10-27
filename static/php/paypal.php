@@ -92,15 +92,18 @@
     	'eur' => '€'
     );
     $cookie_name = 'serving-library-shop-currency';
+    $disable_eu = true;
+    
     if(isset($_GET['currency']) && in_array(strtolower($_GET['currency']), $acceptedCurrencies))
     {
         $currency = strtolower($_GET['currency']);
-        setcookie($cookie_name, $currency);
-    }
-    else if(isset($_COOKIE[$cookie_name]))
-    {
-        $currency = strtolower($_COOKIE[$cookie_name]);
+        // setcookie($cookie_name, $currency);
     }
     else
         $currency = 'usd';
+
+    if($disable_eu) {
+        // setcookie($cookie_name, 'usd');
+        $currency = 'usd';
+    }
 ?>
