@@ -263,6 +263,7 @@ a.currencyOption {
     align-items: center;
     justify-content: center;
     flex: 0 0 40px;
+    width: 40px; /* for safari */
 	padding: 2px 5px;
     font-family: Arial, sans-serif;
 }
@@ -417,7 +418,7 @@ a.currencyOption.active,
 	    color: #fff;
     }
     .currencyOption.disabled:hover {
-        background-color: transparent;
+        background-color: #fff;
         color: #888;
     }
 }
