@@ -332,10 +332,6 @@ a.currencyOption.active,
 .item-row {
         margin-top: 10px;
 }
-#cart-container[data-locked="1"] .item-row {
-    opacity: 0.5;
-    pointer-events: none;
-}
 .item-column {
         display: inline-block;
         flex-basis: 50px;

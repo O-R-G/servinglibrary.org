@@ -46,18 +46,15 @@ function togglePaypalButton(buttonAreaId, currency, itemName, type = ''){
 	
 }
 function toggleCheckoutButton(buttonAreaId, currency, itemName, type = ''){
-	const sCart_container = document.getElementById('cart-container');
 	let sButtonArea = document.getElementById(buttonAreaId);
 	if( sButtonArea.classList.contains('viewing-paypal') ){
 		sButtonArea.classList.remove('viewing-paypal');
-		sCart_container.dataset.locked = "0";
 		removePaypalButtons();
 	} else {
 		let sViewing_paypal = document.querySelector('.button-area.viewing-paypal');
 		if(sViewing_paypal)
 			sViewing_paypal.classList.remove('viewing-paypal');
 		sButtonArea.classList.add('viewing-paypal');
-		sCart_container.dataset.locked = "1";
 		let hasButton = sButtonArea.querySelector('.paypal-buttons') !== null;
 		if(!hasButton){
 			var thisPaypalButtonContainer = sButtonArea.querySelector('.paypal-button-container');
@@ -67,178 +64,191 @@ function toggleCheckoutButton(buttonAreaId, currency, itemName, type = ''){
 		}
 	}
 }
+// Reads the cart fresh from the DOM. Called at createOrder time (not just
+// once at render time) so the rendered button can stay mounted while the
+// cart's +/-/remove controls stay live — whatever's on screen when the
+// buyer clicks Pay is what gets checked out.
+function readCartItems(currencyUppercase){
+	let sItem_row = document.getElementsByClassName('item-row');
+	let items = [];
+	let baseAmount = 0.0;
+	let hasSubscription = false;
+	[].forEach.call(sItem_row, function(el){
+		let thisItemName = el.querySelector('.item-name').innerText;
+		let thisItemPrice = el.querySelector('.item-price').innerText;
+		let thisItemQuantity = el.querySelector('.item-quantity').innerText;
+		var thisType = el.getAttribute('type');
+		if(thisType == '')
+			thisType = 'issue';
+		let thisSubType = el.getAttribute('subtype');
+		if(thisSubType)
+			thisType = thisType + '-' + thisSubType;
+		items.push({
+			name: thisItemName,
+			unit_amount: {
+				currency_code: currencyUppercase,
+				value: thisItemPrice
+			},
+			quantity: thisItemQuantity,
+			type: thisType
+		});
+
+		if(el.getAttribute('type') == 'subscription')
+			hasSubscription = true;
+		baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
+	});
+	return { items, baseAmount, hasSubscription };
+}
 function createPaypalButton(){
 	console.log('createPaypalButton');
-	let sItem_row = document.getElementsByClassName('item-row');
 
-	if(sItem_row.length > 0)
-	{
-		let currencyUppercase = currency.toUpperCase();
-		let buttonContainerId = 'paypal-button-container-cart';
-		let items = [];
-		let type = '';
-		let baseAmount = 0.0;
-		var totalShippingFee = 0;
-		var hasSubscription = false;
-		const rederence_id = '781012';
-		// Tracks domestic vs. world for onApprove. Starts at the default
-		// create_order.php picks (always 'domestic') and is kept in sync by
-		// whichever of onShippingAddressChange/onShippingOptionsChange last
-		// resolved a method server-side.
-		var shippingMethod = 'domestic';
-		[].forEach.call(sItem_row, function(el, i){
-			let thisItemName = el.querySelector('.item-name').innerText;
-			let thisItemPrice = el.querySelector('.item-price').innerText;
-			let thisItemQuantity = el.querySelector('.item-quantity').innerText;
-			var thisType = el.getAttribute('type');
-			if(thisType == '')
-				thisType = 'issue';
-			let thisSubType = el.getAttribute('subtype');
-			if(thisSubType)
-				thisType = thisType + '-' + thisSubType;
-			let thisItem = {
-				name: thisItemName,
-				unit_amount: {
-					currency_code: currencyUppercase,
-					value: thisItemPrice
+	if(document.getElementsByClassName('item-row').length === 0){
+		console.log('cart is empty');
+		return;
+	}
+
+	let currencyUppercase = currency.toUpperCase();
+	let buttonContainerId = 'paypal-button-container-cart';
+	const rederence_id = '781012';
+	// Tracks domestic vs. world for onApprove. Starts at the default
+	// create_order.php picks (always 'domestic') and is kept in sync by
+	// whichever of onShippingAddressChange/onShippingOptionsChange last
+	// resolved a method server-side.
+	var shippingMethod = 'domestic';
+	// Snapshotted fresh inside createOrder below, then reused as-is by
+	// onShippingAddressChange/onShippingOptionsChange/onApprove so the rest
+	// of this one order stays consistent with what create_order.php priced.
+	var cart = { items: [], baseAmount: 0, hasSubscription: false };
+
+	// Shipping fees/options are never computed here — create_order.php and
+	// patch_order.php both derive them server-side from $shipping_config
+	// (see api/api_config.php), so the browser only ever sends the cart.
+	paypal.Buttons({
+        createOrder: function(data, actions) {
+			cart = readCartItems(currencyUppercase);
+			if(cart.items.length === 0){
+				return Promise.reject(new Error('Your cart is empty'));
+			}
+        	return fetch('/api/create_order.php', {
+        		method: 'POST',
+        		headers: {
+        			'Content-Type': 'application/json'
+        		},
+        		body: JSON.stringify({
+        			currency: currencyUppercase,
+        			items: cart.items,
+        			hasSubscription: cart.hasSubscription
+        		})
+        	})
+        	.then(response => {
+        		if (!response.ok) {
+        			return response.json().then(err => {
+        				throw new Error(err.error || 'Failed to create order');
+        			});
+        		}
+        		return response.json();
+        	})
+        	.then(orderData => {
+        		shippingMethod = orderData.shippingMethod || shippingMethod;
+        		return orderData.id;
+        	})
+        	.catch(error => {
+        		console.error('Order creation error:', error);
+        		throw error;
+        	});
+        },
+		onShippingAddressChange: function (data, actions) {
+			// console.log('onShippingAddressChange');
+			// console.log(data.shippingAddress.countryCode);
+			const contryCodeUppercase = data.shippingAddress.countryCode.toUpperCase();
+			return fetch('/api/patch_order.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
 				},
-				quantity: thisItemQuantity,
-				type: thisType
-			};
-			items.push(thisItem);
-
-			if(el.getAttribute('type') == 'subscription')
-				hasSubscription = true;
-			baseAmount += parseFloat(thisItemPrice, 10) * parseInt(thisItemQuantity);
-		});
-		// Shipping fees/options are never computed here — create_order.php and
-		// patch_order.php both derive them server-side from $shipping_config
-		// (see api/api_config.php), so the browser only ever sends the cart.
-		paypal.Buttons({
-	        createOrder: function(data, actions) {
-				// console.log('createOrder');
-				// console.log(items);
-	        	return fetch('/api/create_order.php', {
-	        		method: 'POST',
-	        		headers: {
-	        			'Content-Type': 'application/json'
-	        		},
-	        		body: JSON.stringify({
-	        			currency: currencyUppercase,
-	        			items: items,
-	        			hasSubscription: hasSubscription
-	        		})
-	        	})
-	        	.then(response => {
-	        		if (!response.ok) {
-	        			return response.json().then(err => {
-	        				throw new Error(err.error || 'Failed to create order');
-	        			});
-	        		}
-	        		return response.json();
-	        	})
-	        	.then(orderData => {
-	        		shippingMethod = orderData.shippingMethod || shippingMethod;
-	        		return orderData.id;
-	        	})
-	        	.catch(error => {
-	        		console.error('Order creation error:', error);
-	        		throw error;
-	        	});
-	        },
-			onShippingAddressChange: function (data, actions) {
-				// console.log('onShippingAddressChange');
-				// console.log(data.shippingAddress.countryCode);
-				const contryCodeUppercase = data.shippingAddress.countryCode.toUpperCase();
-				return fetch('/api/patch_order.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						orderId: data.orderID,
-						currency: currencyUppercase,
-						items: items,
-						countryCode: contryCodeUppercase,
-						baseAmount: baseAmount,
-						reference_id: rederence_id
-					})
+				body: JSON.stringify({
+					orderId: data.orderID,
+					currency: currencyUppercase,
+					items: cart.items,
+					countryCode: contryCodeUppercase,
+					baseAmount: cart.baseAmount,
+					reference_id: rederence_id
 				})
-				.then(response => {
-					if (!response.ok) {
-						return response.json().then(err => {
-							throw new Error(err.error || 'Failed to update order');
-						});
-					}
-					return response.json();
-				})
-				.then(result => {
-					shippingMethod = result.shippingMethod || shippingMethod;
-					return result;
-				})
-				.catch((error, details) => {
-					console.log(error);
-					// console.error('Shipping option change error:', error);
-					// throw error;
-				});
-			},
-	        onShippingOptionsChange: function (data, actions) {
-				// console.log(data);
-				return fetch('/api/patch_order.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						orderId: data.orderID,
-						currency: currencyUppercase,
-						items: items,
-						shippingOptionId: data.selectedShippingOption.id,
-						baseAmount: baseAmount,
-						reference_id: rederence_id
-					})
-				})
-				.then(response => {
-					if (!response.ok) {
-						return response.json().then(err => {
-							throw new Error(err.error || 'Failed to update order');
-						});
-					}
-					return response.json();
-				})
-				.then(result => {
-					shippingMethod = result.shippingMethod || shippingMethod;
-					return result;
-				})
-				.catch((error, details) => {
-					console.log(error);
-					// console.error('Shipping option change error:', error);
-					// throw error;
-				});
-			},
-	        style: {
-	            color: 'black'
-	        },
-	        onError: function (err) {
-				// For example, redirect to a specific error page
-				// window.location.href = "/your-error-page-here";
-				// window.location.href = "/shop/issues/error";
-				console.log(err);
-			},
-	        onApprove: function(data, actions) {
-	            return actions.order.capture().then(function(orderData) {
-                    eraseCookie('serving-library-shop-cart');
-                    var return_url = location.protocol + '//' + location.host + "/shop/thx";
-					let email = orderData.payer.email_address;
-					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase)+'&shippingMethod='+encodeURIComponent(shippingMethod);
-					[].forEach.call(items, function(el){
-						return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
+			})
+			.then(response => {
+				if (!response.ok) {
+					return response.json().then(err => {
+						throw new Error(err.error || 'Failed to update order');
 					});
-					actions.redirect(return_url);
-	            });
-	        }
-	  	}).render('#' + buttonContainerId);
-	} else console.log('cart is empty');
+				}
+				return response.json();
+			})
+			.then(result => {
+				shippingMethod = result.shippingMethod || shippingMethod;
+				return result;
+			})
+			.catch((error, details) => {
+				console.log(error);
+				// console.error('Shipping option change error:', error);
+				// throw error;
+			});
+		},
+        onShippingOptionsChange: function (data, actions) {
+			// console.log(data);
+			return fetch('/api/patch_order.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					orderId: data.orderID,
+					currency: currencyUppercase,
+					items: cart.items,
+					shippingOptionId: data.selectedShippingOption.id,
+					baseAmount: cart.baseAmount,
+					reference_id: rederence_id
+				})
+			})
+			.then(response => {
+				if (!response.ok) {
+					return response.json().then(err => {
+						throw new Error(err.error || 'Failed to update order');
+					});
+				}
+				return response.json();
+			})
+			.then(result => {
+				shippingMethod = result.shippingMethod || shippingMethod;
+				return result;
+			})
+			.catch((error, details) => {
+				console.log(error);
+				// console.error('Shipping option change error:', error);
+				// throw error;
+			});
+		},
+        style: {
+            color: 'black'
+        },
+        onError: function (err) {
+			// For example, redirect to a specific error page
+			// window.location.href = "/your-error-page-here";
+			// window.location.href = "/shop/issues/error";
+			console.log(err);
+		},
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(orderData) {
+                eraseCookie('serving-library-shop-cart');
+                var return_url = location.protocol + '//' + location.host + "/shop/thx";
+				let email = orderData.payer.email_address;
+				return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase)+'&shippingMethod='+encodeURIComponent(shippingMethod);
+				[].forEach.call(cart.items, function(el){
+					return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
+				});
+				actions.redirect(return_url);
+            });
+        }
+  	}).render('#' + buttonContainerId);
 }
 
 function addToCartByClick(event, currency, quantityToAdd = 1){
@@ -378,9 +388,6 @@ function toggleCart(){
 		let sButtonArea = document.querySelector('.button-area.viewing-paypal');
 		if(sButtonArea)
 			sButtonArea.classList.remove('viewing-paypal');
-		let cart_container = document.getElementById('cart-container');
-		if(cart_container)
-			cart_container.dataset.locked = "0";
 		removePaypalButtons();
 	}
 	document.body.classList.toggle('viewing-cart');

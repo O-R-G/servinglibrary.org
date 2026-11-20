@@ -26,10 +26,10 @@
 
     $shippingMethod = $_GET['shippingMethod'] ?? '';
 
-    // $debug_email_us = 'info@servinglibrary.org';
-    // $debug_email_eu = 'stuart@servinglibrary.org, francesca@servinglibrary.org';
-    $debug_email_us = 'wei@o-r-g.com';
-    $debug_email_eu = 'drxk41012@gmail.com';
+    $debug_email_us = 'info@servinglibrary.org';
+    $debug_email_eu = 'stuart@servinglibrary.org, francesca@servinglibrary.org';
+    // $debug_email_us = 'wei@o-r-g.com';
+    // $debug_email_eu = 'drxk41012@gmail.com';
 
     $bbc_list = getBBCList($shippingMethod, $currency);
 
