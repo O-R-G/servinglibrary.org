@@ -1,6 +1,7 @@
 /* 
     buy now and shopping cart via paypal api
 */
+// isSandbox = true;
 if(isSandbox)
 {
 	// sandbox

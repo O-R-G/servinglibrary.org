@@ -57,7 +57,7 @@ if($announcement !== false):
         });
     }
     
-    const disabledOptions = document.querySelectorAll('#currencyOption-gbp, #currencyOption-eur');
+    const disabledOptions = document.querySelectorAll('#currencyOption-gbp.disabled, #currencyOption-eur.disabled');
     console.log(disabledOptions);
     for(const option of disabledOptions) {
         

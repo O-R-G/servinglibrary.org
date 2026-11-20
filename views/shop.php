@@ -178,7 +178,9 @@ function renderCurrencyOptions($options, $current='usd'){
     if(currency.toUpperCase() == 'USD')
         paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
     else
-        paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id_eu+'&disable-funding=credit,card';
+        paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id+'&disable-funding=credit,card';
+    // else
+    //     paypal_url = 'https://www.paypal.com/sdk/js?client-id='+paypal_client_id_eu+'&disable-funding=credit,card';
     paypal_url += '&currency='+currency.toUpperCase();
     var paypal_script = loadScript(paypal_url);
     document.body.classList.add('viewing-'+currency);

@@ -74,15 +74,11 @@ function logAPICall($action, $details = []) {
 }
 
 function getPayPalClientId($currency = 'USD') {
-	$currencyUppercase = strtoupper($currency);
-	$accountKey = ($currencyUppercase === 'USD') ? 'US' : 'EU';
-	return $_ENV['PAYPAL_CLIENT_ID_LIVE_' . $accountKey] ?? false;
+	return $_ENV['PAYPAL_CLIENT_ID_LIVE_US'] ?? false;
 }
 
 function getPayPalClientSecret($currency = 'USD') {
-	$currencyUppercase = strtoupper($currency);
-	$accountKey = ($currencyUppercase === 'USD') ? 'US' : 'EU';
-	return $_ENV['PAYPAL_CLIENT_SECRET_LIVE_' . $accountKey] ?? false;
+	return $_ENV['PAYPAL_CLIENT_SECRET_LIVE_US'] ?? false;
 }
 
 function getTokenCacheDir() {
