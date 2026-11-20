@@ -81,6 +81,11 @@ function createPaypalButton(){
 		var totalShippingFee = 0;
 		var hasSubscription = false;
 		const rederence_id = '781012';
+		// Tracks domestic vs. world for onApprove. Starts at the default
+		// create_order.php picks (always 'domestic') and is kept in sync by
+		// whichever of onShippingAddressChange/onShippingOptionsChange last
+		// resolved a method server-side.
+		var shippingMethod = 'domestic';
 		[].forEach.call(sItem_row, function(el, i){
 			let thisItemName = el.querySelector('.item-name').innerText;
 			let thisItemPrice = el.querySelector('.item-price').innerText;
@@ -132,7 +137,10 @@ function createPaypalButton(){
 	        		}
 	        		return response.json();
 	        	})
-	        	.then(orderData => orderData.id)
+	        	.then(orderData => {
+	        		shippingMethod = orderData.shippingMethod || shippingMethod;
+	        		return orderData.id;
+	        	})
 	        	.catch(error => {
 	        		console.error('Order creation error:', error);
 	        		throw error;
@@ -164,6 +172,10 @@ function createPaypalButton(){
 					}
 					return response.json();
 				})
+				.then(result => {
+					shippingMethod = result.shippingMethod || shippingMethod;
+					return result;
+				})
 				.catch((error, details) => {
 					console.log(error);
 					// console.error('Shipping option change error:', error);
@@ -194,6 +206,10 @@ function createPaypalButton(){
 					}
 					return response.json();
 				})
+				.then(result => {
+					shippingMethod = result.shippingMethod || shippingMethod;
+					return result;
+				})
 				.catch((error, details) => {
 					console.log(error);
 					// console.error('Shipping option change error:', error);
@@ -214,7 +230,7 @@ function createPaypalButton(){
                     eraseCookie('serving-library-shop-cart');
                     var return_url = location.protocol + '//' + location.host + "/shop/thx";
 					let email = orderData.payer.email_address;
-					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase);
+					return_url += '?email=' + encodeURIComponent(email)+'&currency='+encodeURIComponent(currencyUppercase)+'&shippingMethod='+encodeURIComponent(shippingMethod);
 					[].forEach.call(items, function(el){
 						return_url += '&items[]='+ encodeURIComponent(el['quantity'] + ' × '+ el['name']);
 					});

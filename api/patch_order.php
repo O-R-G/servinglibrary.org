@@ -213,10 +213,13 @@ logAPICall('patch_order', [
 	'shipping' => $shippingAmount
 ]);
 
-// Return success
+// Return success. shippingMethod is the authoritative 'domestic'/'world'
+// value this patch just resolved, so the client doesn't have to re-derive
+// it (and can't get it wrong once an address is known).
 echo json_encode([
 	'success' => true,
 	'message' => 'Order updated successfully',
 	'amount' => number_format($totalAmount, 2, '.', ''),
-	'shipping' => number_format($shippingAmount, 2, '.', '')
+	'shipping' => number_format($shippingAmount, 2, '.', ''),
+	'shippingMethod' => $shippingMethod
 ]);

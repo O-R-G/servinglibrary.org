@@ -172,8 +172,11 @@ logAPICall('create_order', [
 	'item_count' => count($items)
 ]);
 
-// Return the order ID
+// Return the order ID. shippingMethod reflects the default selection
+// getAllShippingOptions() just made (always 'domestic') so the client has
+// a correct starting value without re-deriving it itself.
 echo json_encode([
 	'id' => $responseData['id'],
-	'status' => $responseData['status']
+	'status' => $responseData['status'],
+	'shippingMethod' => 'domestic'
 ]);
