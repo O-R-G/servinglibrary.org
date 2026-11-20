@@ -7,15 +7,19 @@
     // think it uses get or maybe post in teiger
     $items = $_GET['items'];
 	require_once('static/php/mail.php');
-	// $debug_email = 'david@servinglibrary.org';
-    $debug_email = 'info@servinglibrary.org';
 
-	$email = isset($_GET['email']) ? $_GET['email'] : $debug_email;
+    // $debug_email_us = 'info@servinglibrary.org';
+    // $debug_email_eu = 'stuart@servinglibrary.org, francesca@servinglibrary.org';
+    $debug_email_us = 'wei@o-r-g.com';
+    $debug_email_eu = 'drxk41012@gmail.com';
+
+	$email = isset($_GET['email']) ? $_GET['email'] : $debug_email_us;
+    
     if(!empty($email)) {
         $domain = 'mail.servinglibrary.org';
         $msg['from'] = 'shop@servinglibrary.org';
         $msg['to'] = $email;
-        $msg['bcc'] = isset($_GET['currency']) && strtolower($_GET['currency']) == 'usd' ? $debug_email : 'stuart@servinglibrary.org, francesca@servinglibrary.org';
+        $msg['bcc'] = isset($_GET['currency']) && strtolower($_GET['currency']) == 'usd' ? $debug_email_us : $debug_email_eu;
         $msg['subject'] = 'The Serving Library says thanks for your order';
         $msg['text'] = "*\n\nThank you for purchasing the following item(s):\n";
         foreach($items as $it)
